@@ -1,4 +1,4 @@
-// Banco de Dados Completo v2: 4 Níveis, 20 Cenários e 200+ Frases Prontas
+// Banco de Dados Completo v4: 4 Níveis, 20 Cenários e 340+ Frases Prontas
 window.LEVELS_META = {
   "1": "Primeiros Contatos e Sobrevivência",
   "2": "Viagem e Deslocamento",
@@ -41,6 +41,118 @@ window.SCENARIOS = [
         "distractor": "Quanto custa?",
         "emoji": "💬",
         "tip": "Ótimo para devolver a pergunta sem travar."
+      },
+      {
+        "en": "What's your name?",
+        "pt": "Qual é o seu nome?",
+        "distractor": "",
+        "emoji": "🏷️",
+        "tip": "Direto e natural em qualquer contexto."
+      },
+      {
+        "en": "I live in Maputo.",
+        "pt": "Eu moro em Maputo.",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Troque pela sua cidade atual."
+      },
+      {
+        "en": "What do you do for a living?",
+        "pt": "Com o que você trabalha?",
+        "distractor": "",
+        "emoji": "💼",
+        "tip": "Forma mais natural que 'What is your profession?'."
+      },
+      {
+        "en": "I work in technology.",
+        "pt": "Eu trabalho com tecnologia.",
+        "distractor": "",
+        "emoji": "💻",
+        "tip": "Use 'in' + área (finance, sales, health)."
+      },
+      {
+        "en": "I'm learning English.",
+        "pt": "Estou aprendendo inglês.",
+        "distractor": "",
+        "emoji": "📚",
+        "tip": "Quebra o gelo e deixa o nativo mais paciente."
+      },
+      {
+        "en": "It's a pleasure to meet you.",
+        "pt": "É um prazer conhecê-lo(a).",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "Versão um pouco mais formal/educada."
+      },
+      {
+        "en": "Where do you live?",
+        "pt": "Onde você mora?",
+        "distractor": "",
+        "emoji": "🏠",
+        "tip": "Ótima para continuar a conversa."
+      },
+      {
+        "en": "Let's keep in touch!",
+        "pt": "Vamos manter contato!",
+        "distractor": "",
+        "emoji": "✨",
+        "tip": "Excelente para encerrar uma apresentação."
+      },
+      {
+        "en": "Do you have Instagram?",
+        "pt": "Você tem Instagram?",
+        "distractor": "",
+        "emoji": "📸",
+        "tip": "Também funciona com TikTok, LinkedIn ou Facebook."
+      },
+      {
+        "en": "Can I have your WhatsApp?",
+        "pt": "Posso pegar o seu WhatsApp?",
+        "distractor": "",
+        "emoji": "💬",
+        "tip": "Mais educado: 'Could I have your WhatsApp number?'"
+      },
+      {
+        "en": "What's your Instagram handle?",
+        "pt": "Qual é o seu arroba (@) no Instagram?",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Handle = nome de usuário (@)."
+      },
+      {
+        "en": "Can I get your phone number?",
+        "pt": "Posso pegar o seu número de telefone?",
+        "distractor": "",
+        "emoji": "📞",
+        "tip": "Muito usado em conversas informais."
+      },
+      {
+        "en": "Let's exchange numbers!",
+        "pt": "Vamos trocar nossos números!",
+        "distractor": "",
+        "emoji": "🔄",
+        "tip": "Jeito direto e amigável de propor contato."
+      },
+      {
+        "en": "Are you on WhatsApp?",
+        "pt": "Você usa WhatsApp?",
+        "distractor": "",
+        "emoji": "📲",
+        "tip": "'Are you on [rede social]?' é super usado por nativos."
+      },
+      {
+        "en": "I'll send you a message.",
+        "pt": "Vou te mandar uma mensagem.",
+        "distractor": "",
+        "emoji": "✉️",
+        "tip": "Versão informal: 'I'll text you.'"
+      },
+      {
+        "en": "Can I add you on LinkedIn?",
+        "pt": "Posso te adicionar no LinkedIn?",
+        "distractor": "",
+        "emoji": "👔",
+        "tip": "Excelente para contatos profissionais ou eventos."
       }
     ],
     "builder": [
@@ -440,6 +552,62 @@ window.SCENARIOS = [
         "distractor": "A conta, por favor.",
         "emoji": "💳",
         "tip": "Dinheiro em espécie = cash."
+      },
+      {
+        "en": "What can I get for you?",
+        "pt": "O que posso servir para você?",
+        "distractor": "",
+        "emoji": "☕",
+        "tip": "Pergunta padrão do atendente no balcão."
+      },
+      {
+        "en": "For here, please.",
+        "pt": "Para comer aqui, por favor.",
+        "distractor": "",
+        "emoji": "🪑",
+        "tip": "Oposto de 'To go, please.'"
+      },
+      {
+        "en": "Could I get an iced coffee?",
+        "pt": "Poderia me ver um café gelado?",
+        "distractor": "",
+        "emoji": "🧊",
+        "tip": "Iced = gelado; Hot = quente."
+      },
+      {
+        "en": "With milk, no sugar.",
+        "pt": "Com leite, sem açúcar.",
+        "distractor": "",
+        "emoji": "🥛",
+        "tip": "Oat milk (aveia), almond milk (amêndoas)."
+      },
+      {
+        "en": "Do you have anything gluten-free?",
+        "pt": "Vocês têm algo sem glúten?",
+        "distractor": "",
+        "emoji": "🥐",
+        "tip": "Também vale lactose-free ou vegan."
+      },
+      {
+        "en": "Can you warm this up, please?",
+        "pt": "Pode esquentar isso, por favor?",
+        "distractor": "",
+        "emoji": "🔥",
+        "tip": "Muito útil para pães, croissants e bolos."
+      },
+      {
+        "en": "That's all, thank you.",
+        "pt": "É só isso, obrigado(a).",
+        "distractor": "",
+        "emoji": "✅",
+        "tip": "Use quando o atendente perguntar 'Anything else?'."
+      },
+      {
+        "en": "Keep the receipt, thanks.",
+        "pt": "Pode ficar com o recibo, obrigado.",
+        "distractor": "",
+        "emoji": "🧾",
+        "tip": "Ou 'I don't need a receipt.'"
       }
     ],
     "builder": [
@@ -531,6 +699,62 @@ window.SCENARIOS = [
         "distractor": "Você está livre hoje?",
         "emoji": "🙋",
         "tip": "Funciona em lojas, ruas, aeroportos e hotéis."
+      },
+      {
+        "en": "My English is still basic.",
+        "pt": "Meu inglês ainda é básico.",
+        "distractor": "",
+        "emoji": "🌱",
+        "tip": "Faz as pessoas falarem com mais clareza."
+      },
+      {
+        "en": "What does that mean?",
+        "pt": "O que isso significa?",
+        "distractor": "",
+        "emoji": "❓",
+        "tip": "Essencial quando ouvir uma palavra nova."
+      },
+      {
+        "en": "How do you say this in English?",
+        "pt": "Como se diz isso em inglês?",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Perfeito para destravar no meio de uma frase."
+      },
+      {
+        "en": "Could you write it down, please?",
+        "pt": "Poderia anotar isso, por favor?",
+        "distractor": "",
+        "emoji": "✍️",
+        "tip": "Salva vidas com endereços, nomes e números."
+      },
+      {
+        "en": "How do you spell that?",
+        "pt": "Como se soletra isso?",
+        "distractor": "",
+        "emoji": "🔤",
+        "tip": "Muito útil ao anotar e-mails ou sobrenomes."
+      },
+      {
+        "en": "Wait a second, let me translate.",
+        "pt": "Espera um segundo, deixa eu traduzir.",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Natural quando precisar olhar no celular."
+      },
+      {
+        "en": "I think I understand now.",
+        "pt": "Acho que entendi agora.",
+        "distractor": "",
+        "emoji": "💡",
+        "tip": "Versão curta: 'Got it!' (Entendi!)."
+      },
+      {
+        "en": "Thank you for your patience.",
+        "pt": "Obrigado(a) pela sua paciência.",
+        "distractor": "",
+        "emoji": "🙏",
+        "tip": "Muito apreciado por atendentes e nativos."
       }
     ],
     "builder": [
@@ -1189,6 +1413,62 @@ window.SCENARIOS = [
         "distractor": "Quantos quilômetros são?",
         "emoji": "⏳",
         "tip": "Útil para saber o tempo de trajeto."
+      },
+      {
+        "en": "Are you Carlos?",
+        "pt": "Você é o Carlos?",
+        "distractor": "",
+        "emoji": "🚘",
+        "tip": "Para confirmar o motorista do Uber/app."
+      },
+      {
+        "en": "How much is the fare?",
+        "pt": "Quanto custa a tarifa/corrida?",
+        "distractor": "",
+        "emoji": "💵",
+        "tip": "Fare = valor da passagem ou corrida."
+      },
+      {
+        "en": "Could you turn on the AC?",
+        "pt": "Poderia ligar o ar-condicionado?",
+        "distractor": "",
+        "emoji": "❄️",
+        "tip": "AC = air conditioning."
+      },
+      {
+        "en": "Is there a lot of traffic?",
+        "pt": "Tem muito trânsito?",
+        "distractor": "",
+        "emoji": "🚦",
+        "tip": "Bom quebra-gelo com o motorista."
+      },
+      {
+        "en": "Which stop should I get off at?",
+        "pt": "Em qual parada devo descer?",
+        "distractor": "",
+        "emoji": "🚏",
+        "tip": "Get off = descer do ônibus/trem."
+      },
+      {
+        "en": "Could you open the trunk, please?",
+        "pt": "Poderia abrir o porta-malas, por favor?",
+        "distractor": "",
+        "emoji": "🧳",
+        "tip": "Trunk (EUA) / Boot (Reino Unido)."
+      },
+      {
+        "en": "Just drop me off at the corner.",
+        "pt": "Pode me deixar na esquina.",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Drop off = deixar o passageiro."
+      },
+      {
+        "en": "Keep the change, thanks!",
+        "pt": "Pode ficar com o troco, obrigado!",
+        "distractor": "",
+        "emoji": "💰",
+        "tip": "Muito usado em corridas pagas em dinheiro."
       }
     ],
     "builder": [
@@ -1280,6 +1560,62 @@ window.SCENARIOS = [
         "distractor": "A chave não abre a porta.",
         "emoji": "🧺",
         "tip": "Pillow = travesseiro; blanket = cobertor."
+      },
+      {
+        "en": "Is my room ready?",
+        "pt": "Meu quarto já está pronto?",
+        "distractor": "",
+        "emoji": "🔑",
+        "tip": "Útil quando você chega antes do horário."
+      },
+      {
+        "en": "Can I leave my luggage here?",
+        "pt": "Posso deixar minha mala aqui?",
+        "distractor": "",
+        "emoji": "🧳",
+        "tip": "Para guardar bagagem antes do check-in ou após o check-out."
+      },
+      {
+        "en": "What floor is my room on?",
+        "pt": "Em qual andar fica meu quarto?",
+        "distractor": "",
+        "emoji": "🏢",
+        "tip": "Elevator (EUA) / Lift (Reino Unido)."
+      },
+      {
+        "en": "My key card isn't working.",
+        "pt": "Meu cartão-chave não está funcionando.",
+        "distractor": "",
+        "emoji": "💳",
+        "tip": "Acontece com frequência em hotéis."
+      },
+      {
+        "en": "Could I get a late check-out?",
+        "pt": "Poderia pedir um check-out mais tarde?",
+        "distractor": "",
+        "emoji": "🕒",
+        "tip": "Late check-out = saída estendida."
+      },
+      {
+        "en": "The air conditioning isn't working.",
+        "pt": "O ar-condicionado não está funcionando.",
+        "distractor": "",
+        "emoji": "🌡️",
+        "tip": "Troque por 'the Wi-Fi' ou 'the shower' (chuveiro)."
+      },
+      {
+        "en": "Could you call a taxi for me?",
+        "pt": "Poderia chamar um táxi para mim?",
+        "distractor": "",
+        "emoji": "🚕",
+        "tip": "A recepção costuma resolver na hora."
+      },
+      {
+        "en": "I'd like to check out, please.",
+        "pt": "Eu gostaria de fazer o check-out, por favor.",
+        "distractor": "",
+        "emoji": "👋",
+        "tip": "Diga isso ao entregar a chave na saída."
       }
     ],
     "builder": [
@@ -1371,6 +1707,62 @@ window.SCENARIOS = [
         "distractor": "Aceita cartão de crédito?",
         "emoji": "🎓",
         "tip": "Discount = desconto."
+      },
+      {
+        "en": "How much is a ticket?",
+        "pt": "Quanto custa um ingresso?",
+        "distractor": "",
+        "emoji": "🎟️",
+        "tip": "Ou 'How much is admission?'."
+      },
+      {
+        "en": "Is there an audio guide in Portuguese?",
+        "pt": "Tem audioguia em português?",
+        "distractor": "",
+        "emoji": "🎧",
+        "tip": "Muito comum em museus internacionais."
+      },
+      {
+        "en": "Can I buy tickets online?",
+        "pt": "Posso comprar ingressos online?",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Útil quando a fila presencial está grande."
+      },
+      {
+        "en": "Where is the entrance?",
+        "pt": "Onde fica a entrada?",
+        "distractor": "",
+        "emoji": "🚪",
+        "tip": "Entrance = entrada; Exit = saída."
+      },
+      {
+        "en": "How long is the wait?",
+        "pt": "Quanto tempo está a fila/espera?",
+        "distractor": "",
+        "emoji": "⏳",
+        "tip": "Ótimo para decidir se vale esperar."
+      },
+      {
+        "en": "Does this include a guided tour?",
+        "pt": "Isso inclui visita guiada?",
+        "distractor": "",
+        "emoji": "🗺️",
+        "tip": "Guided tour = passeio com guia."
+      },
+      {
+        "en": "Where are the restrooms?",
+        "pt": "Onde ficam os banheiros?",
+        "distractor": "",
+        "emoji": "🚻",
+        "tip": "Restrooms (EUA) / Toilets (Europa)."
+      },
+      {
+        "en": "Can I re-enter later today?",
+        "pt": "Posso entrar novamente mais tarde hoje?",
+        "distractor": "",
+        "emoji": "🔄",
+        "tip": "Útil em parques e museus grandes."
       }
     ],
     "builder": [
@@ -2449,6 +2841,62 @@ window.SCENARIOS = [
         "distractor": "Onde você comprou isso?",
         "emoji": "🧥",
         "tip": "Elogios simples abrem conversas facilmente."
+      },
+      {
+        "en": "What have you been up to?",
+        "pt": "O que você tem feito ultimamente?",
+        "distractor": "",
+        "emoji": "😊",
+        "tip": "Super natural entre conhecidos."
+      },
+      {
+        "en": "Looks like it's going to rain.",
+        "pt": "Parece que vai chover.",
+        "distractor": "",
+        "emoji": "🌧️",
+        "tip": "Clássico para puxar assunto no elevador ou na rua."
+      },
+      {
+        "en": "Have you been here before?",
+        "pt": "Você já esteve aqui antes?",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Ótimo em eventos, restaurantes ou viagens."
+      },
+      {
+        "en": "Any plans for the weekend?",
+        "pt": "Algum plano para o fim de semana?",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Muito usado às quintas e sextas-feiras."
+      },
+      {
+        "en": "I'm just relaxing this weekend.",
+        "pt": "Vou só relaxar neste fim de semana.",
+        "distractor": "",
+        "emoji": "🛋️",
+        "tip": "Resposta pronta e leve."
+      },
+      {
+        "en": "That sounds amazing!",
+        "pt": "Isso parece incrível!",
+        "distractor": "",
+        "emoji": "🤩",
+        "tip": "Ótima reação para demonstrar interesse."
+      },
+      {
+        "en": "Where did you get that?",
+        "pt": "Onde você comprou isso?",
+        "distractor": "",
+        "emoji": "🛍️",
+        "tip": "Use após elogiar uma roupa, relógio ou acessório."
+      },
+      {
+        "en": "It was great talking to you!",
+        "pt": "Foi ótimo conversar com você!",
+        "distractor": "",
+        "emoji": "👋",
+        "tip": "Jeito educado de encerrar o papo."
       }
     ],
     "builder": [
@@ -2540,6 +2988,62 @@ window.SCENARIOS = [
         "distractor": "Desculpa, não posso ir.",
         "emoji": "👍",
         "tip": "Para recusar educadamente: 'Sorry, I can't make it.'"
+      },
+      {
+        "en": "What are you doing tonight?",
+        "pt": "O que você vai fazer hoje à noite?",
+        "distractor": "",
+        "emoji": "🌙",
+        "tip": "Ponto de partida para convites."
+      },
+      {
+        "en": "Do you want to hang out?",
+        "pt": "Você quer sair / dar uma volta?",
+        "distractor": "",
+        "emoji": "🎉",
+        "tip": "Hang out = passar um tempo junto sem formalidade."
+      },
+      {
+        "en": "Where should we meet?",
+        "pt": "Onde devemos nos encontrar?",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Direto e prático."
+      },
+      {
+        "en": "I'm on my way!",
+        "pt": "Estou a caminho!",
+        "distractor": "",
+        "emoji": "🏃",
+        "tip": "Mensagem clássica quando já saiu de casa."
+      },
+      {
+        "en": "Sorry, I'm running a bit late.",
+        "pt": "Desculpa, estou um pouco atrasado(a).",
+        "distractor": "",
+        "emoji": "⏱️",
+        "tip": "Running late = estar atrasado."
+      },
+      {
+        "en": "Let's reschedule for next week.",
+        "pt": "Vamos remarcar para a semana que vem.",
+        "distractor": "",
+        "emoji": "📆",
+        "tip": "Reschedule = remarcar."
+      },
+      {
+        "en": "Count me in!",
+        "pt": "Pode contar comigo! / Tô dentro!",
+        "distractor": "",
+        "emoji": "🙌",
+        "tip": "Resposta animada para aceitar um convite."
+      },
+      {
+        "en": "Text me when you get there.",
+        "pt": "Me manda mensagem quando chegar lá.",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Muito usado entre amigos."
       }
     ],
     "builder": [
@@ -2631,6 +3135,62 @@ window.SCENARIOS = [
         "distractor": "Eu sei a resposta exata.",
         "emoji": "🔎",
         "tip": "Salva você quando não sabe a resposta na hora."
+      },
+      {
+        "en": "Good morning, everyone!",
+        "pt": "Bom dia, pessoal!",
+        "distractor": "",
+        "emoji": "☀️",
+        "tip": "Abertura padrão em reuniões de equipe."
+      },
+      {
+        "en": "Let's get started.",
+        "pt": "Vamos começar.",
+        "distractor": "",
+        "emoji": "🚀",
+        "tip": "Usado para iniciar a reunião ou tarefa."
+      },
+      {
+        "en": "Can I share my screen?",
+        "pt": "Posso compartilhar minha tela?",
+        "distractor": "",
+        "emoji": "🖥️",
+        "tip": "Essencial em reuniões online."
+      },
+      {
+        "en": "I have a quick question.",
+        "pt": "Tenho uma pergunta rápida.",
+        "distractor": "",
+        "emoji": "✋",
+        "tip": "Ótimo para interromper com educação."
+      },
+      {
+        "en": "When is the deadline?",
+        "pt": "Qual é o prazo final?",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Deadline = data limite de entrega."
+      },
+      {
+        "en": "I'm almost done with it.",
+        "pt": "Estou quase terminando isso.",
+        "distractor": "",
+        "emoji": "📈",
+        "tip": "Para atualizar o status de uma tarefa."
+      },
+      {
+        "en": "That makes sense.",
+        "pt": "Isso faz sentido.",
+        "distractor": "",
+        "emoji": "👍",
+        "tip": "Mostra que você entendeu e concorda."
+      },
+      {
+        "en": "Thanks, everyone! Have a great day.",
+        "pt": "Obrigado, pessoal! Tenham um ótimo dia.",
+        "distractor": "",
+        "emoji": "👋",
+        "tip": "Encerramento natural de reuniões."
       }
     ],
     "builder": [
@@ -3016,6 +3576,62 @@ window.SCENARIOS = [
         "distractor": "Por favor, chame um táxi.",
         "emoji": "🚓",
         "tip": "Frase direta para emergências reais."
+      },
+      {
+        "en": "Can someone help me, please?",
+        "pt": "Alguém pode me ajudar, por favor?",
+        "distractor": "",
+        "emoji": "🆘",
+        "tip": "Para chamar atenção rapidamente em local público."
+      },
+      {
+        "en": "My bag was stolen.",
+        "pt": "Minha bolsa/mala foi roubada.",
+        "distractor": "",
+        "emoji": "🚨",
+        "tip": "Stolen = roubada; Lost = perdida."
+      },
+      {
+        "en": "I need to go to the embassy.",
+        "pt": "Preciso ir à embaixada.",
+        "distractor": "",
+        "emoji": "🏛️",
+        "tip": "Essencial em caso de perda de passaporte."
+      },
+      {
+        "en": "Is there a pharmacy nearby?",
+        "pt": "Tem alguma farmácia por perto?",
+        "distractor": "",
+        "emoji": "💊",
+        "tip": "Útil para urgências leves."
+      },
+      {
+        "en": "I'm having an allergic reaction.",
+        "pt": "Estou tendo uma reação alérgica.",
+        "distractor": "",
+        "emoji": "⚠️",
+        "tip": "Frase crítica para emergências médicas."
+      },
+      {
+        "en": "My phone is dead. Can I make a call?",
+        "pt": "Meu celular descarregou. Posso fazer uma ligação?",
+        "distractor": "",
+        "emoji": "🪫",
+        "tip": "Dead = sem bateria."
+      },
+      {
+        "en": "I need to file a police report.",
+        "pt": "Preciso fazer um boletim de ocorrência.",
+        "distractor": "",
+        "emoji": "📋",
+        "tip": "Police report = B.O. (exigido por seguros)."
+      },
+      {
+        "en": "Please stay with me.",
+        "pt": "Por favor, fique comigo.",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "Para pedir apoio até a ajuda chegar."
       }
     ],
     "builder": [

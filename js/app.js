@@ -102,27 +102,55 @@
     return rounds;
   }
 
-  // Monta a fila da Etapa 5 (Prática Final) usando TODAS as frases com métodos variados e aleatórios
+  // Monta a fila da Etapa 5 (Prática Final): TODAS as frases do assunto + Revisão de lições anteriores
   function createFinalPracticeQueue(scenario) {
     const methods = ['shadowing', 'writing', 'blocks', 'listening'];
     const queue = [];
     const phrases = shuffle(scenario.phrases);
 
-    // Primeira passagem: 100% das frases do assunto, alternando os 4 métodos
+    // 1. Primeira passagem: 100% das frases do assunto atual, alternando os 4 métodos
     phrases.forEach((phrase, idx) => {
       const method = methods[idx % methods.length];
-      queue.push({ phrase, method });
+      queue.push({ phrase, method, isReview: false });
     });
 
-    // Se o cenário tiver menos de 8 frases (ex: 4 frases), faz uma 2ª passagem repetindo
-    // as mesmas frases com MÉTODOS DIFERENTES para fixar todas as formas de conversa
+    // 2. Se o cenário tiver menos de 8 frases, faz uma 2ª passagem com MÉTODOS DIFERENTES
     if (phrases.length < 8) {
       const secondPass = shuffle(scenario.phrases);
       secondPass.forEach((phrase) => {
         const prevEntry = queue.find((q) => q.phrase.en === phrase.en);
         const otherMethods = methods.filter((m) => !prevEntry || m !== prevEntry.method);
         const chosenMethod = otherMethods[Math.floor(Math.random() * otherMethods.length)];
-        queue.push({ phrase, method: chosenMethod });
+        queue.push({ phrase, method: chosenMethod, isReview: false });
+      });
+    }
+
+    // 3. Revisão Espaçada: inclui até 3 frases de lições anteriores (ou já concluídas)
+    const completedIds = Object.keys(state.completedLessons)
+      .map(Number)
+      .filter((id) => id !== scenario.id);
+
+    const prevScenarios = window.SCENARIOS.filter(
+      (s) => s.id !== scenario.id && (completedIds.includes(s.id) || s.id < scenario.id)
+    );
+
+    if (prevScenarios.length > 0) {
+      const reviewPool = [];
+      prevScenarios.forEach((ps) => {
+        ps.phrases.forEach((p) => {
+          reviewPool.push({ phrase: p, fromTitle: ps.title });
+        });
+      });
+
+      const selectedReviews = shuffle(reviewPool).slice(0, Math.min(3, reviewPool.length));
+      selectedReviews.forEach((rev, i) => {
+        const method = methods[(i + 1) % methods.length];
+        queue.push({
+          phrase: rev.phrase,
+          method,
+          isReview: true,
+          reviewFrom: rev.fromTitle
+        });
       });
     }
 
@@ -596,6 +624,9 @@
     const phrase = task.phrase;
     const total = lesson.practiceQueue.length;
     const num = lesson.subIndex + 1;
+    const reviewTag = task.isReview
+      ? `<div class="tag" style="background:rgba(34,197,94,0.18);color:#86efac;margin-bottom:8px;">🔄 Revisão: ${task.reviewFrom}</div>`
+      : '';
 
     function advanceFinalPractice() {
       lesson.subIndex++;
@@ -610,6 +641,7 @@
     if (task.method === 'writing') {
       body.innerHTML = `
         <span class="method-badge">✍️ Escrita • Prática ${num}/${total}</span>
+        ${reviewTag}
         <h2 class="lesson-prompt-title">Escreva a frase em inglês</h2>
         <div class="visual-card" style="padding:20px 16px;">
           <div class="visual-emoji" style="font-size:2.4rem;">${phrase.emoji}</div>
@@ -667,6 +699,7 @@
     if (task.method === 'shadowing') {
       body.innerHTML = `
         <span class="method-badge">🎙️ Ouvir e Repetir • Prática ${num}/${total}</span>
+        ${reviewTag}
         <h2 class="lesson-prompt-title">Ouça e fale em voz alta</h2>
         <div class="card">
           <h2 class="shadow-en">${phrase.en}</h2>
@@ -742,6 +775,7 @@
 
       body.innerHTML = `
         <span class="method-badge">🧩 Completar Blocos • Prática ${num}/${total}</span>
+        ${reviewTag}
         <h2 class="lesson-prompt-title">Organize os blocos na ordem certa</h2>
         <div class="visual-card" style="padding:16px;">
           <p style="font-size:1.05rem;font-weight:700;">🇧🇷 ${phrase.pt}</p>
@@ -815,6 +849,7 @@
 
     body.innerHTML = `
       <span class="method-badge">🎧 Ouvido Rápido • Prática ${num}/${total}</span>
+      ${reviewTag}
       <h2 class="lesson-prompt-title">O que você ouviu?</h2>
       <div class="wave-player" id="btn-lp-wave">
         <span class="play-icon">🔊</span>
