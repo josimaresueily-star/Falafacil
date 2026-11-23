@@ -44,6 +44,28 @@
     return a;
   }
 
+
+  function isLevelUnlocked(levelNum) {
+    if (state.unlockAll || levelNum <= 1) return true;
+    const prevLevelLastId = (levelNum - 1) * 5;
+    return Boolean(state.completedLessons[prevLevelLastId]);
+  }
+
+  function isScenarioUnlocked(scenarioId) {
+    if (state.unlockAll || scenarioId <= 1) return true;
+    return Boolean(state.completedLessons[scenarioId - 1]);
+  }
+
+  function showToast(msg) {
+    const existing = document.querySelector('.lock-toast');
+    if (existing) existing.remove();
+    const el = document.createElement('div');
+    el.className = 'lock-toast';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2600);
+  }
+
   function normalizeText(str) {
     return (str || '')
       .toLowerCase()
@@ -185,18 +207,34 @@
   }
 
   /* ==================== TAB 1: TRILHA ==================== */
+  function renderLevelTabs() {
+    document.querySelectorAll('.level-pill').forEach((pill) => {
+      const lvl = Number(pill.dataset.level);
+      const unlocked = isLevelUnlocked(lvl);
+      pill.classList.toggle('locked', !unlocked);
+      pill.classList.toggle('active', lvl === currentLevel);
+      pill.textContent = unlocked ? `Nível ${lvl}` : `🔒 Nível ${lvl}`;
+    });
+  }
+
   function bindLevelTabs() {
     document.querySelectorAll('.level-pill').forEach((pill) => {
       pill.addEventListener('click', () => {
-        currentLevel = Number(pill.dataset.level);
-        document.querySelectorAll('.level-pill').forEach((p) => p.classList.remove('active'));
-        pill.classList.add('active');
+        const lvl = Number(pill.dataset.level);
+        if (!isLevelUnlocked(lvl)) {
+          showToast(`Conclua o Nível ${lvl - 1} para desbloquear o Nível ${lvl}!`);
+          return;
+        }
+        currentLevel = lvl;
+        renderLevelTabs();
         renderTrail();
       });
     });
   }
 
   function renderTrail() {
+    if (!isLevelUnlocked(currentLevel)) currentLevel = 1;
+    renderLevelTabs();
     document.getElementById('level-subtitle').textContent = window.LEVELS_META[currentLevel];
     const container = document.getElementById('trail-container');
     container.innerHTML = '';
@@ -204,8 +242,9 @@
     const items = window.SCENARIOS.filter((s) => s.level === currentLevel);
     items.forEach((s) => {
       const stars = state.completedLessons[s.id] || 0;
+      const unlocked = isScenarioUnlocked(s.id);
       const card = document.createElement('div');
-      card.className = 'lesson-circle-card' + (stars > 0 ? ' completed' : '');
+      card.className = 'lesson-circle-card' + (stars > 0 ? ' completed' : '') + (!unlocked ? ' locked' : '');
 
       let starsHtml = '';
       for (let i = 1; i <= 3; i++) {
@@ -214,19 +253,29 @@
 
       card.innerHTML = `
         <span class="lesson-num">Cenário ${s.id} • ${s.phrases.length} frases</span>
-        <div class="lesson-emoji">${s.emoji}</div>
+        <div class="lesson-emoji">${unlocked ? s.emoji : '🔒'}</div>
         <h3 class="lesson-title">${s.title}</h3>
         <div class="stars-row">${starsHtml}</div>
         <div class="circle-actions">
-          <button class="btn-start-circle">${stars > 0 ? 'Repetir' : 'Começar'}</button>
-          ${stars > 0 ? '<button class="btn-quick-circle" title="Ir direto para a Prática Aleatória">⚡ Prática</button>' : ''}
+          ${
+            unlocked
+              ? `<button class="btn-start-circle">${stars > 0 ? 'Repetir' : 'Começar'}</button>
+                 ${stars > 0 || state.unlockAll ? '<button class="btn-quick-circle" title="Ir direto para a Prática Aleatória">⚡ Prática</button>' : ''}`
+              : `<button class="btn-locked-circle">🔒 Bloqueado</button>`
+          }
         </div>
       `;
 
-      card.querySelector('.btn-start-circle').addEventListener('click', () => startLesson(s, 1));
-      const quickBtn = card.querySelector('.btn-quick-circle');
-      if (quickBtn) {
-        quickBtn.addEventListener('click', () => startLesson(s, 4));
+      if (unlocked) {
+        card.querySelector('.btn-start-circle').addEventListener('click', () => startLesson(s, 1));
+        const quickBtn = card.querySelector('.btn-quick-circle');
+        if (quickBtn) {
+          quickBtn.addEventListener('click', () => startLesson(s, 4));
+        }
+      } else {
+        card.querySelector('.btn-locked-circle').addEventListener('click', () => {
+          showToast(`Conclua o Cenário ${s.id - 1} para desbloquear esta lição!`);
+        });
       }
       container.appendChild(card);
     });
@@ -731,7 +780,7 @@
           <div class="mic-area" style="margin-bottom:0;">
             <button class="btn-mic" id="btn-lp-mic">
               <span class="mic-icon">🎙️</span>
-              <span id="lp-mic-label">Toque e repita (meta: 60%+)</span>
+              <span id="lp-mic-label">Toque e repita em voz alta</span>
             </button>
             <div id="lp-speech-res" class="speech-result hidden"></div>
           </div>
@@ -761,7 +810,7 @@
             resBox.innerHTML = `
               <strong>Você disse:</strong> "${transcript}"<br/>
               <strong>Precisão:</strong> <span style="color:${score >= 60 ? '#22c55e' : '#ef4444'}">${score}%</span>
-              ${score >= 60 ? ' — Aprovado! 🎉' : ' — Abaixo de 60%. Tente de novo ou avance para refazer no fim da fila.'}
+              ${score >= 60 ? ' — Ótima pronúncia! 🎉' : ' — Vamos praticar esta frase novamente ao final da aula.'}
             `;
           },
           (err) => {
@@ -1016,7 +1065,7 @@
           resultBox.innerHTML = `
             <strong>Você disse:</strong> "${transcript}"<br/>
             <strong>Precisão:</strong> <span style="color:${score >= 60 ? '#22c55e' : '#ef4444'}">${score}%</span>
-            ${score >= 60 ? ' — Excelente pronúncia! 🎉' : ' — Abaixo de 60%. Ouça em 0.75x e tente novamente.'}
+            ${score >= 60 ? ' — Excelente pronúncia! 🎉' : ' — Ouça em 0.75x e tente novamente.'}
           `;
         },
         (err) => {
@@ -1242,12 +1291,80 @@
     document.getElementById('btn-reset-progress').addEventListener('click', () => {
       if (confirm('Tem certeza que deseja apagar todo o seu progresso?')) {
         state = window.AppStorage.reset();
+        currentLevel = 1;
         renderTopBar();
         renderTrail();
         renderPhrasebook();
         renderSettings();
       }
     });
+
+    // Senha escondida nos Ajustes: 5 toques em "FalaFácil v6.0" abre o painel de teste
+    let devTaps = 0;
+    let devTapTimer = null;
+    const versionTrigger = document.getElementById('app-version-trigger');
+    const devPanel = document.getElementById('dev-unlock-panel');
+    const devInput = document.getElementById('dev-password-input');
+    const devMsg = document.getElementById('dev-msg');
+
+    versionTrigger.addEventListener('click', () => {
+      devTaps++;
+      clearTimeout(devTapTimer);
+      devTapTimer = setTimeout(() => { devTaps = 0; }, 2000);
+      if (devTaps >= 5) {
+        devTaps = 0;
+        devPanel.classList.toggle('hidden');
+        renderDevPanel();
+      }
+    });
+
+    function tryUnlockDev() {
+      const code = (devInput.value || '').trim().toLowerCase();
+      if (code === 'falafacil2026') {
+        state.unlockAll = true;
+        window.AppStorage.save(state);
+        devInput.value = '';
+        devMsg.style.color = '#86efac';
+        devMsg.textContent = '✅ Todas as lições e níveis foram desbloqueados para teste!';
+        renderDevPanel();
+        renderTrail();
+      } else {
+        devMsg.style.color = '#fca5a5';
+        devMsg.textContent = '❌ Senha incorreta.';
+      }
+    }
+
+    document.getElementById('btn-dev-unlock').addEventListener('click', tryUnlockDev);
+    devInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') tryUnlockDev();
+    });
+
+    document.getElementById('btn-dev-lock').addEventListener('click', () => {
+      state.unlockAll = false;
+      window.AppStorage.save(state);
+      devMsg.style.color = '#fde68a';
+      devMsg.textContent = '🔒 Modo teste desativado. Bloqueio normal restaurado.';
+      renderDevPanel();
+      renderTrail();
+    });
+  }
+
+  function renderDevPanel() {
+    const devPanel = document.getElementById('dev-unlock-panel');
+    const pwRow = document.getElementById('dev-password-row');
+    const lockBtn = document.getElementById('btn-dev-lock');
+    const statusText = document.getElementById('dev-status-text');
+
+    if (state.unlockAll) {
+      devPanel.classList.remove('hidden');
+      pwRow.classList.add('hidden');
+      lockBtn.classList.remove('hidden');
+      statusText.textContent = 'Modo Teste ATIVO — todas as 20 lições e 4 níveis estão liberados.';
+    } else {
+      pwRow.classList.remove('hidden');
+      lockBtn.classList.add('hidden');
+      statusText.textContent = 'Digite a senha para liberar todas as lições e níveis.';
+    }
   }
 
   function renderSettings() {
@@ -1260,6 +1377,7 @@
     document.getElementById('select-accent').value = state.accent;
     document.getElementById('select-goal').value = String(state.dailyGoal);
     document.getElementById('select-rate').value = String(state.rate);
+    renderDevPanel();
   }
 
   document.addEventListener('DOMContentLoaded', init);

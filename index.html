@@ -217,6 +217,20 @@
         <div class="card danger-card">
           <button class="btn-danger" id="btn-reset-progress">🗑️ Resetar todo o progresso</button>
         </div>
+
+        <!-- Painel oculto de teste (ativado com 5 toques na versão abaixo) -->
+        <div id="dev-unlock-panel" class="card hidden">
+          <strong style="display:block;margin-bottom:6px;">🔓 Modo Teste (Desenvolvedor)</strong>
+          <p class="muted" id="dev-status-text" style="margin-bottom:10px;">Digite a senha para liberar todas as lições e níveis.</p>
+          <div id="dev-password-row" style="display:flex;gap:8px;">
+            <input type="password" id="dev-password-input" class="writing-input" style="padding:10px 12px;font-size:0.9rem;" placeholder="Senha de teste..." />
+            <button class="btn-primary" id="btn-dev-unlock" style="white-space:nowrap;">Liberar</button>
+          </div>
+          <button class="btn-secondary hidden" id="btn-dev-lock" style="width:100%;margin-top:8px;">🔒 Desativar Modo Teste (voltar bloqueio)</button>
+          <p id="dev-msg" class="muted" style="margin-top:8px;"></p>
+        </div>
+
+        <p id="app-version-trigger" class="version-footer">FalaFácil v6.0</p>
       </section>
     </main>
 

@@ -1,4 +1,4 @@
-// Banco de Dados Completo v4: 4 Níveis, 20 Cenários e 340+ Frases Prontas
+// Banco de Dados Completo v6: 4 Níveis, 20 Cenários, 346 Frases e Diálogos Progressivos Completos
 window.LEVELS_META = {
   "1": "Primeiros Contatos e Sobrevivência",
   "2": "Viagem e Deslocamento",
@@ -180,11 +180,11 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Alex",
-        "en": "Hi! I'm Alex. Nice to meet you!",
-        "pt": "Oi! Eu sou o Alex. Prazer em te conhecer!",
+        "en": "Hi! I'm Alex. Nice to meet you! What's your name?",
+        "pt": "Oi! Eu sou o Alex. Prazer em te conhecer! Qual é o seu nome?",
         "options": [
           {
-            "en": "Hi! Nice to meet you too!",
+            "en": "Hi, Alex! I'm Ana. Nice to meet you too!",
             "correct": true
           },
           {
@@ -195,15 +195,45 @@ window.SCENARIOS = [
       },
       {
         "speaker": "Alex",
-        "en": "Where are you from?",
-        "pt": "De onde você é?",
+        "en": "Where are you from? And what do you do for a living?",
+        "pt": "De onde você é? E com o que você trabalha?",
         "options": [
           {
-            "en": "I'm from Brazil. How about you?",
+            "en": "I'm from Brazil and I work in technology. How about you?",
             "correct": true
           },
           {
             "en": "Turn left at the bank.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Alex",
+        "en": "I'm a designer! Hey, let's keep in touch. Are you on WhatsApp or Instagram?",
+        "pt": "Eu sou designer! Ei, vamos manter contato. Você usa WhatsApp ou Instagram?",
+        "options": [
+          {
+            "en": "Yes! Can I have your WhatsApp? Do you have Instagram too?",
+            "correct": true
+          },
+          {
+            "en": "I have a headache.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Alex",
+        "en": "Sure, here is my number! It was great meeting you!",
+        "pt": "Claro, aqui está meu número! Foi ótimo te conhecer!",
+        "options": [
+          {
+            "en": "Thanks! I'll send you a message. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Two tickets, please.",
             "correct": false
           }
         ]
@@ -488,30 +518,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Local",
-        "en": "Hello! Can I help you?",
-        "pt": "Olá! Posso te ajudar?",
+        "en": "Hello! You look a bit lost. Can I help you?",
+        "pt": "Olá! Você parece um pouco perdido. Posso te ajudar?",
         "options": [
           {
-            "en": "Excuse me, where is the subway?",
+            "en": "Hi! Excuse me, sorry to bother you. I'm trying to find the subway station.",
             "correct": true
           },
           {
-            "en": "Two tickets, please.",
+            "en": "I'd like a medium coffee.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Local",
-        "en": "Go straight and turn left. About three minutes.",
-        "pt": "Siga em frente e vire à esquerda. Cerca de três minutos.",
+        "en": "No problem! Walk straight down this street and turn left at the bank.",
+        "pt": "Sem problemas! Ande reto por esta rua e vire à esquerda no banco.",
         "options": [
           {
-            "en": "Thank you so much!",
+            "en": "Is it far from here? Can I go there on foot?",
             "correct": true
           },
           {
-            "en": "I have a headache.",
+            "en": "What's your Instagram handle?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Local",
+        "en": "Yes, it's within walking distance — about five minutes. Where are you from?",
+        "pt": "Sim, dá para ir caminhando — cerca de cinco minutos. De onde você é?",
+        "options": [
+          {
+            "en": "I'm from Brazil! I'm learning English.",
+            "correct": true
+          },
+          {
+            "en": "No onions, please.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Local",
+        "en": "Your English is great! Enjoy the city!",
+        "pt": "Seu inglês é ótimo! Aproveite a cidade!",
+        "options": [
+          {
+            "en": "Thank you so much! Have a nice day. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Where is the fitting room?",
             "correct": false
           }
         ]
@@ -635,30 +695,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Barista",
-        "en": "Hi! What can I get for you?",
-        "pt": "Oi! O que posso servir para você?",
+        "en": "Good morning! Welcome! What can I get for you?",
+        "pt": "Bom dia! Bem-vindo! O que posso servir para você?",
         "options": [
           {
-            "en": "Can I have a medium coffee, please?",
+            "en": "Hi! Can I have a medium coffee with milk, no sugar, please?",
             "correct": true
           },
           {
-            "en": "I'm here on vacation.",
+            "en": "Turn right at the corner.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Barista",
-        "en": "For here or to go?",
-        "pt": "Para comer aqui ou para viagem?",
+        "en": "Sure! For here or to go?",
+        "pt": "Claro! Para comer aqui ou para viagem?",
         "options": [
           {
-            "en": "To go, please. Can I pay by card?",
+            "en": "To go, please. Can you warm this croissant up too?",
             "correct": true
           },
           {
-            "en": "Nice to meet you!",
+            "en": "I'm from Brazil.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Barista",
+        "en": "Of course! Anything else?",
+        "pt": "Com certeza! Mais alguma coisa?",
+        "options": [
+          {
+            "en": "That's all, thank you. Can I pay by card?",
+            "correct": true
+          },
+          {
+            "en": "I'm lost. Can you help me?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Barista",
+        "en": "Yes, right here. Would you like your receipt?",
+        "pt": "Sim, bem aqui. Gostaria do recibo?",
+        "options": [
+          {
+            "en": "Keep the receipt, thanks! Have a nice day!",
+            "correct": true
+          },
+          {
+            "en": "Let's exchange numbers!",
             "correct": false
           }
         ]
@@ -782,30 +872,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Atendente",
-        "en": "Your gate is B12, boarding starts at 3:15.",
-        "pt": "Seu portão é o B12, o embarque começa às 15h15.",
+        "en": "Hi there! Your express train leaves from platform 9B in four minutes.",
+        "pt": "Olá! Seu trem expresso sai da plataforma 9B em quatro minutos.",
         "options": [
           {
-            "en": "Sorry, I didn't catch that. Could you speak slower?",
+            "en": "Sorry, I didn't catch that. My English is still basic. Could you speak slower?",
             "correct": true
           },
           {
-            "en": "Keep the change.",
+            "en": "For here, please.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Atendente",
-        "en": "Sure. Gate B-12. Boarding at 3:15.",
-        "pt": "Claro. Portão B-12. Embarque às 15h15.",
+        "en": "Of course! Platform 9-B. Walk straight and turn left.",
+        "pt": "Claro! Plataforma 9-B. Siga em frente e vire à esquerda.",
         "options": [
           {
-            "en": "Got it! Thank you so much!",
+            "en": "Could you write it down, please? Just to be sure.",
             "correct": true
           },
           {
-            "en": "No onions, please.",
+            "en": "Do you have Instagram?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Sure, here you go: Platform 9B. Do you understand now?",
+        "pt": "Claro, aqui está: Plataforma 9B. Você entendeu agora?",
+        "options": [
+          {
+            "en": "Yes, I think I understand now! Is it far from here?",
+            "correct": true
+          },
+          {
+            "en": "With milk, no sugar.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "No, just two minutes on foot! Have a great trip!",
+        "pt": "Não, apenas dois minutos a pé! Boa viagem!",
+        "options": [
+          {
+            "en": "Thank you for your patience! Have a nice day. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Keep the receipt, thanks.",
             "correct": false
           }
         ]
@@ -943,30 +1063,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Funcionário",
-        "en": "Hi! Can I help you find something?",
-        "pt": "Oi! Posso ajudar a encontrar algo?",
+        "en": "Hi! Welcome! Can I help you find anything?",
+        "pt": "Oi! Bem-vindo! Posso ajudar a encontrar algo?",
         "options": [
           {
-            "en": "Where can I find the bread?",
+            "en": "Excuse me, where can I find the bread and rice?",
             "correct": true
           },
           {
-            "en": "What's the Wi-Fi password?",
+            "en": "Could you repeat that?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Funcionário",
-        "en": "It's in aisle 4, on your right.",
-        "pt": "Fica no corredor 4, à sua direita.",
+        "en": "They're on aisle six, on your right. Did you find everything okay?",
+        "pt": "Estão no corredor seis, à sua direita. Encontrou tudo o que precisava?",
         "options": [
           {
-            "en": "Thanks! And how much is this water?",
+            "en": "Yes, thanks! How much is this water?",
             "correct": true
           },
           {
-            "en": "I'm allergic to nuts.",
+            "en": "I work in technology.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Caixa",
+        "en": "It's two dollars. Would you like a bag? And how would you like to pay?",
+        "pt": "São dois dólares. Gostaria de uma sacola? E como gostaria de pagar?",
+        "options": [
+          {
+            "en": "Yes, please. I'd like to pay with a credit card.",
+            "correct": true
+          },
+          {
+            "en": "Go straight and turn left.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Caixa",
+        "en": "All set! Please sign here. Have a great day!",
+        "pt": "Tudo certo! Por favor, assine aqui. Tenha um ótimo dia!",
+        "options": [
+          {
+            "en": "Thank you so much! You too, bye!",
+            "correct": true
+          },
+          {
+            "en": "How do you spell that?",
             "correct": false
           }
         ]
@@ -1125,30 +1275,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Atendente",
-        "en": "Good morning! Window or aisle seat?",
-        "pt": "Bom dia! Assento na janela ou corredor?",
+        "en": "Good morning! Can I see your ticket and your passport, please?",
+        "pt": "Bom dia! Posso ver sua passagem e seu passaporte, por favor?",
         "options": [
           {
-            "en": "Can I have a window seat, please?",
+            "en": "Good morning! Sure, I'd like to check in. Here they are.",
             "correct": true
           },
           {
-            "en": "A table for two, please.",
+            "en": "I'm just looking, thanks.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Atendente",
-        "en": "Sure! Here is your boarding pass. Gate 14.",
-        "pt": "Claro! Aqui está seu cartão de embarque. Portão 14.",
+        "en": "Thank you. Are you checking in your luggage or just carry-on?",
+        "pt": "Obrigado. Você vai despachar sua bagagem ou é só bagagem de mão?",
         "options": [
           {
-            "en": "Thank you! Is my flight on time?",
+            "en": "I need to check in my luggage. Can I have a window seat, please?",
             "correct": true
           },
           {
-            "en": "It's a bit too tight.",
+            "en": "Where can I find the bread?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Done! Window seat 12A. Your gate is B12 and the flight is on time.",
+        "pt": "Pronto! Assento na janela 12A. Seu portão é B12 e o voo está no horário.",
+        "options": [
+          {
+            "en": "Sorry, could you repeat the gate? Where do I go next?",
+            "correct": true
+          },
+          {
+            "en": "With a credit card.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Gate B12. Walk straight and follow the signs. Enjoy your trip!",
+        "pt": "Portão B12. Siga em frente e acompanhe as placas. Aproveite sua viagem!",
+        "options": [
+          {
+            "en": "Got it! Thank you so much. Have a nice day!",
+            "correct": true
+          },
+          {
+            "en": "Keep the change.",
             "correct": false
           }
         ]
@@ -1349,30 +1529,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Oficial",
-        "en": "Passport, please. What is the purpose of your visit?",
-        "pt": "Passaporte, por favor. Qual o motivo da sua visita?",
+        "en": "Next! Passport, please. Where are you coming from?",
+        "pt": "Próximo! Passaporte, por favor. De onde você está vindo?",
         "options": [
           {
-            "en": "Here is my passport. I'm here on vacation.",
+            "en": "Hello! Here is my passport. I'm from São Paulo, Brazil.",
             "correct": true
           },
           {
-            "en": "Can I try this on?",
+            "en": "Can I have a window seat?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Oficial",
-        "en": "How long are you staying?",
-        "pt": "Quanto tempo você vai ficar?",
+        "en": "What's the purpose of your visit? Business or pleasure?",
+        "pt": "Qual é o propósito da sua visita? Negócios ou lazer?",
         "options": [
           {
-            "en": "I'm staying for ten days.",
+            "en": "I'm here on vacation. Are you asking how long I'm staying?",
             "correct": true
           },
           {
-            "en": "You're breaking up.",
+            "en": "It's on aisle six.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Oficial",
+        "en": "Yes. How long are you staying, and where are you staying?",
+        "pt": "Sim. Quanto tempo vai ficar e onde vai ficar hospedado?",
+        "options": [
+          {
+            "en": "I'm staying for fifteen days at the Central Hotel.",
+            "correct": true
+          },
+          {
+            "en": "Can I pay by card?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Oficial",
+        "en": "Everything looks good. Welcome to America! Have a nice day.",
+        "pt": "Tudo certo. Bem-vindo à América! Tenha um bom dia.",
+        "options": [
+          {
+            "en": "Thank you very much! You too, goodbye!",
+            "correct": true
+          },
+          {
+            "en": "To go, please.",
             "correct": false
           }
         ]
@@ -1496,30 +1706,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Motorista",
-        "en": "Hi! Where are we going today?",
-        "pt": "Oi! Para onde vamos hoje?",
+        "en": "Hi! Are you Ana? Where are we going today?",
+        "pt": "Oi! Você é a Ana? Para onde vamos hoje?",
         "options": [
           {
-            "en": "Could you take me to the Central Hotel, please?",
+            "en": "Yes, hi! Could you take me to the Central Hotel, please?",
             "correct": true
           },
           {
-            "en": "I'd like to return this.",
+            "en": "Here is my passport.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Motorista",
-        "en": "Sure! Do you want me to drop you at the main door?",
-        "pt": "Claro! Quer que eu te deixe na porta principal?",
+        "en": "Sure! Let me open the trunk for your luggage. How long are you staying in town?",
+        "pt": "Claro! Deixa eu abrir o porta-malas para sua mala. Quanto tempo vai ficar na cidade?",
         "options": [
           {
-            "en": "Yes, you can stop right here. Thanks!",
+            "en": "Thanks! I'm here on vacation for ten days. Is there a lot of traffic?",
             "correct": true
           },
           {
-            "en": "What do you recommend?",
+            "en": "Would you like a bag?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Motorista",
+        "en": "Not too bad, about fifteen minutes. Would you like the AC on?",
+        "pt": "Não está ruim, cerca de quinze minutos. Gostaria do ar-condicionado ligado?",
+        "options": [
+          {
+            "en": "Yes, please! Could you turn on the AC?",
+            "correct": true
+          },
+          {
+            "en": "Where is gate B12?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Motorista",
+        "en": "We're here! That's twenty dollars.",
+        "pt": "Chegamos! São vinte dólares.",
+        "options": [
+          {
+            "en": "You can stop right here. Keep the change, thanks! Bye!",
+            "correct": true
+          },
+          {
+            "en": "I'm just looking, thanks.",
             "correct": false
           }
         ]
@@ -1643,30 +1883,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Recepção",
-        "en": "Welcome to our hotel! How can I help you?",
-        "pt": "Bem-vindo ao nosso hotel! Como posso ajudar?",
+        "en": "Welcome to Central Hotel! How can I help you?",
+        "pt": "Bem-vindo ao Central Hotel! Como posso ajudar?",
         "options": [
           {
-            "en": "Hi, I have a reservation under Silva.",
+            "en": "Hi! I have a reservation under Silva. Is my room ready?",
             "correct": true
           },
           {
-            "en": "I lost my passport.",
+            "en": "Does this bus go to downtown?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Recepção",
-        "en": "Great, you're in room 302. Here is your key.",
-        "pt": "Ótimo, você está no quarto 302. Aqui está sua chave.",
+        "en": "Yes! Can I see your passport, please? You're in room 302 on the third floor.",
+        "pt": "Sim! Posso ver seu passaporte, por favor? Você está no quarto 302 no terceiro andar.",
         "options": [
           {
-            "en": "Thanks! What's the Wi-Fi password?",
+            "en": "Sure, here it is. What's the Wi-Fi password and what time is breakfast?",
             "correct": true
           },
           {
-            "en": "Let's grab a coffee!",
+            "en": "How much is the fare?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Recepção",
+        "en": "Breakfast is from 7 to 10 AM, and the Wi-Fi password is on your key card.",
+        "pt": "O café é das 7h às 10h, e a senha do Wi-Fi está no seu cartão-chave.",
+        "options": [
+          {
+            "en": "Great! Also, could I get extra towels later?",
+            "correct": true
+          },
+          {
+            "en": "I'm here on business.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Recepção",
+        "en": "Of course, we'll send them up right away. Enjoy your stay!",
+        "pt": "Claro, vamos enviar já já. Aproveite sua estadia!",
+        "options": [
+          {
+            "en": "Thank you so much! See you later!",
+            "correct": true
+          },
+          {
+            "en": "You can stop right here.",
             "correct": false
           }
         ]
@@ -1790,30 +2060,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Bilheteria",
-        "en": "Hello! Welcome to the Art Museum.",
-        "pt": "Olá! Bem-vindo ao Museu de Arte.",
+        "en": "Hello! Welcome to the Art Museum. How can I help you?",
+        "pt": "Olá! Bem-vindo ao Museu de Arte. Como posso ajudar?",
         "options": [
           {
-            "en": "Hi, two tickets, please.",
+            "en": "Hi! How much is a ticket? Is there a student discount?",
             "correct": true
           },
           {
-            "en": "Do you have something for a cold?",
+            "en": "My key card isn't working.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Bilheteria",
-        "en": "That's thirty dollars. Enjoy your visit!",
-        "pt": "São trinta dólares. Aproveite sua visita!",
+        "en": "It's fifteen dollars, and yes, students pay ten. How many tickets?",
+        "pt": "São quinze dólares, e sim, estudantes pagam dez. Quantos ingressos?",
         "options": [
           {
-            "en": "Thank you! What time do you close?",
+            "en": "Two tickets, please. Can I pay by card?",
             "correct": true
           },
           {
-            "en": "I'll call you back.",
+            "en": "Could I get extra towels?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Bilheteria",
+        "en": "Sure! Would you also like an audio guide?",
+        "pt": "Claro! Gostaria também de um audioguia?",
+        "options": [
+          {
+            "en": "Is there an audio guide in Portuguese? And what time do you close?",
+            "correct": true
+          },
+          {
+            "en": "Is my flight on time?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Bilheteria",
+        "en": "Yes, we have Portuguese! We close at 6 PM. The entrance is on your left.",
+        "pt": "Sim, temos em português! Fechamos às 18h. A entrada fica à sua esquerda.",
+        "options": [
+          {
+            "en": "Awesome, thank you so much! Have a nice day!",
+            "correct": true
+          },
+          {
+            "en": "Could you open the trunk?",
             "correct": false
           }
         ]
@@ -2006,31 +2306,61 @@ window.SCENARIOS = [
     ],
     "dialogue": [
       {
-        "speaker": "Garçom",
-        "en": "Good evening! Are you ready to order?",
-        "pt": "Boa noite! Prontos para fazer o pedido?",
+        "speaker": "Recepcionista",
+        "en": "Good evening! Welcome! Party of how many?",
+        "pt": "Boa noite! Bem-vindos! Mesa para quantas pessoas?",
         "options": [
           {
-            "en": "Yes. What do you recommend?",
+            "en": "Good evening! A table for two, please.",
             "correct": true
           },
           {
-            "en": "Where is the fitting room?",
+            "en": "Two tickets, please.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Garçom",
-        "en": "The pasta is very popular tonight.",
-        "pt": "A massa está muito pedida hoje à noite.",
+        "en": "Here is the menu. Would you like something to drink first?",
+        "pt": "Aqui está o cardápio. Gostariam de algo para beber primeiro?",
         "options": [
           {
-            "en": "Okay, I'll have the pasta, please.",
+            "en": "May I have some tap water and a Coke, please?",
             "correct": true
           },
           {
-            "en": "Here is my receipt.",
+            "en": "What floor is my room on?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Garçom",
+        "en": "Sure! Are you ready to order, or do you need a few more minutes?",
+        "pt": "Claro! Estão prontos para pedir ou precisam de mais alguns minutos?",
+        "options": [
+          {
+            "en": "I'm ready to order. What do you recommend?",
+            "correct": true
+          },
+          {
+            "en": "Can I take pictures here?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Garçom",
+        "en": "The grilled fish and the pasta are both amazing!",
+        "pt": "O peixe grelhado e a massa são incríveis!",
+        "options": [
+          {
+            "en": "I'll go with the fish, please. Thank you!",
+            "correct": true
+          },
+          {
+            "en": "I'd like to check out, please.",
             "correct": false
           }
         ]
@@ -2133,30 +2463,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Garçom",
-        "en": "Did you enjoy your meal?",
-        "pt": "Vocês gostaram da refeição?",
+        "en": "Before I send your order, do you have any food allergies?",
+        "pt": "Antes de enviar seu pedido, você tem alguma alergia alimentar?",
         "options": [
           {
-            "en": "Yes, it was great! Can we have the check, please?",
+            "en": "Yes, I'm allergic to nuts. And no onions, please.",
             "correct": true
           },
           {
-            "en": "I have a fever.",
+            "en": "Is there an audio guide?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Garçom",
-        "en": "Of course, here is your check.",
-        "pt": "Claro, aqui está a sua conta.",
+        "en": "Got it! (Later...) Are you still working on that, or are you done?",
+        "pt": "Entendido! (Mais tarde...) Ainda está comendo ou já terminou?",
         "options": [
           {
-            "en": "Thank you. Is service included?",
+            "en": "Yes, I'm done. Everything was delicious! Can we have the check, please?",
             "correct": true
           },
           {
-            "en": "Hold on a second.",
+            "en": "I need a few more minutes.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Garçom",
+        "en": "Here is your check. How would you like to pay?",
+        "pt": "Aqui está a sua conta. Como gostaria de pagar?",
+        "options": [
+          {
+            "en": "With a credit card. Excuse me, is service included?",
+            "correct": true
+          },
+          {
+            "en": "Where is the entrance?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Garçom",
+        "en": "Yes, service is already included. Thank you for coming!",
+        "pt": "Sim, o serviço já está incluído. Obrigado por virem!",
+        "options": [
+          {
+            "en": "Thank you so much! Have a great evening. Bye!",
+            "correct": true
+          },
+          {
+            "en": "I'm still working on it.",
             "correct": false
           }
         ]
@@ -2399,30 +2759,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Vendedor",
-        "en": "Let me know if you need any help!",
-        "pt": "Me avise se precisar de ajuda!",
+        "en": "Hello, welcome! Are you looking for anything specific?",
+        "pt": "Olá, bem-vindo! Você está procurando algo específico?",
         "options": [
           {
-            "en": "Excuse me, can I try this on?",
+            "en": "Hi! I'm looking for a white T-shirt. Can I try this on?",
             "correct": true
           },
           {
-            "en": "Is my flight on time?",
+            "en": "Can we have the check, please?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Vendedor",
-        "en": "Sure! The fitting room is right over there. How does it fit?",
+        "en": "Of course! The fitting room is right over there. How does it fit?",
         "pt": "Claro! O provador é bem ali. Como serviu?",
         "options": [
           {
-            "en": "It's a bit too tight. Do you have this in large?",
+            "en": "It's a bit too tight. Do you have it in a bigger size?",
             "correct": true
           },
           {
-            "en": "Please call the police.",
+            "en": "I'm allergic to nuts.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Vendedor",
+        "en": "Let me check in the back... Yes! Here is a large. How do you like it?",
+        "pt": "Deixa eu ver lá atrás... Sim! Aqui está o grande. O que achou?",
+        "options": [
+          {
+            "en": "I think it fits me well! How much is this? Can I pay by card?",
+            "correct": true
+          },
+          {
+            "en": "How would you like your steak?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Vendedor",
+        "en": "It's twenty-five dollars and yes, we take card. Do you need a bag?",
+        "pt": "São vinte e cinco dólares e sim, aceitamos cartão. Precisa de sacola?",
+        "options": [
+          {
+            "en": "Yes, please. Thank you very much! Bye!",
+            "correct": true
+          },
+          {
+            "en": "Party of two.",
             "correct": false
           }
         ]
@@ -2686,30 +3076,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Farmacêutico",
-        "en": "Hi, how can I help you today?",
-        "pt": "Oi, como posso ajudar hoje?",
+        "en": "Hello! How can I help you today?",
+        "pt": "Olá! Como posso ajudar hoje?",
         "options": [
           {
-            "en": "I have a headache. Do you have something for it?",
+            "en": "Hi! Can I talk to the pharmacist? I have a headache and a sore throat.",
             "correct": true
           },
           {
-            "en": "How was your weekend?",
+            "en": "Do you have it in a different color?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Farmacêutico",
-        "en": "Yes, these tablets work really well.",
-        "pt": "Sim, estes comprimidos funcionam muito bem.",
+        "en": "I'm the pharmacist. Do you have a fever or any allergies?",
+        "pt": "Eu sou o farmacêutico. Você está com febre ou alguma alergia?",
         "options": [
           {
-            "en": "Thanks! How often should I take them?",
+            "en": "No fever, and I'm allergic to nuts. Do you have something for a cold?",
             "correct": true
           },
           {
-            "en": "To go, please.",
+            "en": "Let me try it on.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Farmacêutico",
+        "en": "Yes, this Advil and these throat lozenges work very well.",
+        "pt": "Sim, este Advil e estas pastilhas para garganta funcionam muito bem.",
+        "options": [
+          {
+            "en": "Thanks! How often should I take them? How much is it?",
+            "correct": true
+          },
+          {
+            "en": "Where are the restrooms?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Farmacêutico",
+        "en": "Every eight hours. That's twelve dollars. Feel better soon!",
+        "pt": "A cada oito horas. São doze dólares. Melhoras!",
+        "options": [
+          {
+            "en": "Thank you so much for your help! Goodbye!",
+            "correct": true
+          },
+          {
+            "en": "I'll go with the fish.",
             "correct": false
           }
         ]
@@ -2777,30 +3197,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Atendente",
-        "en": "Hello! What seems to be the problem?",
-        "pt": "Olá! Qual parece ser o problema?",
+        "en": "Hello! Welcome to customer service. How can I help you?",
+        "pt": "Olá! Bem-vindo ao atendimento ao cliente. Como posso ajudar?",
         "options": [
           {
-            "en": "I'd like to return this charger. It doesn't work.",
+            "en": "Hi! I'd like to return this charger. It doesn't work.",
             "correct": true
           },
           {
-            "en": "Can I take pictures here?",
+            "en": "I have a sore throat.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Atendente",
-        "en": "No problem! Do you have your receipt?",
-        "pt": "Sem problemas! Você tem a nota fiscal?",
+        "en": "I'm sorry about that! Do you have your receipt?",
+        "pt": "Sinto muito por isso! Você tem a nota fiscal?",
         "options": [
           {
             "en": "Yes, here is my receipt. Can I get a refund?",
             "correct": true
           },
           {
-            "en": "What time is breakfast?",
+            "en": "I'm just browsing.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Of course. Did you pay in cash or with a credit card?",
+        "pt": "Claro. Você pagou em dinheiro ou com cartão de crédito?",
+        "options": [
+          {
+            "en": "I paid with a credit card. Here it is.",
+            "correct": true
+          },
+          {
+            "en": "I'm feeling dizzy.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Done! The refund will show up in two days. Anything else?",
+        "pt": "Pronto! O reembolso aparecerá em dois dias. Mais alguma coisa?",
+        "options": [
+          {
+            "en": "That's all, thank you for your patience! Have a nice day, bye!",
+            "correct": true
+          },
+          {
+            "en": "No onions, please.",
             "correct": false
           }
         ]
@@ -2924,30 +3374,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Colega",
-        "en": "Hey! How's it going?",
-        "pt": "Ei! Tudo bem?",
+        "en": "Hey! How's it going? What have you been up to?",
+        "pt": "Ei! Tudo bem? O que você tem feito ultimamente?",
         "options": [
           {
-            "en": "Pretty good! How was your weekend?",
+            "en": "Pretty good! I'm learning English and working a lot. How about you?",
             "correct": true
           },
           {
-            "en": "Where is the nearest hospital?",
+            "en": "Can I get a refund?",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Colega",
-        "en": "It was great! By the way, I love your jacket.",
-        "pt": "Foi ótimo! A propósito, adorei sua jaqueta.",
+        "en": "Same here! By the way, I really like your jacket! Where did you get that?",
+        "pt": "Eu também! A propósito, gostei muito da sua jaqueta! Onde você comprou?",
         "options": [
           {
-            "en": "Thank you so much!",
+            "en": "Thank you! I got it at the shopping mall. It's really hot today, right?",
             "correct": true
           },
           {
-            "en": "I'm allergic to nuts.",
+            "en": "Here is my receipt.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Colega",
+        "en": "Yes, super hot! Any plans for the weekend?",
+        "pt": "Sim, super quente! Algum plano para o fim de semana?",
+        "options": [
+          {
+            "en": "I'm just relaxing this weekend. How was your week?",
+            "correct": true
+          },
+          {
+            "en": "My foot hurts.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Colega",
+        "en": "Busy, but good! I have to run now. See you around!",
+        "pt": "Corrida, mas boa! Preciso ir agora. Até mais!",
+        "options": [
+          {
+            "en": "It was great talking to you! Have a nice weekend, bye!",
+            "correct": true
+          },
+          {
+            "en": "It doesn't work.",
             "correct": false
           }
         ]
@@ -3071,30 +3551,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Amigo",
-        "en": "Hey! Long time no see!",
-        "pt": "Ei! Quanto tempo!",
+        "en": "Hey! Long time no see! How's it going?",
+        "pt": "Ei! Quanto tempo! Como vão as coisas?",
         "options": [
           {
-            "en": "Are you free on Friday? Let's grab a coffee!",
+            "en": "Pretty good! Are you free on Friday? Let's grab a coffee!",
             "correct": true
           },
           {
-            "en": "Does this bus go downtown?",
+            "en": "I'd like to return this.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Amigo",
-        "en": "Sure! Around 4 PM works for me.",
-        "pt": "Claro! Por volta das 16h fica bom para mim.",
+        "en": "Count me in! What time works for you, and where should we meet?",
+        "pt": "Tô dentro! Qual horário fica bom para você e onde devemos nos encontrar?",
         "options": [
           {
-            "en": "Sounds good! See you then.",
+            "en": "Around 4 PM at that coffee shop near the subway station?",
             "correct": true
           },
           {
-            "en": "Keep the change.",
+            "en": "I need a prescription.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Amigo",
+        "en": "Sounds good! If I run a bit late, I'll let you know on WhatsApp.",
+        "pt": "Combinado! Se eu atrasar um pouco, te aviso no WhatsApp.",
+        "options": [
+          {
+            "en": "No problem! Text me when you get there.",
+            "correct": true
+          },
+          {
+            "en": "Can I have a discount?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Amigo",
+        "en": "Deal! See you on Friday!",
+        "pt": "Fechado! Te vejo na sexta!",
+        "options": [
+          {
+            "en": "Sounds good! I'll send you a message. See you then, bye!",
+            "correct": true
+          },
+          {
+            "en": "How much is a ticket?",
             "correct": false
           }
         ]
@@ -3218,30 +3728,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Chefe",
-        "en": "Hi! Do you have the numbers for the presentation?",
-        "pt": "Oi! Você tem os números para a apresentação?",
+        "en": "Good morning, everyone! Let's get started. What are you working on today?",
+        "pt": "Bom dia, pessoal! Vamos começar. No que você está trabalhando hoje?",
         "options": [
           {
-            "en": "Let me check and get back to you.",
+            "en": "Good morning! I'm working on the report. I'm almost done with it.",
             "correct": true
           },
           {
-            "en": "No onions, please.",
+            "en": "Let's grab a coffee!",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Chefe",
-        "en": "Great! When can you send them?",
-        "pt": "Ótimo! Quando você pode enviar?",
+        "en": "Awesome! Can you show us the draft? And do you have any questions?",
+        "pt": "Incrível! Pode nos mostrar o rascunho? E você tem alguma dúvida?",
         "options": [
           {
-            "en": "I'll send it to you today.",
+            "en": "Sure, can I share my screen? I have a quick question about the deadline.",
             "correct": true
           },
           {
-            "en": "I'm staying for ten days.",
+            "en": "I'm on my way!",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Chefe",
+        "en": "The deadline is tomorrow at 5 PM. Do you have the final numbers?",
+        "pt": "O prazo é amanhã às 17h. Você tem os números finais?",
+        "options": [
+          {
+            "en": "That makes sense. Let me check and get back to you. I'll send it to you today.",
+            "correct": true
+          },
+          {
+            "en": "Are you free on Friday?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Chefe",
+        "en": "Perfect! Thanks for the update. Have a productive day!",
+        "pt": "Perfeito! Obrigado pela atualização. Tenha um dia produtivo!",
+        "options": [
+          {
+            "en": "Thanks, everyone! Have a great day. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Text me when you get there.",
             "correct": false
           }
         ]
@@ -3511,31 +4051,61 @@ window.SCENARIOS = [
     ],
     "dialogue": [
       {
-        "speaker": "Contato",
-        "en": "Hello? Can you hear me?",
-        "pt": "Alô? Você consegue me ouvir?",
+        "speaker": "Recepção",
+        "en": "Hello, how can I help you?",
+        "pt": "Alô, como posso ajudar?",
         "options": [
           {
-            "en": "Sorry, you're breaking up. Hold on a second!",
+            "en": "Hello, this is Ana. Could I speak to Mr. Smith, please?",
             "correct": true
           },
           {
-            "en": "Two tickets, please.",
+            "en": "Can I share my screen?",
             "correct": false
           }
         ]
       },
       {
-        "speaker": "Contato",
-        "en": "Is it better now?",
-        "pt": "Está melhor agora?",
+        "speaker": "Recepção",
+        "en": "One moment, please. I'll put you through... Hello? Can you hear me?",
+        "pt": "Só um momento, por favor. Vou transferir... Alô? Consegue me ouvir?",
         "options": [
           {
-            "en": "Yes, loud and clear!",
+            "en": "Sorry, you're breaking up! Could you speak up, please?",
             "correct": true
           },
           {
-            "en": "It doesn't work.",
+            "en": "When is the deadline?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Recepção",
+        "en": "Sorry about that! Is it better now? He's not here at the moment. Can I take a message?",
+        "pt": "Desculpe por isso! Melhor agora? Ele não está no momento. Posso anotar um recado?",
+        "options": [
+          {
+            "en": "Yes, loud and clear! Please tell him I'll send the report today.",
+            "correct": true
+          },
+          {
+            "en": "Looks like it's going to rain.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Recepção",
+        "en": "Got it, I'll let him know! Anything else?",
+        "pt": "Anotado, vou avisá-lo! Mais alguma coisa?",
+        "options": [
+          {
+            "en": "That's all, thank you! I'll call back later. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Count me in!",
             "correct": false
           }
         ]
@@ -3659,30 +4229,60 @@ window.SCENARIOS = [
     "dialogue": [
       {
         "speaker": "Local",
-        "en": "Are you okay? What happened?",
-        "pt": "Você está bem? O que aconteceu?",
+        "en": "Hey, are you okay? You look worried!",
+        "pt": "Ei, você está bem? Parece preocupado!",
         "options": [
           {
-            "en": "I lost my passport. Where is the police station?",
+            "en": "Can someone help me, please? My bag was stolen and I lost my passport!",
             "correct": true
           },
           {
-            "en": "Let's grab a coffee!",
+            "en": "The line is busy.",
             "correct": false
           }
         ]
       },
       {
         "speaker": "Local",
-        "en": "It's two blocks down this street. Do you need me to call them?",
-        "pt": "Fica a dois quarteirões descendo esta rua. Quer que eu ligue para eles?",
+        "en": "Oh no! Let's calm down. Do you need to call the police?",
+        "pt": "Ah não! Vamos manter a calma. Você precisa chamar a polícia?",
         "options": [
           {
-            "en": "Yes, please call the police. Thank you!",
+            "en": "Yes, please call the police. My phone is dead, can I make a call?",
             "correct": true
           },
           {
-            "en": "Is service included?",
+            "en": "I'll call you back.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Local",
+        "en": "Of course, use my phone! The police station is two blocks straight down this street.",
+        "pt": "Claro, use meu celular! A delegacia fica a dois quarteirões reto nesta rua.",
+        "options": [
+          {
+            "en": "Thank you! I need to file a police report and go to the embassy.",
+            "correct": true
+          },
+          {
+            "en": "Let's reschedule for next week.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Local",
+        "en": "I'll walk with you to the station so you're safe.",
+        "pt": "Eu vou caminhando com você até a delegacia para você ficar seguro.",
+        "options": [
+          {
+            "en": "Please stay with me. Thank you so much for your help!",
+            "correct": true
+          },
+          {
+            "en": "Can I leave him a message?",
             "correct": false
           }
         ]

@@ -1096,3 +1096,53 @@ select {
   flex-direction: column;
   gap: 10px;
 }
+
+/* v6 Locked Lessons & Levels + Hidden Test Mode */
+.level-pill.locked {
+  opacity: 0.5;
+  border-style: dashed;
+}
+
+.lesson-circle-card.locked {
+  border-color: var(--border);
+  opacity: 0.58;
+  filter: grayscale(0.45);
+}
+
+.btn-locked-circle {
+  background: var(--surface-2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 9px 22px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: not-allowed;
+}
+
+.version-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #4b5563;
+  margin-top: 14px;
+  padding: 8px;
+  user-select: none;
+  cursor: default;
+}
+
+.lock-toast {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: #fde68a;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  padding: 10px 16px;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}

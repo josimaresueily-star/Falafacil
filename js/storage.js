@@ -9,7 +9,8 @@ const DEFAULT_STATE = {
   accent: 'en-US',
   rate: 0.95,
   completedLessons: {}, // { lessonId: stars (1-3) }
-  favorites: []         // array of English phrases
+  favorites: [],        // array of English phrases
+  unlockAll: false      // modo teste (desbloqueia todas as lições e níveis)
 };
 
 window.AppStorage = {
