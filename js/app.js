@@ -1,4 +1,4 @@
-// FalaFácil v3 — Motor Completo (Todas as Frases na Lição + Prática Final Aleatória Multi-Métodos)
+// FalaFácil v5 — 4 Etapas + Combine o Áudio na Prática Aleatória + Refazer Erros no Fim da Fila (<60% no Shadowing)
 (function () {
   let state = window.AppStorage.load();
   let currentLevel = 1;
@@ -8,7 +8,7 @@
   let playlistRunning = false;
   let quickListenAnswer = null;
 
-  // Estado da Lição Ativa (5 Etapas)
+  // Estado da Lição Ativa (4 Etapas)
   let lesson = null;
 
   function init() {
@@ -65,7 +65,7 @@
     return candidates[Math.floor(Math.random() * candidates.length)].pt;
   }
 
-  // Divide qualquer frase em blocos naturais (3 a 5 blocos) para exercícios de Completar Blocos
+  // Divide qualquer frase em blocos naturais (3 a 5 blocos) para Completar Blocos
   function splitIntoChunks(sentence) {
     const words = sentence.trim().split(/\s+/);
     if (words.length <= 5) {
@@ -85,47 +85,43 @@
     return chunks;
   }
 
-  // Agrupa todas as frases em rodadas de 4 itens para o Match de Áudio
-  function createMatchRounds(phrases) {
-    const list = shuffle(phrases);
-    const rounds = [];
-    for (let i = 0; i < list.length; i += 4) {
-      rounds.push(list.slice(i, i + 4));
-    }
-    // Se a última rodada tiver apenas 1 item e houver outra anterior, redistribui para ficar 3 + 2
-    if (rounds.length > 1 && rounds[rounds.length - 1].length === 1) {
-      const last = rounds.pop();
-      const prev = rounds[rounds.length - 1];
-      last.unshift(prev.pop());
-      rounds.push(last);
-    }
-    return rounds;
-  }
-
-  // Monta a fila da Etapa 5 (Prática Final): TODAS as frases do assunto + Revisão de lições anteriores
+  // Monta a fila da Etapa 4 (Prática Final):
+  // TODAS as frases do assunto + blocos aleatórios de "Combine o áudio" + Revisão de lições anteriores
   function createFinalPracticeQueue(scenario) {
     const methods = ['shadowing', 'writing', 'blocks', 'listening'];
     const queue = [];
     const phrases = shuffle(scenario.phrases);
 
-    // 1. Primeira passagem: 100% das frases do assunto atual, alternando os 4 métodos
+    // 1. Primeira passagem: 100% das frases do assunto atual, alternando os 4 métodos individuais
     phrases.forEach((phrase, idx) => {
       const method = methods[idx % methods.length];
-      queue.push({ phrase, method, isReview: false });
+      queue.push({ phrase, method, isReview: false, isRetry: false });
     });
 
-    // 2. Se o cenário tiver menos de 8 frases, faz uma 2ª passagem com MÉTODOS DIFERENTES
-    if (phrases.length < 8) {
-      const secondPass = shuffle(scenario.phrases);
-      secondPass.forEach((phrase) => {
-        const prevEntry = queue.find((q) => q.phrase.en === phrase.en);
-        const otherMethods = methods.filter((m) => !prevEntry || m !== prevEntry.method);
-        const chosenMethod = otherMethods[Math.floor(Math.random() * otherMethods.length)];
-        queue.push({ phrase, method: chosenMethod, isReview: false });
+    // 2. Inclui exercícios de "Combine o áudio com o significado" (4 frases por card) misturados na fila
+    const matchCount = Math.max(1, Math.min(3, Math.floor(phrases.length / 4)));
+    for (let m = 0; m < matchCount; m++) {
+      const slice = shuffle(scenario.phrases).slice(0, Math.min(4, scenario.phrases.length));
+      queue.push({
+        method: 'match',
+        phrases: slice,
+        isReview: false,
+        isRetry: false
       });
     }
 
-    // 3. Revisão Espaçada: inclui até 3 frases de lições anteriores (ou já concluídas)
+    // 3. Se o cenário tiver menos de 8 frases, faz uma 2ª passagem com MÉTODOS DIFERENTES
+    if (phrases.length < 8) {
+      const secondPass = shuffle(scenario.phrases);
+      secondPass.forEach((phrase) => {
+        const prevEntry = queue.find((q) => q.phrase && q.phrase.en === phrase.en);
+        const otherMethods = methods.filter((m) => !prevEntry || m !== prevEntry.method);
+        const chosenMethod = otherMethods[Math.floor(Math.random() * otherMethods.length)];
+        queue.push({ phrase, method: chosenMethod, isReview: false, isRetry: false });
+      });
+    }
+
+    // 4. Revisão Espaçada: inclui até 3 frases de lições anteriores (ou já concluídas)
     const completedIds = Object.keys(state.completedLessons)
       .map(Number)
       .filter((id) => id !== scenario.id);
@@ -149,6 +145,7 @@
           phrase: rev.phrase,
           method,
           isReview: true,
+          isRetry: false,
           reviewFrom: rev.fromTitle
         });
       });
@@ -229,13 +226,13 @@
       card.querySelector('.btn-start-circle').addEventListener('click', () => startLesson(s, 1));
       const quickBtn = card.querySelector('.btn-quick-circle');
       if (quickBtn) {
-        quickBtn.addEventListener('click', () => startLesson(s, 5));
+        quickBtn.addEventListener('click', () => startLesson(s, 4));
       }
       container.appendChild(card);
     });
   }
 
-  /* ==================== MOTOR DA LIÇÃO (5 ETAPAS COMPLETAS) ==================== */
+  /* ==================== MOTOR DA LIÇÃO (4 ETAPAS) ==================== */
   function bindLessonModal() {
     document.getElementById('btn-close-lesson').addEventListener('click', () => {
       window.AppSpeech.stop();
@@ -245,23 +242,22 @@
   }
 
   function startLesson(scenario, initialStep = 1) {
-    // USA TODAS AS FRASES DO ASSUNTO!
-    const activePhrases = [...scenario.phrases];
-    const matchRounds = createMatchRounds(activePhrases);
+    // 4 Etapas: 1=Vocab (todas as frases), 2=Moldes, 3=Diálogo, 4=Prática Final Aleatória (inclui Combine o Áudio)
+    const vocabQueue = scenario.phrases.map((p) => ({ ...p, isRetry: false }));
+    const builderQueue = scenario.builder.map((b) => ({ ...b, isRetry: false }));
+    const dialogueQueue = scenario.dialogue.map((d) => ({ ...d, isRetry: false }));
     const practiceQueue = createFinalPracticeQueue(scenario);
 
     lesson = {
       scenario,
-      activePhrases,
-      matchRounds,
-      matchRoundIndex: 0,
+      vocabQueue,
+      builderQueue,
+      dialogueQueue,
       practiceQueue,
-      step: initialStep, // 1=Vocab, 2=AudioMatch, 3=Builder, 4=Dialogue, 5=Prática Final Completa
+      step: initialStep,
       subIndex: 0,
       errors: 0,
       totalChecks: 0,
-      selectedAudioId: null,
-      matchedIds: [],
       builtChunks: [],
       chatHistory: []
     };
@@ -270,21 +266,15 @@
   }
 
   function updateLessonProgress() {
-    const base = (lesson.step - 1) * 20;
+    const base = (lesson.step - 1) * 25;
     let subPct = 0;
-    if (lesson.step === 1) subPct = (lesson.subIndex / lesson.activePhrases.length) * 20;
-    if (lesson.step === 2) {
-      const doneRounds = lesson.matchRoundIndex / lesson.matchRounds.length;
-      const curRound = lesson.matchRounds[lesson.matchRoundIndex] || [];
-      const inRound = curRound.length ? (lesson.matchedIds.length / curRound.length) / lesson.matchRounds.length : 0;
-      subPct = (doneRounds + inRound) * 20;
-    }
-    if (lesson.step === 3) subPct = (lesson.subIndex / lesson.scenario.builder.length) * 20;
-    if (lesson.step === 4) subPct = (lesson.subIndex / lesson.scenario.dialogue.length) * 20;
-    if (lesson.step === 5) subPct = (lesson.subIndex / lesson.practiceQueue.length) * 20;
+    if (lesson.step === 1) subPct = (lesson.subIndex / lesson.vocabQueue.length) * 25;
+    if (lesson.step === 2) subPct = (lesson.subIndex / lesson.builderQueue.length) * 25;
+    if (lesson.step === 3) subPct = (lesson.subIndex / lesson.dialogueQueue.length) * 25;
+    if (lesson.step === 4) subPct = (lesson.subIndex / lesson.practiceQueue.length) * 25;
 
     document.getElementById('lesson-progress-fill').style.width = Math.min(100, Math.round(base + subPct)) + '%';
-    document.getElementById('lesson-step-label').textContent = `Etapa ${lesson.step}/5`;
+    document.getElementById('lesson-step-label').textContent = `Etapa ${lesson.step}/4`;
   }
 
   function renderLessonStep() {
@@ -295,22 +285,25 @@
     footer.innerHTML = '';
 
     if (lesson.step === 1) renderStepVocab(body, footer);
-    else if (lesson.step === 2) renderStepMatch(body, footer);
-    else if (lesson.step === 3) renderStepBuilder(body, footer);
-    else if (lesson.step === 4) renderStepDialogue(body, footer);
-    else if (lesson.step === 5) renderStepFinalPractice(body, footer);
+    else if (lesson.step === 2) renderStepBuilder(body, footer);
+    else if (lesson.step === 3) renderStepDialogue(body, footer);
+    else if (lesson.step === 4) renderStepFinalPractice(body, footer);
   }
 
-  // ETAPA 1: Vocabulário Visual (TODAS as frases do cenário)
+  // ETAPA 1: Vocabulário Visual (TODAS as frases do cenário; se errar, vai pro fim da fila)
   function renderStepVocab(body, footer) {
-    const item = lesson.activePhrases[lesson.subIndex];
+    const item = lesson.vocabQueue[lesson.subIndex];
     const options = shuffle([
       { text: item.pt, correct: true },
       { text: getDistractor(item), correct: false }
     ]);
+    const retryBadge = item.isRetry
+      ? `<div class="tag" style="background:rgba(239,68,68,0.18);color:#fca5a5;margin-bottom:8px;">🔁 Refazendo frase errada</div>`
+      : '';
 
     body.innerHTML = `
-      <span class="method-badge">📖 Frase ${lesson.subIndex + 1} de ${lesson.activePhrases.length}</span>
+      <span class="method-badge">📖 Frase ${lesson.subIndex + 1} de ${lesson.vocabQueue.length}</span>
+      ${retryBadge}
       <h2 class="lesson-prompt-title">Escolha a tradução</h2>
       <div class="visual-card">
         <div class="visual-emoji">${item.emoji}</div>
@@ -340,11 +333,13 @@
         } else {
           btn.classList.add('wrong');
           lesson.errors++;
+          // Recoloca no fim da fila para ser refeito
+          lesson.vocabQueue.push({ ...item, isRetry: true });
         }
 
         footer.innerHTML = `
           <div class="feedback-banner ${opt.correct ? 'ok' : 'err'}">
-            <strong>${opt.correct ? 'Certo!' : 'Quase lá!'}</strong>
+            <strong>${opt.correct ? 'Certo!' : 'Quase lá! Esta frase voltará no fim da fila.'}</strong>
             <p style="margin-top:4px;font-size:0.86rem;">${item.en} — ${item.pt}</p>
             <p style="margin-top:4px;font-size:0.78rem;opacity:0.85;">💡 ${item.tip}</p>
           </div>
@@ -352,12 +347,9 @@
         `;
         document.getElementById('btn-next-step').addEventListener('click', () => {
           lesson.subIndex++;
-          if (lesson.subIndex >= lesson.activePhrases.length) {
+          if (lesson.subIndex >= lesson.vocabQueue.length) {
             lesson.step = 2;
             lesson.subIndex = 0;
-            lesson.matchRoundIndex = 0;
-            lesson.matchedIds = [];
-            lesson.selectedAudioId = null;
           }
           renderLessonStep();
         });
@@ -366,85 +358,9 @@
     });
   }
 
-  // ETAPA 2: Treino de Ouvido (TODAS as frases em rodadas de 4)
-  function renderStepMatch(body, footer) {
-    const roundPhrases = lesson.matchRounds[lesson.matchRoundIndex].map((p, idx) => ({ ...p, idx }));
-    const audioOrder = shuffle(roundPhrases);
-    const ptOrder = shuffle(roundPhrases);
-
-    body.innerHTML = `
-      <span class="method-badge">🎧 Rodada ${lesson.matchRoundIndex + 1} de ${lesson.matchRounds.length}</span>
-      <h2 class="lesson-prompt-title">Combine o áudio com o significado</h2>
-      <p class="muted" style="margin-bottom:14px;">Toque em um áudio à esquerda e depois na tradução correspondente à direita.</p>
-      <div class="match-grid">
-        <div class="match-col" id="match-audio-col"></div>
-        <div class="match-col" id="match-pt-col"></div>
-      </div>
-    `;
-
-    const audioCol = document.getElementById('match-audio-col');
-    const ptCol = document.getElementById('match-pt-col');
-
-    audioOrder.forEach((p) => {
-      const btn = document.createElement('button');
-      btn.className = 'match-card';
-      btn.dataset.id = p.idx;
-      btn.innerHTML = `🔊 <span style="margin-left:6px;letter-spacing:2px;color:#3b82f6;">ılııllı</span>`;
-      btn.addEventListener('click', () => {
-        window.AppSpeech.speak(p.en);
-        audioCol.querySelectorAll('.match-card').forEach((c) => c.classList.remove('selected'));
-        btn.classList.add('selected');
-        lesson.selectedAudioId = p.idx;
-      });
-      audioCol.appendChild(btn);
-    });
-
-    ptOrder.forEach((p) => {
-      const btn = document.createElement('button');
-      btn.className = 'match-card';
-      btn.dataset.id = p.idx;
-      btn.textContent = p.pt;
-      btn.addEventListener('click', () => {
-        if (lesson.selectedAudioId === null) return;
-        lesson.totalChecks++;
-        const audioBtn = audioCol.querySelector(`[data-id="${lesson.selectedAudioId}"]`);
-
-        if (lesson.selectedAudioId === p.idx) {
-          audioBtn.classList.remove('selected');
-          audioBtn.classList.add('matched');
-          btn.classList.add('matched');
-          lesson.matchedIds.push(p.idx);
-          lesson.selectedAudioId = null;
-          updateLessonProgress();
-
-          if (lesson.matchedIds.length === roundPhrases.length) {
-            const hasMoreRounds = lesson.matchRoundIndex + 1 < lesson.matchRounds.length;
-            footer.innerHTML = `<button class="btn-green" id="btn-match-next">${hasMoreRounds ? 'Próxima rodada de áudio →' : 'Continuar para Montagem'}</button>`;
-            document.getElementById('btn-match-next').addEventListener('click', () => {
-              if (hasMoreRounds) {
-                lesson.matchRoundIndex++;
-                lesson.matchedIds = [];
-                lesson.selectedAudioId = null;
-              } else {
-                lesson.step = 3;
-                lesson.subIndex = 0;
-              }
-              renderLessonStep();
-            });
-          }
-        } else {
-          lesson.errors++;
-          btn.classList.add('wrong-flash');
-          setTimeout(() => btn.classList.remove('wrong-flash'), 450);
-        }
-      });
-      ptCol.appendChild(btn);
-    });
-  }
-
-  // ETAPA 3: Moldes de Conversa (Blocos Coloridos)
+  // ETAPA 2: Moldes de Conversa (Blocos Coloridos; se errar, vai pro fim da fila)
   function renderStepBuilder(body, footer) {
-    const item = lesson.scenario.builder[lesson.subIndex];
+    const item = lesson.builderQueue[lesson.subIndex];
     const targetParts = [
       { text: item.fixed, type: 'chunk-fixed' },
       { text: item.variable, type: 'chunk-var' }
@@ -457,9 +373,13 @@
     ]);
 
     lesson.builtChunks = [];
+    const retryBadge = item.isRetry
+      ? `<div class="tag" style="background:rgba(239,68,68,0.18);color:#fca5a5;margin-bottom:8px;">🔁 Refazendo molde errado</div>`
+      : '';
 
     body.innerHTML = `
-      <span class="method-badge">🧩 Molde ${lesson.subIndex + 1} de ${lesson.scenario.builder.length}</span>
+      <span class="method-badge">🧩 Molde ${lesson.subIndex + 1} de ${lesson.builderQueue.length}</span>
+      ${retryBadge}
       <h2 class="lesson-prompt-title">Monte a frase pronta</h2>
       <div class="pattern-box">
         Use este molde de conversação:
@@ -513,13 +433,16 @@
       const expected = targetParts.map((p) => p.text).join(' ');
       const ok = userSentence === expected;
       lesson.totalChecks++;
-      if (!ok) lesson.errors++;
+      if (!ok) {
+        lesson.errors++;
+        lesson.builderQueue.push({ ...item, isRetry: true });
+      }
 
       window.AppSpeech.speak(expected);
 
       footer.innerHTML = `
         <div class="feedback-banner ${ok ? 'ok' : 'err'}">
-          <strong>${ok ? 'Perfeito!' : 'Resposta esperada:'}</strong>
+          <strong>${ok ? 'Perfeito!' : 'Vamos tentar de novo no fim! Resposta:'}</strong>
           <p style="margin-top:4px;">${expected}</p>
         </div>
         <button class="btn-green" id="btn-next-builder">Próximo</button>
@@ -527,8 +450,8 @@
 
       document.getElementById('btn-next-builder').addEventListener('click', () => {
         lesson.subIndex++;
-        if (lesson.subIndex >= lesson.scenario.builder.length) {
-          lesson.step = 4;
+        if (lesson.subIndex >= lesson.builderQueue.length) {
+          lesson.step = 3;
           lesson.subIndex = 0;
           lesson.chatHistory = [];
         }
@@ -537,12 +460,16 @@
     });
   }
 
-  // ETAPA 4: Mini-Diálogo Interativo
+  // ETAPA 3: Mini-Diálogo Interativo (se errar, recoloca o turno no fim)
   function renderStepDialogue(body, footer) {
-    const turn = lesson.scenario.dialogue[lesson.subIndex];
+    const turn = lesson.dialogueQueue[lesson.subIndex];
+    const retryBadge = turn.isRetry
+      ? `<div class="tag" style="background:rgba(239,68,68,0.18);color:#fca5a5;margin-bottom:8px;">🔁 Refazendo resposta do diálogo</div>`
+      : '';
 
     body.innerHTML = `
-      <span class="method-badge">💬 Diálogo ${lesson.subIndex + 1} de ${lesson.scenario.dialogue.length}</span>
+      <span class="method-badge">💬 Diálogo ${lesson.subIndex + 1} de ${lesson.dialogueQueue.length}</span>
+      ${retryBadge}
       <h2 class="lesson-prompt-title">Mini-Diálogo Real</h2>
       <div class="chat-box" id="chat-box"></div>
       <div class="options-grid" id="dialogue-options"></div>
@@ -587,26 +514,29 @@
         } else {
           btn.classList.add('wrong');
           lesson.errors++;
+          lesson.dialogueQueue.push({ ...turn, isRetry: true });
         }
 
         const correctOpt = turn.options.find((o) => o.correct);
-        lesson.chatHistory.push({ isUser: false, text: turn.en });
-        lesson.chatHistory.push({ isUser: true, text: correctOpt.en });
+        if (opt.correct) {
+          lesson.chatHistory.push({ isUser: false, text: turn.en });
+          lesson.chatHistory.push({ isUser: true, text: correctOpt.en });
+        }
 
         footer.innerHTML = `
           <div class="feedback-banner ${opt.correct ? 'ok' : 'err'}">
-            <strong>${opt.correct ? 'Boa resposta!' : 'Melhor resposta:'}</strong>
+            <strong>${opt.correct ? 'Boa resposta!' : 'Melhor resposta (voltará no fim):'}</strong>
             <p style="margin-top:4px;">${correctOpt.en}</p>
           </div>
           <button class="btn-green" id="btn-next-dialogue">
-            ${lesson.subIndex + 1 < lesson.scenario.dialogue.length ? 'Continuar conversa' : 'Ir para Prática Final Aleatória ⚡'}
+            ${lesson.subIndex + 1 < lesson.dialogueQueue.length ? 'Continuar conversa' : 'Ir para Prática Final Aleatória ⚡'}
           </button>
         `;
 
         document.getElementById('btn-next-dialogue').addEventListener('click', () => {
           lesson.subIndex++;
-          if (lesson.subIndex >= lesson.scenario.dialogue.length) {
-            lesson.step = 5;
+          if (lesson.subIndex >= lesson.dialogueQueue.length) {
+            lesson.step = 4;
             lesson.subIndex = 0;
             renderLessonStep();
           } else {
@@ -618,30 +548,114 @@
     });
   }
 
-  // ETAPA 5: Prática Final Completa e Aleatória (Ouvir e Repetir, Escrita, Completar Blocos e Ouvido)
+  // ETAPA 4: Prática Final Completa e Aleatória
+  // Métodos: Escrita, Ouvir e Repetir (<60% volta pro fim), Completar Blocos, Ouvido Rápido e Combine o Áudio
   function renderStepFinalPractice(body, footer) {
     const task = lesson.practiceQueue[lesson.subIndex];
-    const phrase = task.phrase;
     const total = lesson.practiceQueue.length;
     const num = lesson.subIndex + 1;
+
     const reviewTag = task.isReview
       ? `<div class="tag" style="background:rgba(34,197,94,0.18);color:#86efac;margin-bottom:8px;">🔄 Revisão: ${task.reviewFrom}</div>`
       : '';
+    const retryTag = task.isRetry
+      ? `<div class="tag" style="background:rgba(239,68,68,0.18);color:#fca5a5;margin-bottom:8px;">🔁 Refazendo exercício</div>`
+      : '';
+
+    function requeueTask() {
+      lesson.practiceQueue.push({ ...task, isRetry: true });
+    }
 
     function advanceFinalPractice() {
       lesson.subIndex++;
-      if (lesson.subIndex >= total) {
+      if (lesson.subIndex >= lesson.practiceQueue.length) {
         finishLesson();
       } else {
         renderLessonStep();
       }
     }
 
-    // MÉTODO A: ESCRITA
+    // MÉTODO 1: COMBINE O ÁUDIO COM O SIGNIFICADO (Integrado aleatoriamente na prática!)
+    if (task.method === 'match') {
+      const roundPhrases = task.phrases.map((p, idx) => ({ ...p, idx }));
+      const audioOrder = shuffle(roundPhrases);
+      const ptOrder = shuffle(roundPhrases);
+      let selectedAudioId = null;
+      let matchedIds = [];
+      let hadError = false;
+
+      body.innerHTML = `
+        <span class="method-badge">🔗 Combine o Áudio • Prática ${num}/${total}</span>
+        ${retryTag}
+        <h2 class="lesson-prompt-title">Combine o áudio com o significado</h2>
+        <p class="muted" style="margin-bottom:14px;">Toque em um áudio à esquerda e depois na tradução correspondente à direita.</p>
+        <div class="match-grid">
+          <div class="match-col" id="fp-match-audio"></div>
+          <div class="match-col" id="fp-match-pt"></div>
+        </div>
+      `;
+
+      const audioCol = document.getElementById('fp-match-audio');
+      const ptCol = document.getElementById('fp-match-pt');
+
+      audioOrder.forEach((p) => {
+        const btn = document.createElement('button');
+        btn.className = 'match-card';
+        btn.dataset.id = p.idx;
+        btn.innerHTML = `🔊 <span style="margin-left:6px;letter-spacing:2px;color:#3b82f6;">ılııllı</span>`;
+        btn.addEventListener('click', () => {
+          window.AppSpeech.speak(p.en);
+          audioCol.querySelectorAll('.match-card').forEach((c) => c.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedAudioId = p.idx;
+        });
+        audioCol.appendChild(btn);
+      });
+
+      ptOrder.forEach((p) => {
+        const btn = document.createElement('button');
+        btn.className = 'match-card';
+        btn.dataset.id = p.idx;
+        btn.textContent = p.pt;
+        btn.addEventListener('click', () => {
+          if (selectedAudioId === null) return;
+          lesson.totalChecks++;
+          const audioBtn = audioCol.querySelector(`[data-id="${selectedAudioId}"]`);
+
+          if (selectedAudioId === p.idx) {
+            audioBtn.classList.remove('selected');
+            audioBtn.classList.add('matched');
+            btn.classList.add('matched');
+            matchedIds.push(p.idx);
+            selectedAudioId = null;
+
+            if (matchedIds.length === roundPhrases.length) {
+              if (hadError) requeueTask();
+              footer.innerHTML = `
+                ${hadError ? '<div class="feedback-banner err"><strong>Houve erro nesta rodada!</strong><p style="margin-top:4px;">Este exercício voltará no fim da fila para fixar.</p></div>' : ''}
+                <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+              `;
+              document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
+            }
+          } else {
+            lesson.errors++;
+            hadError = true;
+            btn.classList.add('wrong-flash');
+            setTimeout(() => btn.classList.remove('wrong-flash'), 450);
+          }
+        });
+        ptCol.appendChild(btn);
+      });
+      return;
+    }
+
+    const phrase = task.phrase;
+
+    // MÉTODO 2: ESCRITA
     if (task.method === 'writing') {
       body.innerHTML = `
         <span class="method-badge">✍️ Escrita • Prática ${num}/${total}</span>
-        ${reviewTag}
+        ${reviewTag}${retryTag}
         <h2 class="lesson-prompt-title">Escreva a frase em inglês</h2>
         <div class="visual-card" style="padding:20px 16px;">
           <div class="visual-emoji" style="font-size:2.4rem;">${phrase.emoji}</div>
@@ -673,17 +687,20 @@
         const sim = window.AppSpeech.similarity(phrase.en, input.value);
         const ok = typed === expected || sim >= 85;
         lesson.totalChecks++;
-        if (!ok) lesson.errors++;
+        if (!ok) {
+          lesson.errors++;
+          requeueTask();
+        }
 
         window.AppSpeech.speak(phrase.en);
         input.disabled = true;
 
         footer.innerHTML = `
           <div class="feedback-banner ${ok ? 'ok' : 'err'}">
-            <strong>${ok ? 'Mandou bem! ✍️' : 'Resposta correta:'}</strong>
+            <strong>${ok ? 'Mandou bem! ✍️' : 'Resposta correta (voltará no fim da fila):'}</strong>
             <p style="margin-top:4px;">${phrase.en}</p>
           </div>
-          <button class="btn-green" id="btn-lp-next">${num < total ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
         `;
         document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
       }
@@ -695,11 +712,13 @@
       return;
     }
 
-    // MÉTODO B: OUVIR E REPETIR (SHADOWING)
+    // MÉTODO 3: OUVIR E REPETIR (SHADOWING — se ficar abaixo de 60%, volta para o fim da fila!)
     if (task.method === 'shadowing') {
+      let bestScore = null;
+
       body.innerHTML = `
         <span class="method-badge">🎙️ Ouvir e Repetir • Prática ${num}/${total}</span>
-        ${reviewTag}
+        ${reviewTag}${retryTag}
         <h2 class="lesson-prompt-title">Ouça e fale em voz alta</h2>
         <div class="card">
           <h2 class="shadow-en">${phrase.en}</h2>
@@ -712,7 +731,7 @@
           <div class="mic-area" style="margin-bottom:0;">
             <button class="btn-mic" id="btn-lp-mic">
               <span class="mic-icon">🎙️</span>
-              <span id="lp-mic-label">Toque e repita em voz alta</span>
+              <span id="lp-mic-label">Toque e repita (meta: 60%+)</span>
             </button>
             <div id="lp-speech-res" class="speech-result hidden"></div>
           </div>
@@ -737,11 +756,12 @@
             micBtn.classList.remove('listening');
             label.textContent = 'Repetir novamente';
             const score = window.AppSpeech.similarity(phrase.en, transcript);
+            bestScore = bestScore === null ? score : Math.max(bestScore, score);
             resBox.classList.remove('hidden');
             resBox.innerHTML = `
               <strong>Você disse:</strong> "${transcript}"<br/>
-              <strong>Precisão:</strong> <span style="color:${score >= 70 ? '#22c55e' : '#facc15'}">${score}%</span>
-              ${score >= 70 ? ' — Ótima pronúncia! 🎉' : ' — Ouça em 0.75x e tente de novo.'}
+              <strong>Precisão:</strong> <span style="color:${score >= 60 ? '#22c55e' : '#ef4444'}">${score}%</span>
+              ${score >= 60 ? ' — Aprovado! 🎉' : ' — Abaixo de 60%. Tente de novo ou avance para refazer no fim da fila.'}
             `;
           },
           (err) => {
@@ -754,11 +774,21 @@
       });
 
       footer.innerHTML = `<button class="btn-green" id="btn-lp-next">${num < total ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>`;
-      document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
+      document.getElementById('btn-lp-next').addEventListener('click', () => {
+        // Se tentou falar e ficou abaixo de 60%, recoloca no fim da fila!
+        if (bestScore !== null) {
+          lesson.totalChecks++;
+          if (bestScore < 60) {
+            lesson.errors++;
+            requeueTask();
+          }
+        }
+        advanceFinalPractice();
+      });
       return;
     }
 
-    // MÉTODO C: COMPLETAR BLOCOS
+    // MÉTODO 4: COMPLETAR BLOCOS
     if (task.method === 'blocks') {
       const rawChunks = splitIntoChunks(phrase.en);
       const targetParts = rawChunks.map((text, idx) => ({
@@ -766,7 +796,6 @@
         type: idx === 0 ? 'chunk-fixed' : idx === rawChunks.length - 1 ? 'chunk-extra' : 'chunk-var'
       }));
 
-      // Pega 1 bloco distrator de outra frase do mesmo cenário (ou geral)
       const otherPool = allPhrases.filter((p) => p.en !== phrase.en);
       const randomOther = otherPool[Math.floor(Math.random() * otherPool.length)];
       const extraWord = randomOther.en.split(' ')[0];
@@ -775,7 +804,7 @@
 
       body.innerHTML = `
         <span class="method-badge">🧩 Completar Blocos • Prática ${num}/${total}</span>
-        ${reviewTag}
+        ${reviewTag}${retryTag}
         <h2 class="lesson-prompt-title">Organize os blocos na ordem certa</h2>
         <div class="visual-card" style="padding:16px;">
           <p style="font-size:1.05rem;font-weight:700;">🇧🇷 ${phrase.pt}</p>
@@ -824,22 +853,25 @@
         const expected = normalizeText(phrase.en);
         const ok = userSentence === expected;
         lesson.totalChecks++;
-        if (!ok) lesson.errors++;
+        if (!ok) {
+          lesson.errors++;
+          requeueTask();
+        }
 
         window.AppSpeech.speak(phrase.en);
         footer.innerHTML = `
           <div class="feedback-banner ${ok ? 'ok' : 'err'}">
-            <strong>${ok ? 'Perfeito! 🧩' : 'Ordem correta:'}</strong>
+            <strong>${ok ? 'Perfeito! 🧩' : 'Ordem correta (voltará no fim da fila):'}</strong>
             <p style="margin-top:4px;">${phrase.en}</p>
           </div>
-          <button class="btn-green" id="btn-lp-next">${num < total ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
         `;
         document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
       });
       return;
     }
 
-    // MÉTODO D: OUVIDO RÁPIDO (Áudio sem texto -> Escolher significado)
+    // MÉTODO 5: OUVIDO RÁPIDO
     const distractors = shuffle(allPhrases.filter((p) => p.pt !== phrase.pt)).slice(0, 2);
     const choices = shuffle([
       { pt: phrase.pt, correct: true },
@@ -849,7 +881,7 @@
 
     body.innerHTML = `
       <span class="method-badge">🎧 Ouvido Rápido • Prática ${num}/${total}</span>
-      ${reviewTag}
+      ${reviewTag}${retryTag}
       <h2 class="lesson-prompt-title">O que você ouviu?</h2>
       <div class="wave-player" id="btn-lp-wave">
         <span class="play-icon">🔊</span>
@@ -878,14 +910,15 @@
         else {
           btn.classList.add('wrong');
           lesson.errors++;
+          requeueTask();
         }
 
         footer.innerHTML = `
           <div class="feedback-banner ${c.correct ? 'ok' : 'err'}">
-            <strong>${c.correct ? 'Acertou no ouvido! 🎧' : 'A frase era:'}</strong>
+            <strong>${c.correct ? 'Acertou no ouvido! 🎧' : 'A frase era (voltará no fim da fila):'}</strong>
             <p style="margin-top:4px;">${phrase.en} — ${phrase.pt}</p>
           </div>
-          <button class="btn-green" id="btn-lp-next">${num < total ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
         `;
         document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
       });
@@ -924,7 +957,7 @@
     `;
 
     document.getElementById('btn-repeat-random-practice').addEventListener('click', () => {
-      startLesson(currentScenario, 5);
+      startLesson(currentScenario, 4);
     });
 
     document.getElementById('btn-finish-close').addEventListener('click', () => {
@@ -982,8 +1015,8 @@
           resultBox.classList.remove('hidden');
           resultBox.innerHTML = `
             <strong>Você disse:</strong> "${transcript}"<br/>
-            <strong>Precisão:</strong> <span style="color:${score >= 70 ? '#22c55e' : '#facc15'}">${score}%</span>
-            ${score >= 70 ? ' — Excelente pronúncia! 🎉' : ' — Ouça em 0.75x e tente novamente.'}
+            <strong>Precisão:</strong> <span style="color:${score >= 60 ? '#22c55e' : '#ef4444'}">${score}%</span>
+            ${score >= 60 ? ' — Excelente pronúncia! 🎉' : ' — Abaixo de 60%. Ouça em 0.75x e tente novamente.'}
           `;
         },
         (err) => {
