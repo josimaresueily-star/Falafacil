@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0d0f12" />
+  <meta name="description" content="Aprenda inglês para conversação com 20 cenários reais e frases prontas do dia a dia." />
+  <title>FalaFácil — Inglês na Prática</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/assets/icon.svg" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top Status Bar -->
+    <header class="top-bar">
+      <div class="badge-progress" id="mastery-badge" title="Cenários dominados">
+        <span id="mastery-pct">0%</span>
+      </div>
+      <div class="daily-goal-pill">
+        <div class="goal-text">
+          <span>Meta diária</span>
+          <span id="goal-label">0 / 15 min</span>
+        </div>
+        <div class="goal-track">
+          <div class="goal-fill" id="goal-fill" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="streak-pill" title="Dias seguidos">
+        <span class="flame">🔥</span>
+        <span id="streak-count">0</span>
+      </div>
+    </header>
+
+    <!-- Main Views -->
+    <main class="main-content">
+      <!-- TAB 1: TRILHA (INÍCIO) -->
+      <section id="view-home" class="view active">
+        <div class="hero-status">
+          <div class="streak-ring">
+            <div class="streak-ring-inner">
+              <span class="big-flame">🔥</span>
+              <span class="big-num" id="hero-streak">0</span>
+            </div>
+            <span class="ring-caption">DIAS SEGUIDOS</span>
+          </div>
+          <div class="level-tabs" id="level-tabs">
+            <button class="level-pill active" data-level="1">Nível 1</button>
+            <button class="level-pill" data-level="2">Nível 2</button>
+            <button class="level-pill" data-level="3">Nível 3</button>
+            <button class="level-pill" data-level="4">Nível 4</button>
+          </div>
+          <p class="level-subtitle" id="level-subtitle">Primeiros Contatos e Sobrevivência</p>
+        </div>
+
+        <div class="trail-container" id="trail-container">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 2: PRÁTICA (SHADOWING & OUVIDO) -->
+      <section id="view-practice" class="view">
+        <h1 class="page-title">Prática Rápida</h1>
+        <div class="practice-mode-switch">
+          <button class="mode-btn active" data-mode="shadowing">🎙️ Modo Shadowing</button>
+          <button class="mode-btn" data-mode="listening">🎧 Treino de Ouvido</button>
+        </div>
+
+        <!-- Shadowing Panel -->
+        <div id="panel-shadowing" class="practice-panel active">
+          <div class="card shadow-card">
+            <span class="tag" id="shadow-category">Cafeteria</span>
+            <h2 class="shadow-en" id="shadow-en">Can I have a medium coffee, please?</h2>
+            <p class="shadow-pt" id="shadow-pt">Pode me ver um café médio, por favor?</p>
+            <p class="shadow-tip" id="shadow-tip">💡 Muito mais educado do que "I want...".</p>
+
+            <div class="audio-controls">
+              <button class="btn-circle" id="btn-shadow-normal" title="Velocidade normal">🔊 1.0x</button>
+              <button class="btn-circle" id="btn-shadow-slow" title="Velocidade lenta">🐢 0.75x</button>
+            </div>
+
+            <div class="mic-area">
+              <button class="btn-mic" id="btn-mic">
+                <span class="mic-icon">🎙️</span>
+                <span id="mic-label">Segure ou toque para falar</span>
+              </button>
+              <div id="speech-result" class="speech-result hidden"></div>
+            </div>
+
+            <div class="shadow-nav">
+              <button class="btn-secondary" id="btn-shadow-prev">← Anterior</button>
+              <button class="btn-primary" id="btn-shadow-next">Próxima frase →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Listening Panel -->
+        <div id="panel-listening" class="practice-panel">
+          <div class="card listen-card">
+            <p class="instruction">Ouça o áudio e escolha a tradução correta:</p>
+            <div class="wave-player" id="btn-quick-listen">
+              <span class="play-icon">🔊</span>
+              <div class="fake-waves">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <button class="btn-text-small" id="btn-quick-listen-slow">🐢 Ouvir mais devagar</button>
+            <div id="quick-listen-options" class="options-grid"></div>
+            <div id="quick-listen-feedback" class="inline-feedback hidden"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: FRASEÁRIO (MODO SOBREVIVÊNCIA) -->
+      <section id="view-phrasebook" class="view">
+        <div class="phrasebook-header">
+          <h1 class="page-title">Fraseário de Bolso</h1>
+          <button class="btn-playlist" id="btn-playlist">▶ Playlist</button>
+        </div>
+
+        <div class="search-row">
+          <input type="search" id="phrase-search" placeholder="Buscar em português ou inglês..." />
+        </div>
+
+        <div class="filter-chips" id="phrase-filters">
+          <button class="chip active" data-filter="all">Todas (85+)</button>
+          <button class="chip" data-filter="fav">⭐ Favoritas</button>
+          <button class="chip" data-filter="1">Nível 1</button>
+          <button class="chip" data-filter="2">Nível 2</button>
+          <button class="chip" data-filter="3">Nível 3</button>
+          <button class="chip" data-filter="4">Nível 4</button>
+        </div>
+
+        <div id="phrase-list" class="phrase-list">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- TAB 4: AJUSTES -->
+      <section id="view-settings" class="view">
+        <h1 class="page-title">Perfil e Ajustes</h1>
+
+        <div class="card stats-summary">
+          <div class="stat-box">
+            <span class="stat-value" id="stat-scenarios">0/20</span>
+            <span class="stat-label">Cenários dominados</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-value" id="stat-stars">0/60</span>
+            <span class="stat-label">Estrelas ganhas</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-value" id="stat-favs">0</span>
+            <span class="stat-label">Frases salvas</span>
+          </div>
+        </div>
+
+        <div class="card settings-card">
+          <div class="setting-item">
+            <div>
+              <strong>Sotaque do Áudio</strong>
+              <p class="muted">Escolha a pronúncia nativa das lições</p>
+            </div>
+            <select id="select-accent">
+              <option value="en-US">🇺🇸 Inglês (EUA)</option>
+              <option value="en-GB">🇬🇧 Inglês (Reino Unido)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <strong>Meta Diária</strong>
+              <p class="muted">Minutos de treino por dia</p>
+            </div>
+            <select id="select-goal">
+              <option value="5">5 min / dia</option>
+              <option value="10">10 min / dia</option>
+              <option value="15" selected>15 min / dia</option>
+              <option value="30">30 min / dia</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div>
+              <strong>Velocidade Padrão</strong>
+              <p class="muted">Ajuste o ritmo da fala nas lições</p>
+            </div>
+            <select id="select-rate">
+              <option value="0.8">Mais lento (0.8x)</option>
+              <option value="0.95" selected>Natural (0.95x)</option>
+              <option value="1.1">Rápido (1.1x)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card danger-card">
+          <button class="btn-danger" id="btn-reset-progress">🗑️ Resetar todo o progresso</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-view="home">
+        <span class="nav-icon">🏠</span>
+        <span>Início</span>
+      </button>
+      <button class="nav-btn" data-view="practice">
+        <span class="nav-icon">🏋️</span>
+        <span>Prática</span>
+      </button>
+      <button class="nav-btn" data-view="phrasebook">
+        <span class="nav-icon">📖</span>
+        <span>Fraseário</span>
+      </button>
+      <button class="nav-btn" data-view="settings">
+        <span class="nav-icon">⚙️</span>
+        <span>Ajustes</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- FULLSCREEN LESSON MODAL -->
+  <div id="lesson-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="lesson-header">
+      <button class="btn-close-lesson" id="btn-close-lesson" title="Sair da lição">✕</button>
+      <div class="lesson-progress-track">
+        <div class="lesson-progress-fill" id="lesson-progress-fill" style="width: 0%"></div>
+      </div>
+      <span class="step-badge" id="lesson-step-label">Etapa 1/4</span>
+    </div>
+
+    <div class="lesson-body" id="lesson-body">
+      <!-- Dynamic step content -->
+    </div>
+
+    <div class="lesson-footer" id="lesson-footer">
+      <!-- Feedback banner + action button -->
+    </div>
+  </div>
+
+  <script src="/js/data.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/speech.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
