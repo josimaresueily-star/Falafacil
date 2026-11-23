@@ -1,4 +1,4 @@
-// Banco de Dados Completo: 4 Níveis, 20 Cenários, 80 Frases Prontas, Moldes e Diálogos
+// Banco de Dados Completo v2: 4 Níveis, 20 Cenários e 200+ Frases Prontas
 window.LEVELS_META = {
   "1": "Primeiros Contatos e Sobrevivência",
   "2": "Viagem e Deslocamento",
@@ -132,6 +132,223 @@ window.SCENARIOS = [
         "distractor": "Com licença!",
         "emoji": "🙏",
         "tip": "Versão rápida na rua: 'Thanks a lot!'"
+      },
+      {
+        "en": "Excuse me, can you help me?",
+        "pt": "Com licença, você pode me ajudar?",
+        "distractor": "",
+        "emoji": "🙋",
+        "tip": "Versão ainda mais educada: 'Could you help me?'"
+      },
+      {
+        "en": "I'm lost. Can you help me?",
+        "pt": "Estou perdido. Você pode me ajudar?",
+        "distractor": "",
+        "emoji": "🧭",
+        "tip": "Direto ao ponto."
+      },
+      {
+        "en": "Excuse me, sorry to bother you. I'm trying to find the subway station.",
+        "pt": "Com licença, desculpe incomodar. Estou tentando encontrar a estação de metrô.",
+        "distractor": "",
+        "emoji": "🚇",
+        "tip": "Sorry to bother you = desculpe incomodar."
+      },
+      {
+        "en": "I'm trying to get to this hotel.",
+        "pt": "Estou tentando chegar neste hotel.",
+        "distractor": "",
+        "emoji": "🏨",
+        "tip": "Mostre o endereço no celular junto."
+      },
+      {
+        "en": "I'm looking for a restaurant nearby.",
+        "pt": "Estou procurando um restaurante por aqui perto.",
+        "distractor": "",
+        "emoji": "🍽️",
+        "tip": "Nearby = por perto."
+      },
+      {
+        "en": "Do you have any suggestions?",
+        "pt": "Você tem alguma sugestão?",
+        "distractor": "",
+        "emoji": "💡",
+        "tip": "Ou: 'Could you recommend a place?'"
+      },
+      {
+        "en": "What kind of food do you like?",
+        "pt": "Que tipo de comida você gosta?",
+        "distractor": "",
+        "emoji": "🍕",
+        "tip": "Também usado: 'What do you have a taste for?'"
+      },
+      {
+        "en": "I'd like to go to Central Park.",
+        "pt": "Eu gostaria de ir ao Central Park.",
+        "distractor": "",
+        "emoji": "🌳",
+        "tip": "Ou '...to the nearest subway station.'"
+      },
+      {
+        "en": "How do I get to Times Square?",
+        "pt": "Como eu chego à Times Square?",
+        "distractor": "",
+        "emoji": "🗺️",
+        "tip": "How do I get to... = Como chego a..."
+      },
+      {
+        "en": "How do I get to the nearest tube station?",
+        "pt": "Como eu chego à estação de metrô mais próxima?",
+        "distractor": "",
+        "emoji": "🚇",
+        "tip": "Em Londres, o metrô é chamado de 'tube'."
+      },
+      {
+        "en": "Which subway line should I take?",
+        "pt": "Qual linha de metrô devo pegar?",
+        "distractor": "",
+        "emoji": "🚆",
+        "tip": "Subway line = linha de metrô."
+      },
+      {
+        "en": "Where can I find an ATM?",
+        "pt": "Onde posso encontrar um caixa eletrônico?",
+        "distractor": "",
+        "emoji": "🏧",
+        "tip": "ATM = caixa eletrônico."
+      },
+      {
+        "en": "Where can I find a cheap restaurant?",
+        "pt": "Onde posso encontrar um restaurante barato?",
+        "distractor": "",
+        "emoji": "🍔",
+        "tip": "Cheap = barato."
+      },
+      {
+        "en": "Do you know where Central Park is?",
+        "pt": "Você sabe onde fica o Central Park?",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Jeito educado de perguntar localização."
+      },
+      {
+        "en": "Could you point me in the right direction?",
+        "pt": "Você poderia me indicar a direção certa?",
+        "distractor": "",
+        "emoji": "👉",
+        "tip": "Expressão super natural de nativos."
+      },
+      {
+        "en": "Where am I on this map?",
+        "pt": "Onde eu estou neste mapa?",
+        "distractor": "",
+        "emoji": "🗺️",
+        "tip": "Útil com mapa físico ou no celular."
+      },
+      {
+        "en": "Can I go there on foot?",
+        "pt": "Posso ir a pé?",
+        "distractor": "",
+        "emoji": "🚶",
+        "tip": "Também: 'Is it within walking distance?' / 'Can I walk there?'"
+      },
+      {
+        "en": "Have a nice day.",
+        "pt": "Tenha um bom dia.",
+        "distractor": "",
+        "emoji": "☀️",
+        "tip": "Combine sempre com 'Thank you very much.'"
+      },
+      {
+        "en": "The easiest way is...",
+        "pt": "O caminho mais fácil é...",
+        "distractor": "",
+        "emoji": "🛣️",
+        "tip": "O mais rápido = 'The quickest way is...'"
+      },
+      {
+        "en": "Walk down Fifth Avenue and turn right.",
+        "pt": "Caminhe pela Quinta Avenida e vire à direita.",
+        "distractor": "",
+        "emoji": "➡️",
+        "tip": "Walk down = descer/caminhar pela rua."
+      },
+      {
+        "en": "Walk straight down Oxford Street.",
+        "pt": "Ande reto pela Oxford Street.",
+        "distractor": "",
+        "emoji": "⬆️",
+        "tip": "Straight down = reto pela rua."
+      },
+      {
+        "en": "Go down the stairs.",
+        "pt": "Desça as escadas.",
+        "distractor": "",
+        "emoji": "🪜",
+        "tip": "Subir a ladeira = 'Go up the hill.'"
+      },
+      {
+        "en": "Go through the park.",
+        "pt": "Passe por dentro do parque.",
+        "distractor": "",
+        "emoji": "🌲",
+        "tip": "Dar a volta = 'Go around the park.'"
+      },
+      {
+        "en": "Go over the bridge.",
+        "pt": "Passe por cima da ponte.",
+        "distractor": "",
+        "emoji": "🌉",
+        "tip": "Por baixo = 'Go under the bridge.'"
+      },
+      {
+        "en": "Turn right.",
+        "pt": "Vire à direita.",
+        "distractor": "",
+        "emoji": "↪️",
+        "tip": "Esquerda = 'Turn left.'"
+      },
+      {
+        "en": "Head to the museum and you'll see the hotel on the left.",
+        "pt": "Vá em direção ao museu e você verá o hotel à esquerda.",
+        "distractor": "",
+        "emoji": "🏛️",
+        "tip": "Head to = ir em direção a."
+      },
+      {
+        "en": "Keep going.",
+        "pt": "Continue indo.",
+        "distractor": "",
+        "emoji": "➡️",
+        "tip": "Ou: 'Continue in that direction.'"
+      },
+      {
+        "en": "Follow the river.",
+        "pt": "Siga o rio.",
+        "distractor": "",
+        "emoji": "🌊",
+        "tip": "Follow = seguir."
+      },
+      {
+        "en": "It's next to the bank.",
+        "pt": "É ao lado do banco.",
+        "distractor": "",
+        "emoji": "🏦",
+        "tip": "Também: beside, near, between, in front of, across from, behind."
+      },
+      {
+        "en": "It's on the corner.",
+        "pt": "É na esquina.",
+        "distractor": "",
+        "emoji": "📐",
+        "tip": "On the corner = na esquina."
+      },
+      {
+        "en": "Sorry, I'm not from here.",
+        "pt": "Desculpe, não sou daqui.",
+        "distractor": "",
+        "emoji": "🤷",
+        "tip": "Ou: 'Sorry, I don't know.' / 'Sorry, I can't help you.'"
       }
     ],
     "builder": [
@@ -405,6 +622,76 @@ window.SCENARIOS = [
         "distractor": "Preciso de uma sacola.",
         "emoji": "💵",
         "tip": "Muito usado ao pagar em dinheiro."
+      },
+      {
+        "en": "Where can I find rice?",
+        "pt": "Onde posso encontrar arroz?",
+        "distractor": "",
+        "emoji": "🍚",
+        "tip": "Ou 'Where can I find lactose-free milk?' (leite sem lactose)."
+      },
+      {
+        "en": "It's on aisle six.",
+        "pt": "Está no corredor 6.",
+        "distractor": "",
+        "emoji": "🛒",
+        "tip": "Aisle (pronuncia-se áil) = corredor."
+      },
+      {
+        "en": "Sorry, we don't carry passion fruit juice.",
+        "pt": "Desculpe, não trabalhamos com suco de maracujá.",
+        "distractor": "",
+        "emoji": "🧃",
+        "tip": "'Carry' em lojas significa vender/trabalhar com o produto."
+      },
+      {
+        "en": "We don't carry this brand.",
+        "pt": "Não trabalhamos com essa marca.",
+        "distractor": "",
+        "emoji": "🏷️",
+        "tip": "Brand = marca."
+      },
+      {
+        "en": "We are out of stock.",
+        "pt": "Estamos sem estoque.",
+        "distractor": "",
+        "emoji": "📦",
+        "tip": "Out of stock = esgotado."
+      },
+      {
+        "en": "Did you find everything okay?",
+        "pt": "Você encontrou tudo o que precisava?",
+        "distractor": "",
+        "emoji": "😊",
+        "tip": "Responda: 'Yes, it was great.'"
+      },
+      {
+        "en": "How would you like to pay?",
+        "pt": "Como você gostaria de pagar?",
+        "distractor": "",
+        "emoji": "💳",
+        "tip": "Pergunta padrão no caixa."
+      },
+      {
+        "en": "With a credit card.",
+        "pt": "Com cartão de crédito.",
+        "distractor": "",
+        "emoji": "💳",
+        "tip": "Em dinheiro = 'In cash.'"
+      },
+      {
+        "en": "Please sign here.",
+        "pt": "Por favor, assine aqui.",
+        "distractor": "",
+        "emoji": "✍️",
+        "tip": "Ou: 'Can you sign here?'"
+      },
+      {
+        "en": "Would you like a bag?",
+        "pt": "Você gostaria de uma sacola?",
+        "distractor": "",
+        "emoji": "🛍️",
+        "tip": "Responda 'Yes, please.' ou 'No, thanks.'"
       }
     ],
     "builder": [
@@ -496,6 +783,97 @@ window.SCENARIOS = [
         "distractor": "Qual é o número do voo?",
         "emoji": "⏱️",
         "tip": "Atrasado = delayed; Cancelado = canceled."
+      },
+      {
+        "en": "Can I see your ticket and your passport, please?",
+        "pt": "Posso ver sua passagem e seu passaporte, por favor?",
+        "distractor": "",
+        "emoji": "🛂",
+        "tip": "Responda: 'Sure, here they are.'"
+      },
+      {
+        "en": "Can I get a seat near the aisle?",
+        "pt": "Posso pegar um assento perto do corredor?",
+        "distractor": "",
+        "emoji": "💺",
+        "tip": "Aisle = corredor."
+      },
+      {
+        "en": "I need to check in my luggage.",
+        "pt": "Preciso despachar minha bagagem.",
+        "distractor": "",
+        "emoji": "🧳",
+        "tip": "Check in luggage = despachar mala."
+      },
+      {
+        "en": "Are you checking in your luggage or carry-on?",
+        "pt": "Você vai despachar sua bagagem ou é bagagem de mão?",
+        "distractor": "",
+        "emoji": "🎒",
+        "tip": "Carry-on = bagagem de mão."
+      },
+      {
+        "en": "Where do I go next?",
+        "pt": "Para onde eu vou agora?",
+        "distractor": "",
+        "emoji": "🧭",
+        "tip": "Ótima frase após o check-in."
+      },
+      {
+        "en": "Ladies and gentlemen, welcome aboard.",
+        "pt": "Senhoras e senhores, bem-vindos a bordo.",
+        "distractor": "",
+        "emoji": "✈️",
+        "tip": "Anúncio clássico no avião."
+      },
+      {
+        "en": "Please stow your carry-on luggage in an overhead bin.",
+        "pt": "Por favor, guarde sua bagagem de mão no compartimento superior.",
+        "distractor": "",
+        "emoji": "🧳",
+        "tip": "Overhead bin = bagageiro acima do assento."
+      },
+      {
+        "en": "Please take a seat and fasten your seatbelt.",
+        "pt": "Por favor, sente-se e aperte o cinto de segurança.",
+        "distractor": "",
+        "emoji": "💺",
+        "tip": "Fasten your seatbelt = aperte o cinto."
+      },
+      {
+        "en": "Place electronic devices into airplane mode.",
+        "pt": "Coloque os dispositivos eletrônicos no modo avião.",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Airplane mode = modo avião."
+      },
+      {
+        "en": "Would you like something to drink?",
+        "pt": "Você gostaria de algo para beber?",
+        "distractor": "",
+        "emoji": "🥤",
+        "tip": "Responda 'A Coke, please.' ou 'Can I have some coffee, please?'"
+      },
+      {
+        "en": "Thanks for flying with us.",
+        "pt": "Obrigado por voar conosco.",
+        "distractor": "",
+        "emoji": "🛫",
+        "tip": "Despedida da tripulação."
+      },
+      {
+        "en": "Excuse me, where can I get a taxi?",
+        "pt": "Com licença, onde posso pegar um táxi?",
+        "distractor": "",
+        "emoji": "🚕",
+        "tip": "Útil logo ao desembarcar."
+      },
+      {
+        "en": "Enjoy your trip!",
+        "pt": "Aproveite sua viagem!",
+        "distractor": "",
+        "emoji": "🌍",
+        "tip": "Responda: 'Thank you!'"
       }
     ],
     "builder": [
@@ -587,6 +965,139 @@ window.SCENARIOS = [
         "distractor": "Vou para o aeroporto agora.",
         "emoji": "🏨",
         "tip": "Tenha o endereço salvo no celular para mostrar."
+      },
+      {
+        "en": "Please wait behind the yellow line.",
+        "pt": "Por favor, espere atrás da linha amarela.",
+        "distractor": "",
+        "emoji": "🟨",
+        "tip": "Frase padrão na fila da imigração."
+      },
+      {
+        "en": "Next!",
+        "pt": "Próximo!",
+        "distractor": "",
+        "emoji": "👉",
+        "tip": "Chamada do oficial no guichê."
+      },
+      {
+        "en": "May I see your passport?",
+        "pt": "Posso ver seu passaporte?",
+        "distractor": "",
+        "emoji": "🛂",
+        "tip": "Também: 'Passport, please.' / 'Can I see your passport?'"
+      },
+      {
+        "en": "Sure. Here it is.",
+        "pt": "Claro. Aqui está.",
+        "distractor": "",
+        "emoji": "📘",
+        "tip": "Resposta rápida ao entregar o documento."
+      },
+      {
+        "en": "Why are you in the United States?",
+        "pt": "Por que você está nos Estados Unidos?",
+        "distractor": "",
+        "emoji": "🇺🇸",
+        "tip": "Ou apenas 'Why are you here?'"
+      },
+      {
+        "en": "What's the purpose of your visit?",
+        "pt": "Qual é o propósito da sua visita?",
+        "distractor": "",
+        "emoji": "❓",
+        "tip": "Pergunta mais comum da imigração."
+      },
+      {
+        "en": "Business or pleasure?",
+        "pt": "Negócios ou lazer?",
+        "distractor": "",
+        "emoji": "💼",
+        "tip": "Responda 'Vacation' ou 'Business'."
+      },
+      {
+        "en": "How long are you staying here?",
+        "pt": "Por quanto tempo você vai ficar aqui?",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Também: 'How long do you plan to stay?'"
+      },
+      {
+        "en": "For fifteen days.",
+        "pt": "Por 15 dias.",
+        "distractor": "",
+        "emoji": "🗓️",
+        "tip": "7 dias = 'For seven days'; 3 meses = 'For three months.'"
+      },
+      {
+        "en": "Can I see your tickets?",
+        "pt": "Posso ver suas passagens?",
+        "distractor": "",
+        "emoji": "🎫",
+        "tip": "Tenha a passagem de volta impressa ou no celular."
+      },
+      {
+        "en": "Where are you coming from?",
+        "pt": "De onde você está vindo?",
+        "distractor": "",
+        "emoji": "✈️",
+        "tip": "Origem do seu voo."
+      },
+      {
+        "en": "I'm from São Paulo, Brazil.",
+        "pt": "Sou de São Paulo, Brasil.",
+        "distractor": "",
+        "emoji": "🇧🇷",
+        "tip": "Diga cidade e país."
+      },
+      {
+        "en": "Where are you going to stay?",
+        "pt": "Onde você vai ficar hospedado?",
+        "distractor": "",
+        "emoji": "🏨",
+        "tip": "Ou: 'Where are you staying?'"
+      },
+      {
+        "en": "At a friend's house.",
+        "pt": "Na casa de um amigo.",
+        "distractor": "",
+        "emoji": "🏠",
+        "tip": "Ou 'At this hotel.'"
+      },
+      {
+        "en": "What's your final destination?",
+        "pt": "Qual é o seu destino final?",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Comum quando há conexão."
+      },
+      {
+        "en": "Are you traveling alone?",
+        "pt": "Você está viajando sozinho?",
+        "distractor": "",
+        "emoji": "👤",
+        "tip": "Responda 'Yes, I am.' ou com quem está."
+      },
+      {
+        "en": "No, I'm traveling with my husband.",
+        "pt": "Não, estou viajando com meu marido.",
+        "distractor": "",
+        "emoji": "👫",
+        "tip": "He's over there = Ele está logo ali."
+      },
+      {
+        "en": "How much currency are you carrying?",
+        "pt": "Quanto de dinheiro você está carregando?",
+        "distractor": "",
+        "emoji": "💵",
+        "tip": "Currency = moeda / dinheiro em espécie."
+      },
+      {
+        "en": "Welcome to America! Have a nice day.",
+        "pt": "Bem-vindo à América! Tenha um bom dia.",
+        "distractor": "",
+        "emoji": "🎉",
+        "tip": "Responda: 'Thank you, you too!'"
       }
     ],
     "builder": [
@@ -951,6 +1462,132 @@ window.SCENARIOS = [
         "distractor": "Eu não gostei da comida.",
         "emoji": "🍝",
         "tip": "'I'll have...' é a forma mais natural de pedir comida."
+      },
+      {
+        "en": "Please wait to be seated.",
+        "pt": "Por favor, aguarde para ser acomodado.",
+        "distractor": "",
+        "emoji": "🛎️",
+        "tip": "Muito comum em placas na entrada de restaurantes."
+      },
+      {
+        "en": "Wait in line.",
+        "pt": "Espere na fila.",
+        "distractor": "",
+        "emoji": "🚶",
+        "tip": "No Reino Unido também se diz 'Wait in the queue'."
+      },
+      {
+        "en": "Party of how many?",
+        "pt": "Mesa para quantas pessoas?",
+        "distractor": "",
+        "emoji": "👥",
+        "tip": "'Party' aqui significa grupo de pessoas."
+      },
+      {
+        "en": "Party of two.",
+        "pt": "Mesa para dois.",
+        "distractor": "",
+        "emoji": "✌️",
+        "tip": "Equivalente natural a 'Table for two.'"
+      },
+      {
+        "en": "Can I have a napkin, please?",
+        "pt": "Você pode me dar um guardanapo, por favor?",
+        "distractor": "",
+        "emoji": "🧻",
+        "tip": "Napkin = guardanapo."
+      },
+      {
+        "en": "Would you like something to drink?",
+        "pt": "Você gostaria de algo para beber?",
+        "distractor": "",
+        "emoji": "🥤",
+        "tip": "Primeira pergunta padrão do garçom."
+      },
+      {
+        "en": "May I have a Coke, please?",
+        "pt": "Posso pedir uma Coca, por favor?",
+        "distractor": "",
+        "emoji": "🥤",
+        "tip": "Mais formal e educado; também vale 'May I have the menu, please?'."
+      },
+      {
+        "en": "Could I have a Coke, please?",
+        "pt": "Você pode me trazer uma Coca, por favor?",
+        "distractor": "",
+        "emoji": "🥤",
+        "tip": "Can / Could I have... são super naturais."
+      },
+      {
+        "en": "I'd like a Coke, please.",
+        "pt": "Eu gostaria de uma Coca, por favor.",
+        "distractor": "",
+        "emoji": "🧊",
+        "tip": "I'd like = contração de 'I would like'."
+      },
+      {
+        "en": "I'll have a Coke, please.",
+        "pt": "Eu vou querer uma Coca, por favor.",
+        "distractor": "",
+        "emoji": "🥤",
+        "tip": "Forma mais direta e natural de fazer o pedido."
+      },
+      {
+        "en": "I'll go with the fish.",
+        "pt": "Eu vou ficar com o peixe.",
+        "distractor": "",
+        "emoji": "🐟",
+        "tip": "'I'll go with...' = 'Vou escolher / ficar com...'."
+      },
+      {
+        "en": "May I have some water, please?",
+        "pt": "Posso pedir uma água, por favor?",
+        "distractor": "",
+        "emoji": "💧",
+        "tip": "Para água da torneira (grátis nos EUA): 'tap water'."
+      },
+      {
+        "en": "Can I have some tap water, please?",
+        "pt": "Você pode me trazer água da torneira, por favor?",
+        "distractor": "",
+        "emoji": "🚰",
+        "tip": "Nos EUA, água da torneira em restaurantes costuma ser gratuita."
+      },
+      {
+        "en": "Are you ready to order, or do you need a few more minutes?",
+        "pt": "Você está pronto para pedir ou precisa de mais alguns minutos?",
+        "distractor": "",
+        "emoji": "📋",
+        "tip": "Pergunta clássica do garçom."
+      },
+      {
+        "en": "I need a few more minutes, please.",
+        "pt": "Eu preciso de mais alguns minutos, por favor.",
+        "distractor": "",
+        "emoji": "⏳",
+        "tip": "Use quando ainda estiver olhando o cardápio."
+      },
+      {
+        "en": "I'm not ready yet.",
+        "pt": "Eu ainda não estou pronto.",
+        "distractor": "",
+        "emoji": "👀",
+        "tip": "Curto e educado."
+      },
+      {
+        "en": "I'm ready to order.",
+        "pt": "Estou pronto para fazer o pedido.",
+        "distractor": "",
+        "emoji": "✅",
+        "tip": "Diga isso quando chamar o garçom."
+      },
+      {
+        "en": "How would you like your steak?",
+        "pt": "Como você gostaria do seu bife?",
+        "distractor": "",
+        "emoji": "🥩",
+        "tip": "Pontos: Rare (malpassado), Medium rare, Medium (ao ponto), Medium well, Well done (bem passado)."
       }
     ],
     "builder": [
@@ -1042,6 +1679,41 @@ window.SCENARIOS = [
         "distractor": "O Wi-Fi é gratuito?",
         "emoji": "💵",
         "tip": "Gorjeta = tip."
+      },
+      {
+        "en": "Are you still working on that?",
+        "pt": "Você ainda está comendo?",
+        "distractor": "",
+        "emoji": "🍽️",
+        "tip": "O garçom pergunta antes de recolher o prato."
+      },
+      {
+        "en": "Are you done with that?",
+        "pt": "Você já terminou?",
+        "distractor": "",
+        "emoji": "🍽️",
+        "tip": "Versão curta: 'Are you done?'"
+      },
+      {
+        "en": "Yes, I'm done.",
+        "pt": "Sim, já terminei.",
+        "distractor": "",
+        "emoji": "👍",
+        "tip": "Indica que o garçom pode retirar o prato."
+      },
+      {
+        "en": "I'm still working on it.",
+        "pt": "Ainda estou comendo.",
+        "distractor": "",
+        "emoji": "🍴",
+        "tip": "Use se o garçom tentar recolher seu prato cedo demais."
+      },
+      {
+        "en": "Can I have the check, please?",
+        "pt": "Posso pedir a conta, por favor?",
+        "distractor": "",
+        "emoji": "🧾",
+        "tip": "Na Europa/Reino Unido usa-se muito 'bill' em vez de 'check'."
       }
     ],
     "builder": [
@@ -1133,6 +1805,181 @@ window.SCENARIOS = [
         "distractor": "Serviu perfeitamente.",
         "emoji": "🤏",
         "tip": "It fits great! = Serviu perfeitamente!"
+      },
+      {
+        "en": "I'm going shopping now.",
+        "pt": "Eu vou fazer compras agora.",
+        "distractor": "",
+        "emoji": "🛍️",
+        "tip": "Go shopping = ir fazer compras."
+      },
+      {
+        "en": "Let's go shopping together.",
+        "pt": "Vamos fazer compras juntos.",
+        "distractor": "",
+        "emoji": "👯",
+        "tip": "Convite informal."
+      },
+      {
+        "en": "She's going to the shopping mall.",
+        "pt": "Ela está indo ao shopping.",
+        "distractor": "",
+        "emoji": "🏬",
+        "tip": "Em inglês, o lugar é 'shopping mall' (ou apenas 'mall')."
+      },
+      {
+        "en": "Hello, welcome! How may I help you?",
+        "pt": "Olá, bem-vindo! Como posso ajudar?",
+        "distractor": "",
+        "emoji": "😊",
+        "tip": "Também muito usado: 'How can I help you?'"
+      },
+      {
+        "en": "Are you looking for anything specific?",
+        "pt": "Você está procurando algo específico?",
+        "distractor": "",
+        "emoji": "🔎",
+        "tip": "Pergunta padrão de vendedores."
+      },
+      {
+        "en": "No, thanks. I'm just browsing.",
+        "pt": "Não, obrigado. Estou só dando uma olhadinha.",
+        "distractor": "",
+        "emoji": "👀",
+        "tip": "Equivalente a 'I'm just looking.'"
+      },
+      {
+        "en": "I'm looking for a white T-shirt.",
+        "pt": "Estou procurando uma camiseta branca.",
+        "distractor": "",
+        "emoji": "👕",
+        "tip": "Troque o final pelo item que procura."
+      },
+      {
+        "en": "Do you have it in a different color?",
+        "pt": "Você tem em uma cor diferente?",
+        "distractor": "",
+        "emoji": "🎨",
+        "tip": "Muito útil em lojas de roupas e calçados."
+      },
+      {
+        "en": "Do you have it in a different size?",
+        "pt": "Você tem em um tamanho diferente?",
+        "distractor": "",
+        "emoji": "📏",
+        "tip": "Size = tamanho."
+      },
+      {
+        "en": "Do you have it in a smaller size?",
+        "pt": "Você tem em um tamanho menor?",
+        "distractor": "",
+        "emoji": "🔽",
+        "tip": "Maior = 'in a bigger size?'"
+      },
+      {
+        "en": "Do you have it in stock?",
+        "pt": "Você tem no estoque?",
+        "distractor": "",
+        "emoji": "📦",
+        "tip": "In stock = disponível em estoque."
+      },
+      {
+        "en": "Let me check in the back.",
+        "pt": "Deixe-me verificar lá atrás (no estoque).",
+        "distractor": "",
+        "emoji": "🚪",
+        "tip": "Frase clássica de vendedores."
+      },
+      {
+        "en": "Sorry, we're out of stock.",
+        "pt": "Desculpe, estamos sem estoque.",
+        "distractor": "",
+        "emoji": "❌",
+        "tip": "Out of stock = esgotado."
+      },
+      {
+        "en": "It's too small.",
+        "pt": "Está muito pequena.",
+        "distractor": "",
+        "emoji": "🤏",
+        "tip": "Muito apertada = 'It's too tight.'"
+      },
+      {
+        "en": "It's too large.",
+        "pt": "Está muito grande.",
+        "distractor": "",
+        "emoji": "🧥",
+        "tip": "Curta = too short; longa = too long; larga = too loose."
+      },
+      {
+        "en": "How do I look?",
+        "pt": "Como ficou?",
+        "distractor": "",
+        "emoji": "🪞",
+        "tip": "Combine com 'Do you like it?' (Você gostou?)."
+      },
+      {
+        "en": "Let me try it on.",
+        "pt": "Deixe-me experimentar isso.",
+        "distractor": "",
+        "emoji": "👗",
+        "tip": "Try it on = provar a peça."
+      },
+      {
+        "en": "I think it fits me well.",
+        "pt": "Acho que me serviu bem.",
+        "distractor": "",
+        "emoji": "✨",
+        "tip": "Fit = servir (tamanho)."
+      },
+      {
+        "en": "This dress suits you perfectly.",
+        "pt": "Esse vestido caiu perfeitamente em você.",
+        "distractor": "",
+        "emoji": "💃",
+        "tip": "Suit = combinar / cair bem."
+      },
+      {
+        "en": "That shirt really suits you.",
+        "pt": "Aquela camisa te favoreceu muito.",
+        "distractor": "",
+        "emoji": "👔",
+        "tip": "Elogio muito natural."
+      },
+      {
+        "en": "The color looks great on you.",
+        "pt": "A cor ficou ótima em você.",
+        "distractor": "",
+        "emoji": "🌟",
+        "tip": "Look great on you = ficar ótimo em você."
+      },
+      {
+        "en": "Can I have a discount?",
+        "pt": "Você pode me dar um desconto?",
+        "distractor": "",
+        "emoji": "🏷️",
+        "tip": "Discount = desconto."
+      },
+      {
+        "en": "Do you have any coupons?",
+        "pt": "Você tem algum cupom?",
+        "distractor": "",
+        "emoji": "🎟️",
+        "tip": "Muito comum em lojas nos EUA."
+      },
+      {
+        "en": "Do you need a bag?",
+        "pt": "Você precisa de uma sacola?",
+        "distractor": "",
+        "emoji": "🛍️",
+        "tip": "Responda 'Yes, please.' ou 'No, thanks.'"
+      },
+      {
+        "en": "Did you find everything okay?",
+        "pt": "Você encontrou tudo o que precisava?",
+        "distractor": "",
+        "emoji": "💳",
+        "tip": "Pergunta padrão no caixa."
       }
     ],
     "builder": [
@@ -1224,6 +2071,202 @@ window.SCENARIOS = [
         "distractor": "Quanto custa esse remédio?",
         "emoji": "⏰",
         "tip": "Ex: 'Every eight hours' (A cada 8 horas)."
+      },
+      {
+        "en": "Can I talk to the pharmacist?",
+        "pt": "Posso falar com o farmacêutico?",
+        "distractor": "",
+        "emoji": "👨‍⚕️",
+        "tip": "Pharmacist = farmacêutico."
+      },
+      {
+        "en": "Please, I need a wheelchair.",
+        "pt": "Por favor, preciso de uma cadeira de rodas.",
+        "distractor": "",
+        "emoji": "♿",
+        "tip": "Wheelchair = cadeira de rodas."
+      },
+      {
+        "en": "We need an ambulance here.",
+        "pt": "Precisamos de uma ambulância aqui.",
+        "distractor": "",
+        "emoji": "🚑",
+        "tip": "Para emergências médicas."
+      },
+      {
+        "en": "I've been prescribed medication from the doctor.",
+        "pt": "O médico me prescreveu uma medicação.",
+        "distractor": "",
+        "emoji": "📋",
+        "tip": "Prescribed = prescrito/receitado."
+      },
+      {
+        "en": "I got some drugs from the doctor.",
+        "pt": "Peguei alguns remédios com o médico.",
+        "distractor": "",
+        "emoji": "💊",
+        "tip": "Em inglês, 'drugs' também significa medicamentos."
+      },
+      {
+        "en": "The doctor gave me some pills for my heart.",
+        "pt": "O médico me deu alguns remédios para o coração.",
+        "distractor": "",
+        "emoji": "❤️",
+        "tip": "Pills = comprimidos."
+      },
+      {
+        "en": "I need a pill for my headache.",
+        "pt": "Preciso de um remédio para dor de cabeça.",
+        "distractor": "",
+        "emoji": "🤕",
+        "tip": "Headache = dor de cabeça."
+      },
+      {
+        "en": "I'm on the pill.",
+        "pt": "Estou tomando anticoncepcional.",
+        "distractor": "",
+        "emoji": "💊",
+        "tip": "Expressão idiomática específica."
+      },
+      {
+        "en": "You need a shot.",
+        "pt": "Você precisa de uma injeção.",
+        "distractor": "",
+        "emoji": "💉",
+        "tip": "Shot = injeção / vacina."
+      },
+      {
+        "en": "I'm going to give you a prescription.",
+        "pt": "Vou te passar uma receita.",
+        "distractor": "",
+        "emoji": "📝",
+        "tip": "Prescription = receita médica."
+      },
+      {
+        "en": "I want to make an appointment with a doctor.",
+        "pt": "Quero marcar uma consulta com um médico.",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Make an appointment = marcar consulta."
+      },
+      {
+        "en": "You have to see a doctor to get a prescription.",
+        "pt": "Você precisa ver um médico para pegar uma receita.",
+        "distractor": "",
+        "emoji": "🩺",
+        "tip": "Comum em farmácias para antibióticos."
+      },
+      {
+        "en": "I'm feeling sick.",
+        "pt": "Estou me sentindo doente / enjoado.",
+        "distractor": "",
+        "emoji": "🤢",
+        "tip": "Ou simplesmente 'I'm sick.'"
+      },
+      {
+        "en": "I feel like vomiting.",
+        "pt": "Estou com vontade de vomitar.",
+        "distractor": "",
+        "emoji": "🤮",
+        "tip": "Mais informal: 'I'm going to throw up.'"
+      },
+      {
+        "en": "I'm feeling weak.",
+        "pt": "Estou me sentindo fraco.",
+        "distractor": "",
+        "emoji": "😮‍💨",
+        "tip": "Weak = fraco."
+      },
+      {
+        "en": "I'm feeling dizzy.",
+        "pt": "Estou me sentindo tonto.",
+        "distractor": "",
+        "emoji": "😵‍💫",
+        "tip": "Dizzy = tonto."
+      },
+      {
+        "en": "I have a cough.",
+        "pt": "Estou com tosse.",
+        "distractor": "",
+        "emoji": "😷",
+        "tip": "Cough (pronuncia-se cóf)."
+      },
+      {
+        "en": "I have a runny nose.",
+        "pt": "Meu nariz está escorrendo.",
+        "distractor": "",
+        "emoji": "🤧",
+        "tip": "Também: 'My nose is running.'"
+      },
+      {
+        "en": "I have a stuffy nose.",
+        "pt": "Meu nariz está entupido.",
+        "distractor": "",
+        "emoji": "👃",
+        "tip": "Stuffy nose = nariz entupido."
+      },
+      {
+        "en": "I sprained my ankle.",
+        "pt": "Torci meu tornozelo.",
+        "distractor": "",
+        "emoji": "🦶",
+        "tip": "Sprain = torcer."
+      },
+      {
+        "en": "I have cramps.",
+        "pt": "Estou com cólicas / cãibras.",
+        "distractor": "",
+        "emoji": "😣",
+        "tip": "Serve tanto para cólica quanto para cãibra."
+      },
+      {
+        "en": "I have a sore throat.",
+        "pt": "Estou com dor de garganta.",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Sore throat = garganta inflamada/dolorida."
+      },
+      {
+        "en": "I have a stomachache.",
+        "pt": "Estou com dor de estômago.",
+        "distractor": "",
+        "emoji": "🤢",
+        "tip": "Earache = dor de ouvido; backache = dor nas costas."
+      },
+      {
+        "en": "My foot hurts.",
+        "pt": "Meu pé dói.",
+        "distractor": "",
+        "emoji": "🦶",
+        "tip": "Use '[parte do corpo] hurts' para qualquer dor."
+      },
+      {
+        "en": "He was badly hurt in the car crash.",
+        "pt": "Ele se feriu gravemente no acidente de carro.",
+        "distractor": "",
+        "emoji": "🚗",
+        "tip": "Badly hurt = gravemente ferido."
+      },
+      {
+        "en": "Hi, can I have some Tylenol, please?",
+        "pt": "Oi, posso pegar um Tylenol, por favor?",
+        "distractor": "",
+        "emoji": "💊",
+        "tip": "Analgésico muito comum nos EUA."
+      },
+      {
+        "en": "I have a headache, I think I need an Advil.",
+        "pt": "Estou com dor de cabeça, acho que preciso de um Advil.",
+        "distractor": "",
+        "emoji": "💊",
+        "tip": "Advil = ibuprofeno."
+      },
+      {
+        "en": "Do you have aspirin?",
+        "pt": "Você tem aspirina?",
+        "distractor": "",
+        "emoji": "💊",
+        "tip": "Aspirin = aspirina."
       }
     ],
     "builder": [
@@ -1679,6 +2722,209 @@ window.SCENARIOS = [
         "distractor": "Estou ocupado agora.",
         "emoji": "📲",
         "tip": "Encerramento rápido: 'Talk to you soon!'"
+      },
+      {
+        "en": "Excuse me, I have to make a call now.",
+        "pt": "Com licença, preciso fazer uma ligação agora.",
+        "distractor": "",
+        "emoji": "📞",
+        "tip": "Make a call = fazer uma ligação."
+      },
+      {
+        "en": "I have to call my mom now.",
+        "pt": "Preciso ligar para a minha mãe agora.",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Call someone = ligar para alguém."
+      },
+      {
+        "en": "Please call me later.",
+        "pt": "Por favor, me ligue mais tarde.",
+        "distractor": "",
+        "emoji": "⏰",
+        "tip": "Call me later = me ligue depois."
+      },
+      {
+        "en": "Here's my number.",
+        "pt": "Aqui está o meu número.",
+        "distractor": "",
+        "emoji": "🔢",
+        "tip": "Para passar seu telefone."
+      },
+      {
+        "en": "The phone is ringing.",
+        "pt": "O telefone está tocando.",
+        "distractor": "",
+        "emoji": "🔔",
+        "tip": "Ring = tocar."
+      },
+      {
+        "en": "Why don't you answer the phone?",
+        "pt": "Por que você não atende o telefone?",
+        "distractor": "",
+        "emoji": "📲",
+        "tip": "Answer the phone = atender o telefone."
+      },
+      {
+        "en": "I'm calling my mom now. Let's see if she picks up.",
+        "pt": "Estou ligando para minha mãe agora. Vamos ver se ela atende.",
+        "distractor": "",
+        "emoji": "📞",
+        "tip": "Pick up = atender a ligação."
+      },
+      {
+        "en": "Hey, you hung up on me!",
+        "pt": "Ei, você desligou na minha cara!",
+        "distractor": "",
+        "emoji": "😠",
+        "tip": "Hang up on someone = desligar na cara de alguém."
+      },
+      {
+        "en": "Hello, how can I help you?",
+        "pt": "Alô, como posso ajudar?",
+        "distractor": "",
+        "emoji": "🎧",
+        "tip": "Atendimento comercial padrão."
+      },
+      {
+        "en": "Hello, is John there, please?",
+        "pt": "Alô, o John está aí, por favor?",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Também: 'Is that John?' / 'Is John in?'"
+      },
+      {
+        "en": "May I please speak to John?",
+        "pt": "Posso falar com o John, por favor?",
+        "distractor": "",
+        "emoji": "📞",
+        "tip": "Educado e formal."
+      },
+      {
+        "en": "Hello, could I speak to Mr. Smith, please?",
+        "pt": "Alô, eu poderia falar com o Sr. Smith, por favor?",
+        "distractor": "",
+        "emoji": "👔",
+        "tip": "Ideal para ligações de trabalho."
+      },
+      {
+        "en": "Hello, this is Carina calling for John.",
+        "pt": "Alô, aqui é a Carina ligando para o John.",
+        "distractor": "",
+        "emoji": "👋",
+        "tip": "No telefone em inglês, usa-se 'This is [nome]' em vez de 'I am'."
+      },
+      {
+        "en": "Hello, I'd like to speak to Mr. Smith.",
+        "pt": "Alô, eu gostaria de falar com o Sr. Smith.",
+        "distractor": "",
+        "emoji": "💼",
+        "tip": "Direto e profissional."
+      },
+      {
+        "en": "Can I leave him a message?",
+        "pt": "Posso deixar um recado para ele?",
+        "distractor": "",
+        "emoji": "📝",
+        "tip": "Para ela = 'leave her a message'."
+      },
+      {
+        "en": "Speaking.",
+        "pt": "É ele / ela mesmo.",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Quando ligam procurando por você mesmo."
+      },
+      {
+        "en": "Who am I speaking to?",
+        "pt": "Com quem eu estou falando?",
+        "distractor": "",
+        "emoji": "❓",
+        "tip": "Formal e educado."
+      },
+      {
+        "en": "Hi Mom, it's me.",
+        "pt": "Oi mãe, sou eu.",
+        "distractor": "",
+        "emoji": "❤️",
+        "tip": "Informal para família e amigos."
+      },
+      {
+        "en": "One moment, please. I'll put you through.",
+        "pt": "Só um momento, por favor. Vou transferir a ligação.",
+        "distractor": "",
+        "emoji": "🔀",
+        "tip": "Put you through = transferir a chamada."
+      },
+      {
+        "en": "Sure, would you mind holding?",
+        "pt": "Claro, você se importa de aguardar na linha?",
+        "distractor": "",
+        "emoji": "⏳",
+        "tip": "Hold = aguardar na linha."
+      },
+      {
+        "en": "Hang on a sec.",
+        "pt": "Espera um segundo.",
+        "distractor": "",
+        "emoji": "✋",
+        "tip": "Informal; também 'Hang on' ou 'Hold on'."
+      },
+      {
+        "en": "Sorry, he's not here at the moment.",
+        "pt": "Desculpe, ele não está aqui no momento.",
+        "distractor": "",
+        "emoji": "🚪",
+        "tip": "At the moment = no momento."
+      },
+      {
+        "en": "Would you like to leave a message?",
+        "pt": "Você gostaria de deixar um recado?",
+        "distractor": "",
+        "emoji": "📝",
+        "tip": "Ou: 'Can I take a message?'"
+      },
+      {
+        "en": "The line is busy.",
+        "pt": "A linha está ocupada.",
+        "distractor": "",
+        "emoji": "🚫",
+        "tip": "Busy = ocupada."
+      },
+      {
+        "en": "I can't get through.",
+        "pt": "Não consigo completar a ligação.",
+        "distractor": "",
+        "emoji": "📵",
+        "tip": "Get through = conseguir completar a chamada."
+      },
+      {
+        "en": "Sorry, I can't hear you.",
+        "pt": "Desculpe, não consigo te ouvir.",
+        "distractor": "",
+        "emoji": "🔇",
+        "tip": "Útil em ligações com sinal fraco."
+      },
+      {
+        "en": "Could you speak up, please?",
+        "pt": "Você poderia falar mais alto, por favor?",
+        "distractor": "",
+        "emoji": "🔊",
+        "tip": "Ou: 'Could you speak louder, please?'"
+      },
+      {
+        "en": "Sorry, your voice is cracking.",
+        "pt": "Desculpe, sua voz está cortando.",
+        "distractor": "",
+        "emoji": "📡",
+        "tip": "Equivalente a 'You're breaking up.'"
+      },
+      {
+        "en": "Sorry, I think I lost my connection.",
+        "pt": "Desculpe, acho que perdi a conexão.",
+        "distractor": "",
+        "emoji": "📶",
+        "tip": "Quando cai: 'We got cut off.'"
       }
     ],
     "builder": [

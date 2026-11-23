@@ -62,8 +62,9 @@
       <section id="view-practice" class="view">
         <h1 class="page-title">Prática Rápida</h1>
         <div class="practice-mode-switch">
-          <button class="mode-btn active" data-mode="shadowing">🎙️ Modo Shadowing</button>
-          <button class="mode-btn" data-mode="listening">🎧 Treino de Ouvido</button>
+          <button class="mode-btn active" data-mode="shadowing">🎙️ Fala</button>
+          <button class="mode-btn" data-mode="listening">🎧 Ouvido</button>
+          <button class="mode-btn" data-mode="writing">✍️ Escrita</button>
         </div>
 
         <!-- Shadowing Panel -->
@@ -109,6 +110,26 @@
             <div id="quick-listen-feedback" class="inline-feedback hidden"></div>
           </div>
         </div>
+
+        <!-- Quick Writing Panel -->
+        <div id="panel-writing" class="practice-panel">
+          <div class="card writing-card">
+            <span class="tag" id="write-category">Restaurante</span>
+            <p class="instruction" style="margin-bottom:8px;">Escreva em inglês a frase abaixo:</p>
+            <h2 class="shadow-en" id="write-pt" style="font-size:1.2rem;margin-bottom:12px;">Mesa para dois.</h2>
+            <div class="audio-controls" style="margin-bottom:14px;">
+              <button class="btn-circle" id="btn-write-audio">🔊 Ouvir áudio</button>
+              <button class="btn-circle" id="btn-write-hint">💡 Dica</button>
+            </div>
+            <p id="write-hint-text" class="writing-hint-box hidden"></p>
+            <input type="text" id="write-input" class="writing-input" placeholder="Digite sua resposta em inglês..." autocomplete="off" />
+            <div class="shadow-nav" style="margin-top:12px;">
+              <button class="btn-secondary" id="btn-write-next">Pular →</button>
+              <button class="btn-primary" id="btn-write-check" style="flex:1;">Verificar resposta</button>
+            </div>
+            <div id="write-feedback" class="inline-feedback hidden"></div>
+          </div>
+        </div>
       </section>
 
       <!-- TAB 3: FRASEÁRIO (MODO SOBREVIVÊNCIA) -->
@@ -123,7 +144,7 @@
         </div>
 
         <div class="filter-chips" id="phrase-filters">
-          <button class="chip active" data-filter="all">Todas (85+)</button>
+          <button class="chip active" data-filter="all">Todas (250+)</button>
           <button class="chip" data-filter="fav">⭐ Favoritas</button>
           <button class="chip" data-filter="1">Nível 1</button>
           <button class="chip" data-filter="2">Nível 2</button>
@@ -227,7 +248,7 @@
       <div class="lesson-progress-track">
         <div class="lesson-progress-fill" id="lesson-progress-fill" style="width: 0%"></div>
       </div>
-      <span class="step-badge" id="lesson-step-label">Etapa 1/4</span>
+      <span class="step-badge" id="lesson-step-label">Etapa 1/5</span>
     </div>
 
     <div class="lesson-body" id="lesson-body">

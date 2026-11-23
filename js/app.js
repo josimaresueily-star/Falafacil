@@ -1,13 +1,14 @@
-// FalaFácil — Motor Interativo do Webapp
+// FalaFácil v2 — Motor Interativo do Webapp (5 Etapas + Prática Escrita + 250+ Frases)
 (function () {
   let state = window.AppStorage.load();
   let currentLevel = 1;
   let allPhrases = [];
   let shadowIndex = 0;
+  let writeIndex = 0;
   let playlistRunning = false;
   let quickListenAnswer = null;
 
-  // Estado da Lição Ativa (4 Etapas)
+  // Estado da Lição Ativa (5 Etapas)
   let lesson = null;
 
   function init() {
@@ -29,6 +30,7 @@
     renderTrail();
     renderShadowCard();
     loadQuickListening();
+    loadQuickWriting();
     renderPhrasebook();
     renderSettings();
   }
@@ -40,6 +42,27 @@
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+  }
+
+  function normalizeText(str) {
+    return (str || '')
+      .toLowerCase()
+      .replace(/[.,!?;:'"’`-]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function makeHint(en) {
+    return en
+      .split(' ')
+      .map((w) => (w.length <= 2 ? w : w[0] + '_'.repeat(Math.min(w.length - 1, 5))))
+      .join(' ');
+  }
+
+  function getDistractor(item) {
+    if (item.distractor && item.distractor.trim()) return item.distractor;
+    const candidates = allPhrases.filter((p) => p.pt !== item.pt);
+    return candidates[Math.floor(Math.random() * candidates.length)].pt;
   }
 
   /* ==================== TOP BAR & NAV ==================== */
@@ -101,7 +124,7 @@
       }
 
       card.innerHTML = `
-        <span class="lesson-num">Cenário ${s.id} • ${s.category}</span>
+        <span class="lesson-num">Cenário ${s.id} • ${s.phrases.length} frases</span>
         <div class="lesson-emoji">${s.emoji}</div>
         <h3 class="lesson-title">${s.title}</h3>
         <div class="stars-row">${starsHtml}</div>
@@ -113,7 +136,7 @@
     });
   }
 
-  /* ==================== MOTOR DA LIÇÃO (4 ETAPAS) ==================== */
+  /* ==================== MOTOR DA LIÇÃO (5 ETAPAS) ==================== */
   function bindLessonModal() {
     document.getElementById('btn-close-lesson').addEventListener('click', () => {
       window.AppSpeech.stop();
@@ -123,9 +146,12 @@
   }
 
   function startLesson(scenario) {
+    // Seleciona 4 frases aleatórias do cenário para manter a lição ágil (~5 min) e sempre renovada
+    const activePhrases = shuffle(scenario.phrases).slice(0, Math.min(4, scenario.phrases.length));
     lesson = {
       scenario,
-      step: 1,       // 1=Vocab, 2=AudioMatch, 3=Builder, 4=Dialogue
+      activePhrases,
+      step: 1,       // 1=Vocab, 2=AudioMatch, 3=Builder, 4=Dialogue, 5=Prática Rápida (Escrita + Fala)
       subIndex: 0,
       errors: 0,
       totalChecks: 0,
@@ -139,14 +165,15 @@
   }
 
   function updateLessonProgress() {
-    const base = (lesson.step - 1) * 25;
+    const base = (lesson.step - 1) * 20;
     let subPct = 0;
-    if (lesson.step === 1) subPct = (lesson.subIndex / lesson.scenario.phrases.length) * 25;
-    if (lesson.step === 2) subPct = (lesson.matchedIds.length / lesson.scenario.phrases.length) * 25;
-    if (lesson.step === 3) subPct = (lesson.subIndex / lesson.scenario.builder.length) * 25;
-    if (lesson.step === 4) subPct = (lesson.subIndex / lesson.scenario.dialogue.length) * 25;
+    if (lesson.step === 1) subPct = (lesson.subIndex / lesson.activePhrases.length) * 20;
+    if (lesson.step === 2) subPct = (lesson.matchedIds.length / lesson.activePhrases.length) * 20;
+    if (lesson.step === 3) subPct = (lesson.subIndex / lesson.scenario.builder.length) * 20;
+    if (lesson.step === 4) subPct = (lesson.subIndex / lesson.scenario.dialogue.length) * 20;
+    if (lesson.step === 5) subPct = (lesson.subIndex / 3) * 20;
     document.getElementById('lesson-progress-fill').style.width = Math.min(100, Math.round(base + subPct)) + '%';
-    document.getElementById('lesson-step-label').textContent = `Etapa ${lesson.step}/4`;
+    document.getElementById('lesson-step-label').textContent = `Etapa ${lesson.step}/5`;
   }
 
   function renderLessonStep() {
@@ -160,14 +187,15 @@
     else if (lesson.step === 2) renderStepMatch(body, footer);
     else if (lesson.step === 3) renderStepBuilder(body, footer);
     else if (lesson.step === 4) renderStepDialogue(body, footer);
+    else if (lesson.step === 5) renderStepQuickPractice(body, footer);
   }
 
-  // ETAPA 1: Vocabulário Visual (2 opções rápidas)
+  // ETAPA 1: Vocabulário Visual
   function renderStepVocab(body, footer) {
-    const item = lesson.scenario.phrases[lesson.subIndex];
+    const item = lesson.activePhrases[lesson.subIndex];
     const options = shuffle([
       { text: item.pt, correct: true },
-      { text: item.distractor, correct: false }
+      { text: getDistractor(item), correct: false }
     ]);
 
     body.innerHTML = `
@@ -212,7 +240,7 @@
         `;
         document.getElementById('btn-next-step').addEventListener('click', () => {
           lesson.subIndex++;
-          if (lesson.subIndex >= lesson.scenario.phrases.length) {
+          if (lesson.subIndex >= lesson.activePhrases.length) {
             lesson.step = 2;
             lesson.subIndex = 0;
             lesson.matchedIds = [];
@@ -227,7 +255,7 @@
 
   // ETAPA 2: Treino de Ouvido (Áudio sem texto -> Tradução PT)
   function renderStepMatch(body, footer) {
-    const phrases = lesson.scenario.phrases.map((p, idx) => ({ ...p, idx }));
+    const phrases = lesson.activePhrases.map((p, idx) => ({ ...p, idx }));
     const audioOrder = shuffle(phrases);
     const ptOrder = shuffle(phrases);
 
@@ -293,7 +321,7 @@
     });
   }
 
-  // ETAPA 3: Moldes de Conversa (Blocos Coloridos Fixo + Variável)
+  // ETAPA 3: Moldes de Conversa
   function renderStepBuilder(body, footer) {
     const item = lesson.scenario.builder[lesson.subIndex];
     const targetParts = [
@@ -387,7 +415,7 @@
     });
   }
 
-  // ETAPA 4: Mini-Diálogo Interativo (Chat)
+  // ETAPA 4: Mini-Diálogo Interativo
   function renderStepDialogue(body, footer) {
     const turn = lesson.scenario.dialogue[lesson.subIndex];
 
@@ -448,14 +476,16 @@
             <p style="margin-top:4px;">${correctOpt.en}</p>
           </div>
           <button class="btn-green" id="btn-next-dialogue">
-            ${lesson.subIndex + 1 < lesson.scenario.dialogue.length ? 'Continuar conversa' : 'Concluir Cenário 🎉'}
+            ${lesson.subIndex + 1 < lesson.scenario.dialogue.length ? 'Continuar conversa' : 'Ir para Prática Rápida ✍️🎙️'}
           </button>
         `;
 
         document.getElementById('btn-next-dialogue').addEventListener('click', () => {
           lesson.subIndex++;
           if (lesson.subIndex >= lesson.scenario.dialogue.length) {
-            finishLesson();
+            lesson.step = 5;
+            lesson.subIndex = 0;
+            renderLessonStep();
           } else {
             renderLessonStep();
           }
@@ -465,9 +495,132 @@
     });
   }
 
+  // ETAPA 5: Prática Rápida Integrada (2 Escritas + 1 Shadowing de Fala)
+  function renderStepQuickPractice(body, footer) {
+    const phrase = lesson.activePhrases[lesson.subIndex % lesson.activePhrases.length];
+
+    // Sub-etapas 0 e 1: Preencher por escrito
+    if (lesson.subIndex < 2) {
+      body.innerHTML = `
+        <h2 class="lesson-prompt-title">Prática Rápida: Escrita (${lesson.subIndex + 1}/2)</h2>
+        <div class="visual-card" style="padding:20px 16px;">
+          <div class="visual-emoji" style="font-size:2.6rem;">${phrase.emoji}</div>
+          <p class="muted" style="margin-bottom:6px;">Escreva em inglês:</p>
+          <p style="font-size:1.15rem;font-weight:800;">${phrase.pt}</p>
+          <div class="audio-controls" style="margin:14px 0 0;">
+            <button class="btn-circle" id="btn-lp-audio">🔊 Ouvir</button>
+            <button class="btn-circle" id="btn-lp-hint">💡 Dica</button>
+          </div>
+        </div>
+        <p id="lp-hint-box" class="writing-hint-box hidden"></p>
+        <input type="text" id="lp-write-input" class="writing-input" placeholder="Digite a frase em inglês..." autocomplete="off" />
+      `;
+
+      const input = document.getElementById('lp-write-input');
+      const hintBox = document.getElementById('lp-hint-box');
+      setTimeout(() => input.focus(), 100);
+
+      document.getElementById('btn-lp-audio').addEventListener('click', () => window.AppSpeech.speak(phrase.en));
+      document.getElementById('btn-lp-hint').addEventListener('click', () => {
+        hintBox.textContent = 'Dica: ' + makeHint(phrase.en);
+        hintBox.classList.remove('hidden');
+      });
+
+      footer.innerHTML = `<button class="btn-primary" style="width:100%" id="btn-lp-verify">Verificar escrita</button>`;
+
+      function checkWritten() {
+        const typed = normalizeText(input.value);
+        const expected = normalizeText(phrase.en);
+        const sim = window.AppSpeech.similarity(phrase.en, input.value);
+        const ok = typed === expected || sim >= 85;
+        lesson.totalChecks++;
+        if (!ok) lesson.errors++;
+
+        window.AppSpeech.speak(phrase.en);
+        input.disabled = true;
+
+        footer.innerHTML = `
+          <div class="feedback-banner ${ok ? 'ok' : 'err'}">
+            <strong>${ok ? 'Mandou bem! ✍️' : 'Resposta correta:'}</strong>
+            <p style="margin-top:4px;">${phrase.en}</p>
+          </div>
+          <button class="btn-green" id="btn-lp-next">Próximo</button>
+        `;
+        document.getElementById('btn-lp-next').addEventListener('click', () => {
+          lesson.subIndex++;
+          renderLessonStep();
+        });
+      }
+
+      document.getElementById('btn-lp-verify').addEventListener('click', checkWritten);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !input.disabled) checkWritten();
+      });
+      return;
+    }
+
+    // Sub-etapa 2: Prática de Fala (Shadowing da lição)
+    body.innerHTML = `
+      <h2 class="lesson-prompt-title">Prática Rápida: Fala (Shadowing)</h2>
+      <div class="card">
+        <span class="tag">${lesson.scenario.category}</span>
+        <h2 class="shadow-en">${phrase.en}</h2>
+        <p class="shadow-pt">${phrase.pt}</p>
+        <div class="audio-controls">
+          <button class="btn-circle" id="btn-lp-say-1">🔊 1.0x</button>
+          <button class="btn-circle" id="btn-lp-say-slow">🐢 0.75x</button>
+        </div>
+        <div class="mic-area" style="margin-bottom:0;">
+          <button class="btn-mic" id="btn-lp-mic">
+            <span class="mic-icon">🎙️</span>
+            <span id="lp-mic-label">Toque e repita em voz alta</span>
+          </button>
+          <div id="lp-speech-res" class="speech-result hidden"></div>
+        </div>
+      </div>
+    `;
+
+    window.AppSpeech.speak(phrase.en);
+    document.getElementById('btn-lp-say-1').addEventListener('click', () => window.AppSpeech.speak(phrase.en, { rate: 1.0 }));
+    document.getElementById('btn-lp-say-slow').addEventListener('click', () => window.AppSpeech.speak(phrase.en, { rate: 0.72 }));
+
+    const micBtn = document.getElementById('btn-lp-mic');
+    micBtn.addEventListener('click', () => {
+      const label = document.getElementById('lp-mic-label');
+      const resBox = document.getElementById('lp-speech-res');
+      micBtn.classList.add('listening');
+      label.textContent = 'Ouvindo... fale agora!';
+      resBox.classList.add('hidden');
+
+      window.AppSpeech.listen(
+        state.accent,
+        (transcript) => {
+          micBtn.classList.remove('listening');
+          label.textContent = 'Tentar novamente';
+          const score = window.AppSpeech.similarity(phrase.en, transcript);
+          resBox.classList.remove('hidden');
+          resBox.innerHTML = `
+            <strong>Você disse:</strong> "${transcript}"<br/>
+            <strong>Precisão:</strong> <span style="color:${score >= 70 ? '#22c55e' : '#facc15'}">${score}%</span>
+            ${score >= 70 ? ' — Ótima pronúncia! 🎉' : ' — Ouça em 0.75x e repita.'}
+          `;
+        },
+        (err) => {
+          micBtn.classList.remove('listening');
+          label.textContent = 'Toque para falar';
+          resBox.classList.remove('hidden');
+          resBox.textContent = err;
+        }
+      );
+    });
+
+    footer.innerHTML = `<button class="btn-green" id="btn-lp-finish">Concluir Cenário 🎉</button>`;
+    document.getElementById('btn-lp-finish').addEventListener('click', finishLesson);
+  }
+
   function finishLesson() {
     const accuracy = lesson.totalChecks > 0 ? 1 - lesson.errors / lesson.totalChecks : 1;
-    const stars = accuracy >= 0.9 ? 3 : accuracy >= 0.65 ? 2 : 1;
+    const stars = accuracy >= 0.85 ? 3 : accuracy >= 0.6 ? 2 : 1;
 
     const prev = state.completedLessons[lesson.scenario.id] || 0;
     state.completedLessons[lesson.scenario.id] = Math.max(prev, stars);
@@ -497,7 +650,7 @@
     });
   }
 
-  /* ==================== TAB 2: PRÁTICA ==================== */
+  /* ==================== TAB 2: PRÁTICA (FALA, OUVIDO E ESCRITA) ==================== */
   function bindPractice() {
     document.querySelectorAll('.mode-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -508,6 +661,7 @@
       });
     });
 
+    // Shadowing
     document.getElementById('btn-shadow-normal').addEventListener('click', () => {
       window.AppSpeech.speak(allPhrases[shadowIndex].en, { rate: 1.0 });
     });
@@ -555,11 +709,55 @@
       );
     });
 
+    // Listening
     document.getElementById('btn-quick-listen').addEventListener('click', () => {
       if (quickListenAnswer) window.AppSpeech.speak(quickListenAnswer.en, { rate: 0.95 });
     });
     document.getElementById('btn-quick-listen-slow').addEventListener('click', () => {
       if (quickListenAnswer) window.AppSpeech.speak(quickListenAnswer.en, { rate: 0.72 });
+    });
+
+    // Writing
+    document.getElementById('btn-write-audio').addEventListener('click', () => {
+      window.AppSpeech.speak(allPhrases[writeIndex].en);
+    });
+    document.getElementById('btn-write-hint').addEventListener('click', () => {
+      const box = document.getElementById('write-hint-text');
+      box.textContent = 'Dica: ' + makeHint(allPhrases[writeIndex].en);
+      box.classList.remove('hidden');
+    });
+    document.getElementById('btn-write-next').addEventListener('click', () => {
+      writeIndex = Math.floor(Math.random() * allPhrases.length);
+      loadQuickWriting();
+    });
+
+    function verifyQuickWriting() {
+      const p = allPhrases[writeIndex];
+      const input = document.getElementById('write-input');
+      const fb = document.getElementById('write-feedback');
+      const typed = normalizeText(input.value);
+      const expected = normalizeText(p.en);
+      const sim = window.AppSpeech.similarity(p.en, input.value);
+      const ok = typed === expected || sim >= 85;
+
+      window.AppSpeech.speak(p.en);
+      fb.classList.remove('hidden');
+      fb.style.background = ok ? 'var(--green-bg)' : 'var(--red-bg)';
+      fb.innerHTML = ok
+        ? `✅ Excelente! "${p.en}"`
+        : `❌ Resposta esperada: "${p.en}"`;
+
+      if (ok) {
+        setTimeout(() => {
+          writeIndex = Math.floor(Math.random() * allPhrases.length);
+          loadQuickWriting();
+        }, 1600);
+      }
+    }
+
+    document.getElementById('btn-write-check').addEventListener('click', verifyQuickWriting);
+    document.getElementById('write-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyQuickWriting();
     });
   }
 
@@ -570,6 +768,15 @@
     document.getElementById('shadow-pt').textContent = p.pt;
     document.getElementById('shadow-tip').textContent = '💡 ' + p.tip;
     document.getElementById('speech-result').classList.add('hidden');
+  }
+
+  function loadQuickWriting() {
+    const p = allPhrases[writeIndex];
+    document.getElementById('write-category').textContent = `Nível ${p.level} • ${p.category}`;
+    document.getElementById('write-pt').textContent = p.pt;
+    document.getElementById('write-input').value = '';
+    document.getElementById('write-hint-text').classList.add('hidden');
+    document.getElementById('write-feedback').classList.add('hidden');
   }
 
   function loadQuickListening() {
