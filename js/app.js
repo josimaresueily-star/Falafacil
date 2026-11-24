@@ -2,6 +2,7 @@
 (function () {
   let state = window.AppStorage.load();
   let currentLevel = 1;
+  let loadedScenarios = [];
   let allPhrases = [];
   let shadowIndex = 0;
   let writeIndex = 0;
@@ -11,13 +12,51 @@
   // Estado da Lição Ativa (4 Etapas)
   let lesson = null;
 
-  function init() {
+  function rebuildLoadedData() {
+    loadedScenarios = [];
+    for (let lvl = 1; lvl <= 6; lvl++) {
+      const data = window.AppStorage.getLevelData(lvl);
+      if (Array.isArray(data)) {
+        loadedScenarios.push(...data);
+      }
+    }
     allPhrases = [];
-    window.SCENARIOS.forEach((s) => {
+    loadedScenarios.forEach((s) => {
       s.phrases.forEach((p) => {
         allPhrases.push({ ...p, scenarioId: s.id, level: s.level, category: s.category });
       });
     });
+  }
+
+  async function downloadLevel(levelNum, silent = false) {
+    if (window.AppStorage.isLevelDownloaded(levelNum)) {
+      rebuildLoadedData();
+      return true;
+    }
+    try {
+      const resp = await fetch(`/data/level-${levelNum}.json`);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const data = await resp.json();
+      window.AppStorage.saveLevelData(levelNum, data);
+      rebuildLoadedData();
+      if (!silent) showToast(`✅ Nível ${levelNum} baixado para uso offline!`);
+      renderTopBar();
+      renderTrail();
+      renderPhrasebook();
+      if (allPhrases.length && !quickListenAnswer) {
+        renderShadowCard();
+        loadQuickListening();
+        loadQuickWriting();
+      }
+      return true;
+    } catch (err) {
+      if (!silent) showToast(`⚠️ Sem conexão para baixar o Nível ${levelNum}.`);
+      return false;
+    }
+  }
+
+  async function init() {
+    rebuildLoadedData();
 
     bindNavigation();
     bindLevelTabs();
@@ -26,11 +65,18 @@
     bindSettings();
     bindLessonModal();
 
+    // Baixa automaticamente apenas o Nível 1 na primeira vez
+    if (!window.AppStorage.isLevelDownloaded(1)) {
+      await downloadLevel(1, true);
+    }
+
     renderTopBar();
     renderTrail();
-    renderShadowCard();
-    loadQuickListening();
-    loadQuickWriting();
+    if (allPhrases.length) {
+      renderShadowCard();
+      loadQuickListening();
+      loadQuickWriting();
+    }
     renderPhrasebook();
     renderSettings();
   }
@@ -148,7 +194,7 @@
       .map(Number)
       .filter((id) => id !== scenario.id);
 
-    const prevScenarios = window.SCENARIOS.filter(
+    const prevScenarios = loadedScenarios.filter(
       (s) => s.id !== scenario.id && (completedIds.includes(s.id) || s.id < scenario.id)
     );
 
@@ -179,7 +225,7 @@
   /* ==================== TOP BAR & NAV ==================== */
   function renderTopBar() {
     const completedCount = Object.keys(state.completedLessons).length;
-    const pct = Math.round((completedCount / window.SCENARIOS.length) * 100);
+    const pct = Math.round((completedCount / window.TOTAL_SCENARIOS) * 100);
     document.getElementById('mastery-pct').textContent = pct + '%';
     document.getElementById('streak-count').textContent = state.streak;
     document.getElementById('hero-streak').textContent = state.streak;
@@ -239,7 +285,35 @@
     const container = document.getElementById('trail-container');
     container.innerHTML = '';
 
-    const items = window.SCENARIOS.filter((s) => s.level === currentLevel);
+    const offlineBar = document.getElementById('level-offline-bar');
+    const isDownloaded = window.AppStorage.isLevelDownloaded(currentLevel);
+
+    if (!isDownloaded) {
+      offlineBar.innerHTML = '';
+      const dlCard = document.createElement('div');
+      dlCard.className = 'download-level-card';
+      dlCard.innerHTML = `
+        <div style="font-size:2.6rem;margin-bottom:10px;">⬇️</div>
+        <h3 style="margin-bottom:6px;">Nível ${currentLevel} pronto para baixar</h3>
+        <p class="muted" style="margin-bottom:16px;">Baixe apenas este nível (~25 KB) para estudar todas as 5 lições offline.</p>
+        <button class="btn-primary" id="btn-dl-current-level" style="width:100%;">⬇️ Baixar Nível ${currentLevel} Offline</button>
+      `;
+      dlCard.querySelector('#btn-dl-current-level').addEventListener('click', async (e) => {
+        e.target.disabled = true;
+        e.target.textContent = 'Baixando...';
+        const ok = await downloadLevel(currentLevel, false);
+        if (!ok) {
+          e.target.disabled = false;
+          e.target.textContent = `⬇️ Tentar baixar Nível ${currentLevel}`;
+        }
+      });
+      container.appendChild(dlCard);
+      return;
+    }
+
+    offlineBar.innerHTML = `<span class="offline-pill-ok">✅ Nível ${currentLevel} salvo offline</span>`;
+
+    const items = loadedScenarios.filter((s) => s.level === currentLevel);
     items.forEach((s) => {
       const stars = state.completedLessons[s.id] || 0;
       const unlocked = isScenarioUnlocked(s.id);
@@ -282,11 +356,25 @@
   }
 
   /* ==================== MOTOR DA LIÇÃO (4 ETAPAS) ==================== */
+  function updateLessonVoiceButton() {
+    const btn = document.getElementById('btn-lesson-voice');
+    if (btn) btn.textContent = state.voiceGender === 'male' ? '👨' : '👩';
+  }
+
   function bindLessonModal() {
     document.getElementById('btn-close-lesson').addEventListener('click', () => {
       window.AppSpeech.stop();
       document.getElementById('lesson-modal').classList.add('hidden');
       lesson = null;
+    });
+
+    document.getElementById('btn-lesson-voice').addEventListener('click', () => {
+      state.voiceGender = state.voiceGender === 'male' ? 'female' : 'male';
+      window.AppStorage.save(state);
+      updateLessonVoiceButton();
+      const sel = document.getElementById('select-voice-gender');
+      if (sel) sel.value = state.voiceGender;
+      showToast(state.voiceGender === 'male' ? '👨 Voz masculina ativada' : '👩 Voz feminina ativada');
     });
   }
 
@@ -310,6 +398,7 @@
       builtChunks: [],
       chatHistory: []
     };
+    updateLessonVoiceButton();
     document.getElementById('lesson-modal').classList.remove('hidden');
     renderLessonStep();
   }
@@ -984,6 +1073,12 @@
     state.completedLessons[currentScenario.id] = Math.max(prev, stars);
     state = window.AppStorage.recordStudy(state, 5);
 
+    // Se concluiu a última lição do nível, baixa automaticamente o próximo nível para uso offline
+    const nextLevel = currentScenario.level + 1;
+    if (currentScenario.id % 5 === 0 && nextLevel <= 6 && !window.AppStorage.isLevelDownloaded(nextLevel)) {
+      downloadLevel(nextLevel, false);
+    }
+
     document.getElementById('lesson-progress-fill').style.width = '100%';
     document.getElementById('lesson-step-label').textContent = 'Concluído!';
 
@@ -1279,6 +1374,12 @@
       state.accent = e.target.value;
       window.AppStorage.save(state);
     });
+    document.getElementById('select-voice-gender').addEventListener('change', (e) => {
+      state.voiceGender = e.target.value;
+      window.AppStorage.save(state);
+      updateLessonVoiceButton();
+      window.AppSpeech.speak('Hello! Nice to meet you.');
+    });
     document.getElementById('select-goal').addEventListener('change', (e) => {
       state.dailyGoal = Number(e.target.value);
       window.AppStorage.save(state);
@@ -1370,11 +1471,12 @@
   function renderSettings() {
     const completed = Object.keys(state.completedLessons).length;
     const totalStars = Object.values(state.completedLessons).reduce((a, b) => a + b, 0);
-    document.getElementById('stat-scenarios').textContent = `${completed}/${window.SCENARIOS.length}`;
-    document.getElementById('stat-stars').textContent = `${totalStars}/${window.SCENARIOS.length * 3}`;
+    document.getElementById('stat-scenarios').textContent = `${completed}/${window.TOTAL_SCENARIOS}`;
+    document.getElementById('stat-stars').textContent = `${totalStars}/${window.TOTAL_SCENARIOS * 3}`;
     document.getElementById('stat-favs').textContent = state.favorites.length;
 
     document.getElementById('select-accent').value = state.accent;
+    document.getElementById('select-voice-gender').value = state.voiceGender || 'female';
     document.getElementById('select-goal').value = String(state.dailyGoal);
     document.getElementById('select-rate').value = String(state.rate);
     renderDevPanel();

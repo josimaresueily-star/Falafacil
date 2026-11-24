@@ -53,6 +53,7 @@
             <button class="level-pill" data-level="6">Nível 6</button>
           </div>
           <p class="level-subtitle" id="level-subtitle">Primeiros Contatos e Sobrevivência</p>
+          <div id="level-offline-bar" class="offline-status-bar"></div>
         </div>
 
         <div class="trail-container" id="trail-container">
@@ -194,6 +195,17 @@
 
           <div class="setting-item">
             <div>
+              <strong>Voz da Conversação</strong>
+              <p class="muted">Escolha voz feminina ou masculina</p>
+            </div>
+            <select id="select-voice-gender">
+              <option value="female">👩 Feminina</option>
+              <option value="male">👨 Masculina</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div>
               <strong>Meta Diária</strong>
               <p class="muted">Minutos de treino por dia</p>
             </div>
@@ -234,7 +246,7 @@
           <p id="dev-msg" class="muted" style="margin-top:8px;"></p>
         </div>
 
-        <p id="app-version-trigger" class="version-footer">FalaFácil v7.0</p>
+        <p id="app-version-trigger" class="version-footer">FalaFácil v8.0</p>
       </section>
     </main>
 
@@ -266,6 +278,7 @@
       <div class="lesson-progress-track">
         <div class="lesson-progress-fill" id="lesson-progress-fill" style="width: 0%"></div>
       </div>
+      <button class="btn-voice-toggle" id="btn-lesson-voice" title="Alternar voz feminina/masculina">👩</button>
       <span class="step-badge" id="lesson-step-label">Etapa 1/4</span>
     </div>
 
@@ -278,7 +291,7 @@
     </div>
   </div>
 
-  <script src="/js/data.js"></script>
+  <script src="/js/levels-meta.js"></script>
   <script src="/js/storage.js"></script>
   <script src="/js/speech.js"></script>
   <script src="/js/app.js"></script>

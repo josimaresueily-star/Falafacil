@@ -1,10 +1,10 @@
-const CACHE_NAME = 'falafacil-v7';
+const CACHE_NAME = 'falafacil-v8';
 const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/css/styles.css',
-  '/js/data.js',
+  '/js/levels-meta.js',
   '/js/speech.js',
   '/js/storage.js',
   '/js/app.js',
@@ -28,6 +28,23 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
+  const url = new URL(e.request.url);
+  // Cache level JSON files dynamically when downloaded
+  if (url.pathname.startsWith('/data/level-')) {
+    e.respondWith(
+      caches.open(CACHE_NAME).then((cache) =>
+        cache.match(e.request).then((cached) => {
+          if (cached) return cached;
+          return fetch(e.request).then((resp) => {
+            if (resp.ok) cache.put(e.request, resp.clone());
+            return resp;
+          });
+        })
+      )
+    );
+    return;
+  }
+
   e.respondWith(
     caches.match(e.request).then((cached) => cached || fetch(e.request))
   );

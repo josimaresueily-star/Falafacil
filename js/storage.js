@@ -1,5 +1,6 @@
-// Persistência local (LocalStorage) — Zero backend necessário no Cloudflare Pages
+// Persistência local (LocalStorage) + Cache Offline por Nível
 const STORAGE_KEY = 'falafacil_state_v1';
+const LEVEL_PREFIX = 'falafacil_level_data_';
 
 const DEFAULT_STATE = {
   streak: 0,
@@ -7,10 +8,11 @@ const DEFAULT_STATE = {
   todayMinutes: 0,
   dailyGoal: 15,
   accent: 'en-US',
+  voiceGender: 'female', // 'female' | 'male'
   rate: 0.95,
-  completedLessons: {}, // { lessonId: stars (1-3) }
-  favorites: [],        // array of English phrases
-  unlockAll: false      // modo teste (desbloqueia todas as lições e níveis)
+  completedLessons: {},  // { lessonId: stars (1-3) }
+  favorites: [],         // array of English phrases
+  unlockAll: false       // modo teste
 };
 
 window.AppStorage = {
@@ -19,7 +21,6 @@ window.AppStorage = {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return { ...DEFAULT_STATE };
       const parsed = { ...DEFAULT_STATE, ...JSON.parse(raw) };
-      // Reset todayMinutes if it's a new calendar day
       const today = new Date().toISOString().slice(0, 10);
       if (parsed.lastStudyDate && parsed.lastStudyDate !== today) {
         parsed.todayMinutes = 0;
@@ -50,6 +51,42 @@ window.AppStorage = {
     }
     this.save(state);
     return state;
+  },
+
+  // Armazenamento offline por nível
+  getLevelData(levelNum) {
+    try {
+      const raw = localStorage.getItem(LEVEL_PREFIX + levelNum);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  saveLevelData(levelNum, scenariosArray) {
+    try {
+      localStorage.setItem(LEVEL_PREFIX + levelNum, JSON.stringify(scenariosArray));
+      return true;
+    } catch (e) {
+      console.warn('Erro ao salvar nível offline:', e);
+      return false;
+    }
+  },
+
+  isLevelDownloaded(levelNum) {
+    return localStorage.getItem(LEVEL_PREFIX + levelNum) !== null;
+  },
+
+  getDownloadedLevels() {
+    const list = [];
+    for (let i = 1; i <= 6; i++) {
+      if (this.isLevelDownloaded(i)) list.push(i);
+    }
+    return list;
+  },
+
+  removeLevelData(levelNum) {
+    localStorage.removeItem(LEVEL_PREFIX + levelNum);
   },
 
   reset() {
