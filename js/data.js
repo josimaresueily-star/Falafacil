@@ -1,9 +1,11 @@
-// Banco de Dados Completo v6: 4 Níveis, 20 Cenários, 346 Frases e Diálogos Progressivos Completos
+// Banco de Dados Completo v7: 6 Níveis, 30 Cenários e 510+ Frases Prontas
 window.LEVELS_META = {
   "1": "Primeiros Contatos e Sobrevivência",
   "2": "Viagem e Deslocamento",
   "3": "Alimentação, Compras e Saúde",
-  "4": "Vida Social, Trabalho e Imprevistos"
+  "4": "Vida Social, Trabalho e Imprevistos",
+  "5": "Carreira, Entrevistas e Trânsito",
+  "6": "Vida no Exterior e Conversação Avançada"
 };
 
 window.SCENARIOS = [
@@ -4283,6 +4285,2149 @@ window.SCENARIOS = [
           },
           {
             "en": "Can I leave him a message?",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "level": 5,
+    "category": "Entrevista",
+    "emoji": "👔",
+    "title": "Entrevista: Perfil e Carreira",
+    "phrases": [
+      {
+        "en": "Tell me a little about yourself.",
+        "pt": "Fale um pouco sobre você.",
+        "distractor": "",
+        "emoji": "👋",
+        "tip": "A pergunta de abertura mais comum em entrevistas."
+      },
+      {
+        "en": "What are your strengths?",
+        "pt": "Quais são os seus pontos fortes?",
+        "distractor": "",
+        "emoji": "💪",
+        "tip": "Strength = força / ponto forte."
+      },
+      {
+        "en": "What are your weaknesses?",
+        "pt": "Quais são os seus pontos fracos?",
+        "distractor": "",
+        "emoji": "🎯",
+        "tip": "Sempre mencione algo que você já está melhorando."
+      },
+      {
+        "en": "I am focused.",
+        "pt": "Eu sou focado.",
+        "distractor": "",
+        "emoji": "🎯",
+        "tip": "Adjetivo direto e positivo."
+      },
+      {
+        "en": "I am driven and motivated.",
+        "pt": "Eu sou determinado e motivado.",
+        "distractor": "",
+        "emoji": "🚀",
+        "tip": "Driven = movido por objetivos / determinado."
+      },
+      {
+        "en": "I have a lot of experience in this area.",
+        "pt": "Eu tenho muita experiência nessa área.",
+        "distractor": "",
+        "emoji": "📊",
+        "tip": "Funciona para qualquer profissão."
+      },
+      {
+        "en": "I could be more flexible.",
+        "pt": "Eu poderia ser mais flexível.",
+        "distractor": "",
+        "emoji": "🔄",
+        "tip": "Ótima forma honesta e profissional de citar um ponto a melhorar."
+      },
+      {
+        "en": "I could be more independent.",
+        "pt": "Eu poderia ser mais independente.",
+        "distractor": "",
+        "emoji": "🧭",
+        "tip": "Também vale: 'I could be more of a team player.'"
+      },
+      {
+        "en": "I could be more of a team player.",
+        "pt": "Eu poderia trabalhar melhor em equipe.",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "Team player = pessoa que trabalha bem em grupo."
+      },
+      {
+        "en": "Describe yourself.",
+        "pt": "Descreva-se.",
+        "distractor": "",
+        "emoji": "🪞",
+        "tip": "Prepare 2 ou 3 frases curtas sobre seu estilo de trabalho."
+      },
+      {
+        "en": "Let me describe myself. I am a hard worker.",
+        "pt": "Deixe-me me descrever. Sou muito trabalhador.",
+        "distractor": "",
+        "emoji": "💼",
+        "tip": "Complete com: 'I believe in cooperation and strong leadership, but I can also be a follower.'"
+      },
+      {
+        "en": "I believe in cooperation and strong leadership.",
+        "pt": "Acredito em cooperação e liderança forte.",
+        "distractor": "",
+        "emoji": "🌟",
+        "tip": "Mostra maturidade profissional."
+      },
+      {
+        "en": "Where do you see yourself in five years?",
+        "pt": "Onde você se vê daqui a 5 anos?",
+        "distractor": "",
+        "emoji": "🔭",
+        "tip": "Também perguntam 'in ten years?' (em 10 anos)."
+      },
+      {
+        "en": "I see myself working in a leadership role.",
+        "pt": "Eu me vejo trabalhando em um cargo de liderança.",
+        "distractor": "",
+        "emoji": "📈",
+        "tip": "Molde: 'I see myself doing...' / 'I see myself working...'"
+      },
+      {
+        "en": "I see myself speaking with thousands of fluent students.",
+        "pt": "Eu me vejo falando com milhares de alunos fluentes.",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Ou: 'I see myself teaching English to diplomats and celebrities.' / 'playing music in bars.'"
+      },
+      {
+        "en": "Why do you want to leave your current company?",
+        "pt": "Por que você quer sair da sua empresa atual?",
+        "distractor": "",
+        "emoji": "🏢",
+        "tip": "Nunca fale mal do chefe atual; foque em crescimento."
+      },
+      {
+        "en": "Actually, I want to leave my company because I'm looking for a new challenge.",
+        "pt": "Na verdade, quero sair porque estou procurando um novo desafio.",
+        "distractor": "",
+        "emoji": "🧗",
+        "tip": "Complete com '...to apply my growing talents.'"
+      },
+      {
+        "en": "I'm looking for a new challenge to apply my growing talents.",
+        "pt": "Estou procurando um novo desafio para aplicar meus talentos crescentes.",
+        "distractor": "",
+        "emoji": "✨",
+        "tip": "Resposta elegante e positiva."
+      },
+      {
+        "en": "I'm not inspired by my current company's mission.",
+        "pt": "Não me sinto inspirado pela missão da minha empresa atual.",
+        "distractor": "",
+        "emoji": "🧭",
+        "tip": "Mostra que você valoriza propósito."
+      },
+      {
+        "en": "I have a unique set of experiences that I will bring to the table.",
+        "pt": "Tenho um conjunto único de experiências que vou oferecer.",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "'Bring to the table' = contribuir / agregar valor."
+      },
+      {
+        "en": "How did you hear about this position?",
+        "pt": "Como você ficou sabendo desta vaga?",
+        "distractor": "",
+        "emoji": "📢",
+        "tip": "Também: 'How did you find out about this position?'"
+      },
+      {
+        "en": "I heard about this position from a colleague.",
+        "pt": "Fiquei sabendo desta vaga por um colega.",
+        "distractor": "",
+        "emoji": "👥",
+        "tip": "Ou 'on LinkedIn' / 'on your website'."
+      },
+      {
+        "en": "Discuss your educational background.",
+        "pt": "Fale sobre a sua formação acadêmica.",
+        "distractor": "",
+        "emoji": "🎓",
+        "tip": "Educational background = formação escolar/universitária."
+      },
+      {
+        "en": "I received my bachelor's degree in 2010.",
+        "pt": "Recebi meu diploma de graduação em 2010.",
+        "distractor": "",
+        "emoji": "📜",
+        "tip": "Bachelor's degree = graduação; Master's = mestrado; PhD = doutorado."
+      },
+      {
+        "en": "I won a grant to study for my PhD.",
+        "pt": "Ganhei uma bolsa para cursar meu doutorado.",
+        "distractor": "",
+        "emoji": "🏆",
+        "tip": "Grant / scholarship = bolsa de estudos."
+      },
+      {
+        "en": "I did various internships while completing my degree.",
+        "pt": "Fiz vários estágios enquanto concluía minha formação.",
+        "distractor": "",
+        "emoji": "💻",
+        "tip": "Internship = estágio."
+      },
+      {
+        "en": "Why should we hire you?",
+        "pt": "Por que deveríamos contratar você?",
+        "distractor": "",
+        "emoji": "⭐",
+        "tip": "Conecte suas habilidades aos problemas da empresa."
+      },
+      {
+        "en": "You will not find a better professional for this role.",
+        "pt": "Você não vai encontrar um profissional melhor para esta função.",
+        "distractor": "",
+        "emoji": "🔥",
+        "tip": "Adapte: '...a better lesson planner / native teacher.'"
+      },
+      {
+        "en": "What are your career goals?",
+        "pt": "Quais são os seus objetivos de carreira?",
+        "distractor": "",
+        "emoji": "🎯",
+        "tip": "Ex: 'I want to be the best in my field, not just in Brazil.'"
+      },
+      {
+        "en": "I'm a fast learner and adaptable.",
+        "pt": "Aprendo rápido e sou adaptável.",
+        "distractor": "",
+        "emoji": "⚡",
+        "tip": "Frase bônus muito valorizada por recrutadores."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Estou procurando um novo desafio.",
+        "fixed": "I'm looking for",
+        "variable": "a new challenge.",
+        "extra": "",
+        "distractors": [
+          "passport",
+          "ticket"
+        ]
+      },
+      {
+        "pt": "Eu tenho muita experiência nessa área.",
+        "fixed": "I have a lot of",
+        "variable": "experience",
+        "extra": "in this area.",
+        "distractors": [
+          "coffee",
+          "traffic"
+        ]
+      },
+      {
+        "pt": "Fiquei sabendo desta vaga por um colega.",
+        "fixed": "I heard about",
+        "variable": "this position",
+        "extra": "from a colleague.",
+        "distractors": [
+          "weather",
+          "menu"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Entrevistador",
+        "en": "Good morning! Nice to meet you. Tell me a little about yourself and your strengths.",
+        "pt": "Bom dia! Prazer em conhecê-lo. Fale um pouco sobre você e seus pontos fortes.",
+        "options": [
+          {
+            "en": "Nice to meet you too! I am a hard worker, focused, and I have a lot of experience in this area.",
+            "correct": true
+          },
+          {
+            "en": "Can I have the check, please?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Entrevistador",
+        "en": "Great! How did you hear about this position, and why do you want to leave your current company?",
+        "pt": "Ótimo! Como soube desta vaga e por que quer sair da sua empresa atual?",
+        "options": [
+          {
+            "en": "I heard about this position from a colleague. I'm looking for a new challenge to apply my growing talents.",
+            "correct": true
+          },
+          {
+            "en": "I'm staying for ten days.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Entrevistador",
+        "en": "What are your weaknesses, and where do you see yourself in five years?",
+        "pt": "Quais são seus pontos fracos e onde você se vê daqui a 5 anos?",
+        "options": [
+          {
+            "en": "I could be more flexible sometimes. In five years, I see myself working in a leadership role here.",
+            "correct": true
+          },
+          {
+            "en": "Turn left at the bank.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Entrevistador",
+        "en": "Why should we hire you? That's my last question for this part!",
+        "pt": "Por que deveríamos contratar você? Essa é minha última pergunta desta parte!",
+        "options": [
+          {
+            "en": "I have a unique set of experiences that I will bring to the table. Thank you!",
+            "correct": true
+          },
+          {
+            "en": "No onions, please.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "level": 5,
+    "category": "Entrevista",
+    "emoji": "💼",
+    "title": "Entrevista: Desafios e Perguntas",
+    "phrases": [
+      {
+        "en": "What are three things your former manager would like you to improve on?",
+        "pt": "Quais são três coisas que seu antigo gerente gostaria que você melhorasse?",
+        "distractor": "",
+        "emoji": "📋",
+        "tip": "Improve on = melhorar em algo."
+      },
+      {
+        "en": "He would say that I could be better at communication skills.",
+        "pt": "Ele diria que eu poderia ser melhor em habilidades de comunicação.",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Também: 'organizational skills' ou 'my English'."
+      },
+      {
+        "en": "Tell me about a time you made a mistake.",
+        "pt": "Conte-me sobre uma vez em que você cometeu um erro.",
+        "distractor": "",
+        "emoji": "⚠️",
+        "tip": "Foque em como você resolveu e o que aprendeu."
+      },
+      {
+        "en": "I fixed this mistake in one hour and added a check to my checklist.",
+        "pt": "Consertei esse erro em uma hora e adicionei uma verificação à minha lista.",
+        "distractor": "",
+        "emoji": "✅",
+        "tip": "Mostra responsabilidade e prevenção."
+      },
+      {
+        "en": "How would you deal with an angry customer?",
+        "pt": "Como você lidaria com um cliente irritado?",
+        "distractor": "",
+        "emoji": "😤",
+        "tip": "Deal with = lidar com."
+      },
+      {
+        "en": "Give a time when you went above and beyond for a project.",
+        "pt": "Cite uma vez em que você foi além dos requisitos de um projeto.",
+        "distractor": "",
+        "emoji": "🌟",
+        "tip": "Go above and beyond = superar expectativas."
+      },
+      {
+        "en": "I try to go above and beyond for my colleagues and my boss.",
+        "pt": "Eu tento ir além pelos meus colegas e pelo meu chefe.",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "Expressão muito bem vista em entrevistas."
+      },
+      {
+        "en": "What motivates you?",
+        "pt": "O que motiva você?",
+        "distractor": "",
+        "emoji": "🔥",
+        "tip": "Comece respondendo com 'What gets me up in the morning...'"
+      },
+      {
+        "en": "What gets me up in the morning is exciting work.",
+        "pt": "O que me faz levantar de manhã é um trabalho empolgante.",
+        "distractor": "",
+        "emoji": "☀️",
+        "tip": "Ex: 'Knowing that today I could change a student's life.'"
+      },
+      {
+        "en": "Are you a leader or a follower?",
+        "pt": "Você é um líder ou um seguidor?",
+        "distractor": "",
+        "emoji": "🧭",
+        "tip": "Responda mostrando que sabe fazer os dois papéis conforme o momento."
+      },
+      {
+        "en": "I am a good leader when I plan my own projects, and a good follower with a clear action plan.",
+        "pt": "Sou bom líder quando planejo meus projetos e bom seguidor com um plano claro.",
+        "distractor": "",
+        "emoji": "⚖️",
+        "tip": "Resposta equilibrada e madura."
+      },
+      {
+        "en": "Are you willing to relocate?",
+        "pt": "Você está disposto a se mudar?",
+        "distractor": "",
+        "emoji": "✈️",
+        "tip": "Também: 'Are you willing to travel?' (disposto a viajar)."
+      },
+      {
+        "en": "Would you work holidays and weekends?",
+        "pt": "Você trabalharia em feriados e fins de semana?",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Responda: 'Yes, I would.' ou 'No, I wouldn't, because...'"
+      },
+      {
+        "en": "I'm available every weekday.",
+        "pt": "Estou disponível todos os dias úteis.",
+        "distractor": "",
+        "emoji": "🗓️",
+        "tip": "Ou: 'I'm available the whole year' / 'most mornings and every afternoon.'"
+      },
+      {
+        "en": "Would you work 40 plus hours a week?",
+        "pt": "Você trabalharia mais de 40 horas por semana?",
+        "distractor": "",
+        "emoji": "⏰",
+        "tip": "Responda: 'I would, if the result is something big.' ou 'I would prefer not to, because...'"
+      },
+      {
+        "en": "What is the name of our CEO?",
+        "pt": "Qual é o nome do nosso CEO?",
+        "distractor": "",
+        "emoji": "🏢",
+        "tip": "Sempre pesquise sobre a empresa antes da entrevista!"
+      },
+      {
+        "en": "What was the last book you read for fun?",
+        "pt": "Qual foi o último livro que você leu por diversão?",
+        "distractor": "",
+        "emoji": "📖",
+        "tip": "Ex: 'I just finished... and I am currently reading...'"
+      },
+      {
+        "en": "What are your coworker pet peeves?",
+        "pt": "O que seus colegas de trabalho fazem que te irrita?",
+        "distractor": "",
+        "emoji": "😅",
+        "tip": "Pet peeve = implicância / algo que te irrita."
+      },
+      {
+        "en": "I don't love when my coworkers procrastinate.",
+        "pt": "Não gosto muito quando meus colegas procrastinam.",
+        "distractor": "",
+        "emoji": "⏳",
+        "tip": "Ou: '...leave projects until the last minute.'"
+      },
+      {
+        "en": "What makes you uncomfortable? Office gossip.",
+        "pt": "O que te deixa desconfortável? Fofoca no escritório.",
+        "distractor": "",
+        "emoji": "🤫",
+        "tip": "Office gossip = fofoca no ambiente de trabalho."
+      },
+      {
+        "en": "What questions haven't I asked you?",
+        "pt": "Quais perguntas eu ainda não te fiz?",
+        "distractor": "",
+        "emoji": "❓",
+        "tip": "Responda: 'I would like to talk more about my technical background.'"
+      },
+      {
+        "en": "What questions do you have for me?",
+        "pt": "Quais perguntas você tem para mim?",
+        "distractor": "",
+        "emoji": "💬",
+        "tip": "Sempre tenha 2 ou 3 perguntas prontas!"
+      },
+      {
+        "en": "I would like to discuss my salary expectations.",
+        "pt": "Eu gostaria de conversar sobre minhas expectativas salariais.",
+        "distractor": "",
+        "emoji": "💰",
+        "tip": "Salary expectations = pretensão salarial."
+      },
+      {
+        "en": "How long have you been working in the area?",
+        "pt": "Há quanto tempo você trabalha na área?",
+        "distractor": "",
+        "emoji": "📆",
+        "tip": "Ótima pergunta para fazer ao entrevistador."
+      },
+      {
+        "en": "How big is the company now?",
+        "pt": "Qual é o tamanho da empresa agora?",
+        "distractor": "",
+        "emoji": "🏗️",
+        "tip": "Mostra interesse no crescimento da empresa."
+      },
+      {
+        "en": "Is there the possibility to work remotely?",
+        "pt": "Existe a possibilidade de trabalhar remotamente?",
+        "distractor": "",
+        "emoji": "🏠",
+        "tip": "Também: '...to work from home?'"
+      },
+      {
+        "en": "What are the next steps in the hiring process?",
+        "pt": "Quais são os próximos passos do processo seletivo?",
+        "distractor": "",
+        "emoji": "➡️",
+        "tip": "Pergunta bônus excelente para encerrar a entrevista."
+      },
+      {
+        "en": "When can you start?",
+        "pt": "Quando você pode começar?",
+        "distractor": "",
+        "emoji": "📆",
+        "tip": "Ex: 'I can start immediately' ou 'in two weeks.'"
+      },
+      {
+        "en": "Break a leg! Good luck!",
+        "pt": "Boa sorte!",
+        "distractor": "",
+        "emoji": "🍀",
+        "tip": "'Break a leg!' é uma expressão idiomática para desejar boa sorte."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Existe a possibilidade de trabalhar de casa?",
+        "fixed": "Is there the possibility",
+        "variable": "to work from home?",
+        "extra": "",
+        "distractors": [
+          "passport",
+          "bread"
+        ]
+      },
+      {
+        "pt": "Eu gostaria de falar sobre minhas expectativas salariais.",
+        "fixed": "I would like to discuss",
+        "variable": "my salary expectations.",
+        "extra": "",
+        "distractors": [
+          "subway",
+          "towels"
+        ]
+      },
+      {
+        "pt": "Quais são os próximos passos do processo?",
+        "fixed": "What are",
+        "variable": "the next steps?",
+        "extra": "",
+        "distractors": [
+          "breakfast",
+          "jacket"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Entrevistador",
+        "en": "Tell me about a time you made a mistake, and what motivates you at work?",
+        "pt": "Conte sobre uma vez que cometeu um erro e o que motiva você no trabalho?",
+        "options": [
+          {
+            "en": "Once I made a mistake, fixed it in one hour, and added a checklist. What gets me up in the morning is exciting work!",
+            "correct": true
+          },
+          {
+            "en": "I'd like a medium coffee, please.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Entrevistador",
+        "en": "Great attitude! Are you willing to travel, and are you available every weekday?",
+        "pt": "Ótima atitude! Você está disposto a viajar e está disponível todos os dias úteis?",
+        "options": [
+          {
+            "en": "Yes, I would be happy to travel, and I'm available every weekday.",
+            "correct": true
+          },
+          {
+            "en": "It's a bit too tight.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Entrevistador",
+        "en": "We're almost done! What questions do you have for me?",
+        "pt": "Estamos quase terminando! Quais perguntas você tem para mim?",
+        "options": [
+          {
+            "en": "Is there the possibility to work remotely? And what are the next steps in the hiring process?",
+            "correct": true
+          },
+          {
+            "en": "How much is the fare?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Entrevistador",
+        "en": "Yes, we offer hybrid work! We'll call you back by Friday. Good luck!",
+        "pt": "Sim, oferecemos trabalho híbrido! Ligamos até sexta. Boa sorte!",
+        "options": [
+          {
+            "en": "Thank you so much for your time! It was a pleasure meeting you. Goodbye!",
+            "correct": true
+          },
+          {
+            "en": "Please call the police.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "level": 5,
+    "category": "Trânsito",
+    "emoji": "🚗",
+    "title": "Alugar Carro e Trânsito",
+    "phrases": [
+      {
+        "en": "I'd like to rent a car.",
+        "pt": "Eu gostaria de alugar um carro.",
+        "distractor": "",
+        "emoji": "🚗",
+        "tip": "Rent a car = alugar um carro."
+      },
+      {
+        "en": "I have a reservation for an automatic car.",
+        "pt": "Tenho uma reserva para um carro automático.",
+        "distractor": "",
+        "emoji": "⚙️",
+        "tip": "Automatic (automático) / Manual or Stick shift (manual)."
+      },
+      {
+        "en": "Does the price include full insurance?",
+        "pt": "O preço inclui seguro total?",
+        "distractor": "",
+        "emoji": "🛡️",
+        "tip": "Full insurance / full coverage = seguro completo."
+      },
+      {
+        "en": "Is there an extra fee for a second driver?",
+        "pt": "Tem taxa extra para um segundo motorista?",
+        "distractor": "",
+        "emoji": "👥",
+        "tip": "Extra fee = taxa adicional."
+      },
+      {
+        "en": "Do I need to return it with a full tank?",
+        "pt": "Preciso devolver com o tanque cheio?",
+        "distractor": "",
+        "emoji": "⛽",
+        "tip": "Full tank = tanque cheio."
+      },
+      {
+        "en": "Where is the nearest gas station?",
+        "pt": "Onde fica o posto de gasolina mais próximo?",
+        "distractor": "",
+        "emoji": "⛽",
+        "tip": "No Reino Unido: 'petrol station'."
+      },
+      {
+        "en": "Fill it up with regular gas, please.",
+        "pt": "Encha o tanque com gasolina comum, por favor.",
+        "distractor": "",
+        "emoji": "🚗",
+        "tip": "Regular (comum), Premium (aditivada), Diesel."
+      },
+      {
+        "en": "Can I park here?",
+        "pt": "Posso estacionar aqui?",
+        "distractor": "",
+        "emoji": "🅿️",
+        "tip": "Fique atento às placas 'No Parking' ou 'Tow-away zone'."
+      },
+      {
+        "en": "How much is parking per hour?",
+        "pt": "Quanto custa o estacionamento por hora?",
+        "distractor": "",
+        "emoji": "💵",
+        "tip": "Parking lot / parking garage = estacionamento."
+      },
+      {
+        "en": "I have a flat tire.",
+        "pt": "Estou com um pneu furado.",
+        "distractor": "",
+        "emoji": "🔧",
+        "tip": "Flat tire = pneu furado; Spare tire = estepe."
+      },
+      {
+        "en": "My car broke down.",
+        "pt": "Meu carro quebrou.",
+        "distractor": "",
+        "emoji": "🚨",
+        "tip": "Break down = quebrar / parar de funcionar."
+      },
+      {
+        "en": "Could you call roadside assistance?",
+        "pt": "Poderia chamar a assistência na estrada / guincho?",
+        "distractor": "",
+        "emoji": "🚛",
+        "tip": "Tow truck = guincho."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "O preço inclui seguro total?",
+        "fixed": "Does the price include",
+        "variable": "full insurance?",
+        "extra": "",
+        "distractors": [
+          "breakfast",
+          "onions"
+        ]
+      },
+      {
+        "pt": "Onde fica o posto de gasolina mais próximo?",
+        "fixed": "Where is the",
+        "variable": "nearest gas station?",
+        "extra": "",
+        "distractors": [
+          "passport",
+          "menu"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Atendente",
+        "en": "Welcome to City Car Rental! How can I help you today?",
+        "pt": "Bem-vindo à City Car Rental! Como posso ajudar hoje?",
+        "options": [
+          {
+            "en": "Hi! I have a reservation for an automatic car under Silva.",
+            "correct": true
+          },
+          {
+            "en": "A table for two, please.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Great! Can I see your driver's license and credit card, please?",
+        "pt": "Ótimo! Posso ver sua carteira de motorista e cartão de crédito, por favor?",
+        "options": [
+          {
+            "en": "Sure, here they are. Does the price include full insurance?",
+            "correct": true
+          },
+          {
+            "en": "I have a fever.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Yes, full coverage is included! Please return it with a full tank.",
+        "pt": "Sim, cobertura total incluída! Por favor, devolva com o tanque cheio.",
+        "options": [
+          {
+            "en": "Got it! Where is the nearest gas station from here?",
+            "correct": true
+          },
+          {
+            "en": "What are your strengths?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Atendente",
+        "en": "Just two blocks down on your right. Here are the keys. Drive safely!",
+        "pt": "Apenas dois quarteirões descendo à direita. Aqui estão as chaves. Dirija com segurança!",
+        "options": [
+          {
+            "en": "Thank you so much! Have a nice day. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Can I get a refund?",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "level": 5,
+    "category": "Polícia",
+    "emoji": "🚓",
+    "title": "Parado pela Polícia (Trânsito)",
+    "phrases": [
+      {
+        "en": "Pull over to the side of the road.",
+        "pt": "Encoste o carro no acostamento / lado da rua.",
+        "distractor": "",
+        "emoji": "🚓",
+        "tip": "Pull over = encostar o veículo."
+      },
+      {
+        "en": "Turn off the engine, please.",
+        "pt": "Desligue o motor, por favor.",
+        "distractor": "",
+        "emoji": "🔑",
+        "tip": "Também ajuda baixar o vidro e ligar a luz interna à noite."
+      },
+      {
+        "en": "Keep your hands on the steering wheel.",
+        "pt": "Mantenha as mãos no volante.",
+        "distractor": "",
+        "emoji": "🙌",
+        "tip": "Regra de ouro nos EUA/exterior: sempre deixe as mãos visíveis."
+      },
+      {
+        "en": "Good evening, officer.",
+        "pt": "Boa noite, oficial.",
+        "distractor": "",
+        "emoji": "👮",
+        "tip": "Chame sempre de 'officer' (ou 'Sir / Ma'am') com calma e educação."
+      },
+      {
+        "en": "License and registration, please.",
+        "pt": "Carteira de motorista e documento do carro, por favor.",
+        "distractor": "",
+        "emoji": "🪪",
+        "tip": "Também pedem 'proof of insurance' (comprovante de seguro)."
+      },
+      {
+        "en": "May I reach into the glove compartment for my documents?",
+        "pt": "Posso pegar meus documentos no porta-luvas?",
+        "distractor": "",
+        "emoji": "🧤",
+        "tip": "SEMPRE avise antes de mexer no porta-luvas ou no bolso!"
+      },
+      {
+        "en": "My wallet is in my pocket. May I get it?",
+        "pt": "Minha carteira está no meu bolso. Posso pegá-la?",
+        "distractor": "",
+        "emoji": "👛",
+        "tip": "Movimentos lentos e avisados evitam qualquer mal-entendido."
+      },
+      {
+        "en": "Here is my driver's license and rental agreement.",
+        "pt": "Aqui está minha carteira de motorista e o contrato de aluguel.",
+        "distractor": "",
+        "emoji": "📄",
+        "tip": "Se o carro for alugado, o contrato substitui o registro."
+      },
+      {
+        "en": "Do you know why I pulled you over?",
+        "pt": "Você sabe por que eu te parei?",
+        "distractor": "",
+        "emoji": "❓",
+        "tip": "Dica: responda com calma sem admitir culpa precipitadamente."
+      },
+      {
+        "en": "No, officer. Could you please tell me?",
+        "pt": "Não, oficial. Poderia me dizer, por favor?",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "Educado, calmo e direto."
+      },
+      {
+        "en": "You were speeding.",
+        "pt": "Você estava acima do limite de velocidade.",
+        "distractor": "",
+        "emoji": "⚡",
+        "tip": "Speeding = excesso de velocidade."
+      },
+      {
+        "en": "You ran a red light / stop sign.",
+        "pt": "Você furou o sinal vermelho / placa de pare.",
+        "distractor": "",
+        "emoji": "🚦",
+        "tip": "Run a red light = passar no sinal vermelho."
+      },
+      {
+        "en": "Your taillight is out.",
+        "pt": "Sua lanterna traseira está queimada.",
+        "distractor": "",
+        "emoji": "💡",
+        "tip": "Headlight = farol dianteiro; Taillight = lanterna traseira."
+      },
+      {
+        "en": "I'm sorry, officer. I didn't realize I was going that fast.",
+        "pt": "Desculpe, oficial. Não percebi que estava indo tão rápido.",
+        "distractor": "",
+        "emoji": "🙏",
+        "tip": "Tom respeitoso ajuda muito."
+      },
+      {
+        "en": "Where are you heading tonight?",
+        "pt": "Para onde você está indo hoje à noite?",
+        "distractor": "",
+        "emoji": "📍",
+        "tip": "Heading = indo / se dirigindo."
+      },
+      {
+        "en": "I'm heading back to my hotel.",
+        "pt": "Estou voltando para o meu hotel.",
+        "distractor": "",
+        "emoji": "🏨",
+        "tip": "Responda de forma simples e objetiva."
+      },
+      {
+        "en": "Where are you coming from?",
+        "pt": "De onde você está vindo?",
+        "distractor": "",
+        "emoji": "🗺️",
+        "tip": "Ex: 'I'm coming from a restaurant downtown.'"
+      },
+      {
+        "en": "Is this your car?",
+        "pt": "Este carro é seu?",
+        "distractor": "",
+        "emoji": "🚗",
+        "tip": "Se alugado: 'No, officer, it's a rental car.'"
+      },
+      {
+        "en": "Have you had anything to drink tonight?",
+        "pt": "Você bebeu alguma bebida alcoólica hoje à noite?",
+        "distractor": "",
+        "emoji": "🍷",
+        "tip": "Responda com clareza: 'No, officer, I haven't been drinking.'"
+      },
+      {
+        "en": "Please step out of the vehicle.",
+        "pt": "Por favor, saia do veículo.",
+        "distractor": "",
+        "emoji": "🚪",
+        "tip": "Obedeça devagar e com as mãos visíveis."
+      },
+      {
+        "en": "Wait here in the car while I check your license.",
+        "pt": "Espere aqui no carro enquanto verifico sua carteira.",
+        "distractor": "",
+        "emoji": "⏳",
+        "tip": "Nunca saia do carro a menos que o policial peça."
+      },
+      {
+        "en": "I'm going to let you off with a warning.",
+        "pt": "Vou te liberar apenas com uma advertência.",
+        "distractor": "",
+        "emoji": "😌",
+        "tip": "Warning = advertência (sem multa)."
+      },
+      {
+        "en": "I have to give you a ticket.",
+        "pt": "Vou ter que te dar uma multa.",
+        "distractor": "",
+        "emoji": "🧾",
+        "tip": "Ticket = multa de trânsito."
+      },
+      {
+        "en": "Please sign here. It's not an admission of guilt.",
+        "pt": "Por favor, assine aqui. Não é uma admissão de culpa.",
+        "distractor": "",
+        "emoji": "✍️",
+        "tip": "Assinar a multa apenas confirma que você recebeu a notificação."
+      },
+      {
+        "en": "How do I pay this ticket?",
+        "pt": "Como eu pago esta multa?",
+        "distractor": "",
+        "emoji": "💳",
+        "tip": "As instruções costumam vir no verso do papel."
+      },
+      {
+        "en": "Am I free to go now, officer?",
+        "pt": "Estou liberado para ir agora, oficial?",
+        "distractor": "",
+        "emoji": "✅",
+        "tip": "Pergunte educadamente antes de ligar o carro e sair."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Posso pegar meus documentos no porta-luvas?",
+        "fixed": "May I reach into",
+        "variable": "the glove compartment",
+        "extra": "for my documents?",
+        "distractors": [
+          "coffee",
+          "airport"
+        ]
+      },
+      {
+        "pt": "Estou voltando para o meu hotel.",
+        "fixed": "I'm heading back",
+        "variable": "to my hotel.",
+        "extra": "",
+        "distractors": [
+          "receipt",
+          "onions"
+        ]
+      },
+      {
+        "pt": "Estou liberado para ir agora, oficial?",
+        "fixed": "Am I free",
+        "variable": "to go now,",
+        "extra": "officer?",
+        "distractors": [
+          "menu",
+          "discount"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Policial",
+        "en": "Good evening. Please turn off the engine and keep your hands on the steering wheel. License and registration, please.",
+        "pt": "Boa noite. Desligue o motor e mantenha as mãos no volante. Carteira e documento, por favor.",
+        "options": [
+          {
+            "en": "Good evening, officer. May I reach into the glove compartment for my rental agreement?",
+            "correct": true
+          },
+          {
+            "en": "Fill it up with regular gas, please.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Policial",
+        "en": "Go ahead, slowly. Do you know why I pulled you over? You were speeding.",
+        "pt": "Pode pegar, devagar. Sabe por que te parei? Você estava acima do limite.",
+        "options": [
+          {
+            "en": "I'm sorry, officer. I didn't realize I was going that fast. Here is my license.",
+            "correct": true
+          },
+          {
+            "en": "I'm just looking, thanks.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Policial",
+        "en": "Where are you heading tonight, and have you had anything to drink?",
+        "pt": "Para onde está indo hoje à noite e você bebeu alguma coisa?",
+        "options": [
+          {
+            "en": "No, officer, I haven't been drinking. I'm heading back to my hotel.",
+            "correct": true
+          },
+          {
+            "en": "I'd like to return this.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Policial",
+        "en": "Everything checks out. I'm going to let you off with a warning this time. Drive safely!",
+        "pt": "Tudo certo. Vou te liberar só com uma advertência desta vez. Dirija com segurança!",
+        "options": [
+          {
+            "en": "Thank you very much, officer! Am I free to go now? Have a safe night!",
+            "correct": true
+          },
+          {
+            "en": "What are your career goals?",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "level": 5,
+    "category": "Moradia",
+    "emoji": "🏠",
+    "title": "Aluguel, Airbnb e Casa",
+    "phrases": [
+      {
+        "en": "I'm interested in renting this apartment.",
+        "pt": "Estou interessado em alugar este apartamento.",
+        "distractor": "",
+        "emoji": "🏢",
+        "tip": "Rent = alugar."
+      },
+      {
+        "en": "Are utilities included in the rent?",
+        "pt": "As contas (água/luz/gás) estão incluídas no aluguel?",
+        "distractor": "",
+        "emoji": "💡",
+        "tip": "Utilities = serviços básicos (luz, água, gás, internet)."
+      },
+      {
+        "en": "How much is the security deposit?",
+        "pt": "Quanto é o depósito caução?",
+        "distractor": "",
+        "emoji": "💰",
+        "tip": "Security deposit = caução."
+      },
+      {
+        "en": "How do I get the keys for self check-in?",
+        "pt": "Como eu pego as chaves para o self check-in?",
+        "distractor": "",
+        "emoji": "🔑",
+        "tip": "Muito comum em Airbnb (lockbox = cofre de chaves)."
+      },
+      {
+        "en": "Where do we throw out the trash?",
+        "pt": "Onde nós jogamos o lixo fora?",
+        "distractor": "",
+        "emoji": "🗑️",
+        "tip": "Trash (EUA) / Rubbish (Reino Unido)."
+      },
+      {
+        "en": "The shower has no hot water.",
+        "pt": "O chuveiro está sem água quente.",
+        "distractor": "",
+        "emoji": "🚿",
+        "tip": "Hot water = água quente."
+      },
+      {
+        "en": "The sink is clogged.",
+        "pt": "A pia está entupida.",
+        "distractor": "",
+        "emoji": "🚰",
+        "tip": "Clogged = entupida; Leaking = vazando."
+      },
+      {
+        "en": "The Wi-Fi isn't connecting.",
+        "pt": "O Wi-Fi não está conectando.",
+        "distractor": "",
+        "emoji": "📶",
+        "tip": "Peça: 'Could you reset the router?'"
+      },
+      {
+        "en": "Could you send someone to fix it?",
+        "pt": "Poderia mandar alguém para consertar isso?",
+        "distractor": "",
+        "emoji": "🔧",
+        "tip": "Fix = consertar."
+      },
+      {
+        "en": "Is it a quiet neighborhood?",
+        "pt": "É um bairro tranquilo?",
+        "distractor": "",
+        "emoji": "🌳",
+        "tip": "Neighborhood = bairro / vizinhança."
+      },
+      {
+        "en": "Are pets allowed here?",
+        "pt": "Animais de estimação são permitidos aqui?",
+        "distractor": "",
+        "emoji": "🐶",
+        "tip": "Pet-friendly = aceita animais."
+      },
+      {
+        "en": "I'd like to extend my stay for two more nights.",
+        "pt": "Gostaria de estender minha estadia por mais duas noites.",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Extend my stay = prolongar a estadia."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "As contas estão incluídas no aluguel?",
+        "fixed": "Are utilities included",
+        "variable": "in the rent?",
+        "extra": "",
+        "distractors": [
+          "ticket",
+          "steering"
+        ]
+      },
+      {
+        "pt": "Poderia mandar alguém para consertar isso?",
+        "fixed": "Could you send someone",
+        "variable": "to fix it?",
+        "extra": "",
+        "distractors": [
+          "check in",
+          "bread"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Anfitrião",
+        "en": "Hi! Welcome to the apartment! Did you have any trouble with self check-in?",
+        "pt": "Oi! Bem-vindo ao apartamento! Teve algum problema com o self check-in?",
+        "options": [
+          {
+            "en": "Hi! No trouble at all, thanks. Everything looks great! Where do we throw out the trash?",
+            "correct": true
+          },
+          {
+            "en": "Keep your hands on the steering wheel.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Anfitrião",
+        "en": "There's a bin right outside the back door. Let me know if anything isn't working!",
+        "pt": "Tem uma lixeira logo atrás da porta dos fundos. Me avise se algo não funcionar!",
+        "options": [
+          {
+            "en": "Actually, the Wi-Fi isn't connecting and the shower has no hot water.",
+            "correct": true
+          },
+          {
+            "en": "I have a flat tire.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Anfitrião",
+        "en": "Oh, I'm so sorry! I'll reset the router and send someone to fix the heater right now.",
+        "pt": "Nossa, desculpe! Vou reiniciar o roteador e mandar alguém consertar o aquecedor agora.",
+        "options": [
+          {
+            "en": "Thank you so much! By the way, I'd like to extend my stay for two more nights if possible.",
+            "correct": true
+          },
+          {
+            "en": "Why should we hire you?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Anfitrião",
+        "en": "Sure, those two nights are free! I'll update your booking on the app.",
+        "pt": "Claro, essas duas noites estão livres! Vou atualizar sua reserva no app.",
+        "options": [
+          {
+            "en": "Awesome! I'll send you a message if I need anything else. Bye!",
+            "correct": true
+          },
+          {
+            "en": "Party of two.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "level": 6,
+    "category": "Finanças",
+    "emoji": "🏦",
+    "title": "Banco e Finanças",
+    "phrases": [
+      {
+        "en": "I'd like to open a bank account.",
+        "pt": "Eu gostaria de abrir uma conta bancária.",
+        "distractor": "",
+        "emoji": "🏦",
+        "tip": "Checking account (conta corrente) / Savings account (poupança)."
+      },
+      {
+        "en": "What documents do I need?",
+        "pt": "Quais documentos eu preciso?",
+        "distractor": "",
+        "emoji": "📄",
+        "tip": "Geralmente: passport, proof of address (comprovante de residência)."
+      },
+      {
+        "en": "My credit card was blocked.",
+        "pt": "Meu cartão de crédito foi bloqueado.",
+        "distractor": "",
+        "emoji": "🚫",
+        "tip": "Comum quando se usa o cartão em viagem internacional."
+      },
+      {
+        "en": "I'd like to exchange some dollars.",
+        "pt": "Eu gostaria de trocar alguns dólares.",
+        "distractor": "",
+        "emoji": "💱",
+        "tip": "Exchange = fazer câmbio / trocar moeda."
+      },
+      {
+        "en": "What is the exchange rate today?",
+        "pt": "Qual é a taxa de câmbio hoje?",
+        "distractor": "",
+        "emoji": "📈",
+        "tip": "Exchange rate = cotação / câmbio."
+      },
+      {
+        "en": "Is there a commission fee?",
+        "pt": "Existe alguma taxa de comissão?",
+        "distractor": "",
+        "emoji": "💵",
+        "tip": "Fee = taxa / tarifa."
+      },
+      {
+        "en": "I'd like to withdraw two hundred dollars.",
+        "pt": "Eu gostaria de sacar duzentos dólares.",
+        "distractor": "",
+        "emoji": "🏧",
+        "tip": "Withdraw = sacar; Deposit = depositar."
+      },
+      {
+        "en": "I don't recognize this charge on my statement.",
+        "pt": "Não reconheço esta cobrança no meu extrato.",
+        "distractor": "",
+        "emoji": "🧾",
+        "tip": "Statement = extrato / fatura."
+      },
+      {
+        "en": "Can I make an international wire transfer?",
+        "pt": "Posso fazer uma transferência bancária internacional?",
+        "distractor": "",
+        "emoji": "🌍",
+        "tip": "Wire transfer = transferência bancária."
+      },
+      {
+        "en": "I forgot my PIN number.",
+        "pt": "Esqueci a senha do meu cartão.",
+        "distractor": "",
+        "emoji": "🔢",
+        "tip": "PIN = senha numérica do cartão."
+      },
+      {
+        "en": "Is there a monthly maintenance fee?",
+        "pt": "Tem taxa de manutenção mensal?",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Monthly fee = mensalidade."
+      },
+      {
+        "en": "Could I get a receipt for this transaction?",
+        "pt": "Poderia me dar um comprovante desta transação?",
+        "distractor": "",
+        "emoji": "🧾",
+        "tip": "Sempre peça comprovante em operações bancárias."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Qual é a taxa de câmbio hoje?",
+        "fixed": "What is the",
+        "variable": "exchange rate",
+        "extra": "today?",
+        "distractors": [
+          "shower",
+          "jacket"
+        ]
+      },
+      {
+        "pt": "Eu gostaria de abrir uma conta bancária.",
+        "fixed": "I'd like to open",
+        "variable": "a bank account.",
+        "extra": "",
+        "distractors": [
+          "a warning",
+          "a ticket"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Gerente",
+        "en": "Good afternoon! Welcome to Global Bank. How can I help you?",
+        "pt": "Boa tarde! Bem-vindo ao Global Bank. Como posso ajudar?",
+        "options": [
+          {
+            "en": "Hi! My credit card was blocked while traveling, and I'd also like to exchange some dollars.",
+            "correct": true
+          },
+          {
+            "en": "The sink is clogged.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Gerente",
+        "en": "No problem! Can I see your passport and card? Let me unblock it right away.",
+        "pt": "Sem problemas! Posso ver seu passaporte e cartão? Vou desbloquear agora mesmo.",
+        "options": [
+          {
+            "en": "Sure, here they are. What is the exchange rate today, and is there a commission fee?",
+            "correct": true
+          },
+          {
+            "en": "Where is the nearest gas station?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Gerente",
+        "en": "No commission fee for account holders! Your card is active again. Anything else?",
+        "pt": "Sem taxa de comissão para correntistas! Seu cartão está ativo de novo. Mais alguma coisa?",
+        "options": [
+          {
+            "en": "Could I get a receipt for this transaction, please?",
+            "correct": true
+          },
+          {
+            "en": "Are pets allowed here?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Gerente",
+        "en": "Here is your receipt. Have a wonderful afternoon!",
+        "pt": "Aqui está seu comprovante. Tenha uma ótima tarde!",
+        "options": [
+          {
+            "en": "Thank you so much for your help! Goodbye!",
+            "correct": true
+          },
+          {
+            "en": "You were speeding.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "level": 6,
+    "category": "Bem-estar",
+    "emoji": "🏋️",
+    "title": "Academia e Bem-estar",
+    "phrases": [
+      {
+        "en": "I'd like to sign up for a gym membership.",
+        "pt": "Eu gostaria de fazer uma matrícula na academia.",
+        "distractor": "",
+        "emoji": "🏋️",
+        "tip": "Sign up = inscrever-se / matricular-se."
+      },
+      {
+        "en": "Do you offer a day pass?",
+        "pt": "Vocês oferecem diária / passe de um dia?",
+        "distractor": "",
+        "emoji": "🎫",
+        "tip": "Day pass = ótimo para treinar durante viagens."
+      },
+      {
+        "en": "Are you using this machine?",
+        "pt": "Você está usando este aparelho?",
+        "distractor": "",
+        "emoji": "💪",
+        "tip": "Pergunta essencial na academia!"
+      },
+      {
+        "en": "Can we work in together?",
+        "pt": "Podemos revezar neste aparelho?",
+        "distractor": "",
+        "emoji": "🔄",
+        "tip": "'Work in' = revezar séries no mesmo equipamento."
+      },
+      {
+        "en": "How many sets do you have left?",
+        "pt": "Quantas séries faltam para você?",
+        "distractor": "",
+        "emoji": "🔢",
+        "tip": "Sets = séries; Reps = repetições."
+      },
+      {
+        "en": "I'm trying to stay in shape.",
+        "pt": "Estou tentando manter a forma.",
+        "distractor": "",
+        "emoji": "🏃",
+        "tip": "Stay in shape = manter a forma física."
+      },
+      {
+        "en": "I work out four times a week.",
+        "pt": "Eu treino quatro vezes por semana.",
+        "distractor": "",
+        "emoji": "📅",
+        "tip": "Work out = malhar / treinar."
+      },
+      {
+        "en": "Where are the locker rooms?",
+        "pt": "Onde ficam os vestiários?",
+        "distractor": "",
+        "emoji": "🚪",
+        "tip": "Locker = armário."
+      },
+      {
+        "en": "Could you spot me on this set?",
+        "pt": "Poderia me ajudar / dar suporte nesta série?",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "Spot someone = acompanhar o levantamento por segurança."
+      },
+      {
+        "en": "I pulled a muscle in my shoulder.",
+        "pt": "Distendi um músculo no ombro.",
+        "distractor": "",
+        "emoji": "😣",
+        "tip": "Pull a muscle = distender um músculo."
+      },
+      {
+        "en": "I'm focusing on cardio and strength training.",
+        "pt": "Estou focando em cardio e musculação.",
+        "distractor": "",
+        "emoji": "❤️",
+        "tip": "Strength training / weight lifting = musculação."
+      },
+      {
+        "en": "Don't forget to stretch after working out.",
+        "pt": "Não esqueça de alongar depois de treinar.",
+        "distractor": "",
+        "emoji": "🧘",
+        "tip": "Stretch = alongar; Warm up = aquecer."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Você está usando este aparelho?",
+        "fixed": "Are you using",
+        "variable": "this machine?",
+        "extra": "",
+        "distractors": [
+          "passport",
+          "receipt"
+        ]
+      },
+      {
+        "pt": "Eu treino quatro vezes por semana.",
+        "fixed": "I work out",
+        "variable": "four times a week.",
+        "extra": "",
+        "distractors": [
+          "onions",
+          "flight"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Recepção",
+        "en": "Hi! Welcome to FitLife Gym! Are you a member?",
+        "pt": "Oi! Bem-vindo à FitLife Gym! Você é aluno?",
+        "options": [
+          {
+            "en": "Hi! I'm just visiting the city. Do you offer a day pass?",
+            "correct": true
+          },
+          {
+            "en": "I'd like to open a bank account.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Recepção",
+        "en": "Yes! A day pass is fifteen dollars. Would you like to pay by card?",
+        "pt": "Sim! A diária é quinze dólares. Gostaria de pagar no cartão?",
+        "options": [
+          {
+            "en": "Yes, please! Where are the locker rooms?",
+            "correct": true
+          },
+          {
+            "en": "My credit card was blocked.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Aluno",
+        "en": "(Na sala de treino) Hey! Do you need this bench?",
+        "pt": "(Na sala de treino) Ei! Você precisa deste banco?",
+        "options": [
+          {
+            "en": "Are you using this machine? How many sets do you have left?",
+            "correct": true
+          },
+          {
+            "en": "What is the exchange rate today?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Aluno",
+        "en": "Just one more! We can work in together if you want.",
+        "pt": "Só mais uma! Podemos revezar juntos se você quiser.",
+        "options": [
+          {
+            "en": "Sounds good, thanks! Have a great workout!",
+            "correct": true
+          },
+          {
+            "en": "Please step out of the vehicle.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "level": 6,
+    "category": "Networking",
+    "emoji": "🥂",
+    "title": "Eventos, Festas e Networking",
+    "phrases": [
+      {
+        "en": "Are you enjoying the event so far?",
+        "pt": "Você está gostando do evento até agora?",
+        "distractor": "",
+        "emoji": "🥂",
+        "tip": "Quebra-gelo perfeito em festas e conferências."
+      },
+      {
+        "en": "How do you know the host?",
+        "pt": "Como você conhece o anfitrião?",
+        "distractor": "",
+        "emoji": "🎉",
+        "tip": "Funciona em aniversários, casamentos e jantares."
+      },
+      {
+        "en": "What brings you to this conference?",
+        "pt": "O que te traz a esta conferência?",
+        "distractor": "",
+        "emoji": "🎤",
+        "tip": "Excelente para networking profissional."
+      },
+      {
+        "en": "Let me introduce you to my friend.",
+        "pt": "Deixe-me te apresentar ao meu amigo.",
+        "distractor": "",
+        "emoji": "🤝",
+        "tip": "Introduce = apresentar alguém."
+      },
+      {
+        "en": "What kind of music are you into?",
+        "pt": "Que tipo de música você curte?",
+        "distractor": "",
+        "emoji": "🎸",
+        "tip": "'Be into something' = curtir / gostar muito de algo."
+      },
+      {
+        "en": "Have you seen any good movies lately?",
+        "pt": "Você viu algum filme bom ultimamente?",
+        "distractor": "",
+        "emoji": "🎬",
+        "tip": "Ótimo assunto para conversas descontraídas."
+      },
+      {
+        "en": "I'm really into rock music and playing guitar.",
+        "pt": "Eu curto muito rock e tocar violão/guitarra.",
+        "distractor": "",
+        "emoji": "🎵",
+        "tip": "Personalize com os seus hobbies!"
+      },
+      {
+        "en": "That's so interesting! Tell me more about it.",
+        "pt": "Que interessante! Me conte mais sobre isso.",
+        "distractor": "",
+        "emoji": "✨",
+        "tip": "Faz a outra pessoa se sentir ouvida e mantém o papo fluindo."
+      },
+      {
+        "en": "Do you mind if I join you?",
+        "pt": "Você se importa se eu me juntar a vocês?",
+        "distractor": "",
+        "emoji": "🪑",
+        "tip": "Educado ao chegar em uma rodinha de conversa."
+      },
+      {
+        "en": "Can I grab your LinkedIn or Instagram?",
+        "pt": "Posso pegar seu LinkedIn ou Instagram?",
+        "distractor": "",
+        "emoji": "📱",
+        "tip": "Jeito leve de manter o contato após um evento."
+      },
+      {
+        "en": "I'm going to grab another drink. Want anything?",
+        "pt": "Vou pegar outra bebida. Quer alguma coisa?",
+        "distractor": "",
+        "emoji": "🍹",
+        "tip": "Ótima forma educada de fazer uma pausa na conversa."
+      },
+      {
+        "en": "It was a pleasure chatting with you! Let's stay in touch.",
+        "pt": "Foi um prazer conversar com você! Vamos manter contato.",
+        "distractor": "",
+        "emoji": "👋",
+        "tip": "Encerramento elegante em qualquer evento."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Você está gostando do evento até agora?",
+        "fixed": "Are you enjoying",
+        "variable": "the event",
+        "extra": "so far?",
+        "distractors": [
+          "bread",
+          "luggage"
+        ]
+      },
+      {
+        "pt": "Que tipo de música você curte?",
+        "fixed": "What kind of music",
+        "variable": "are you into?",
+        "extra": "",
+        "distractors": [
+          "ticket",
+          "bank"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Convidado",
+        "en": "Hi there! Are you enjoying the event so far?",
+        "pt": "Olá! Você está gostando do evento até agora?",
+        "options": [
+          {
+            "en": "Hi! Yes, it's amazing! What brings you to this conference?",
+            "correct": true
+          },
+          {
+            "en": "I pulled a muscle in my shoulder.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Convidado",
+        "en": "I work with startups and music apps. How about you? What are you into?",
+        "pt": "Trabalho com startups e apps de música. E você? O que você curte?",
+        "options": [
+          {
+            "en": "That's so interesting! I work in technology and I'm really into playing guitar.",
+            "correct": true
+          },
+          {
+            "en": "Can we work in together?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Convidado",
+        "en": "No way! We definitely have a lot in common. Let's stay in touch!",
+        "pt": "Sério? Com certeza temos muito em comum. Vamos manter contato!",
+        "options": [
+          {
+            "en": "For sure! Can I grab your LinkedIn or WhatsApp?",
+            "correct": true
+          },
+          {
+            "en": "Do you offer a day pass?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Convidado",
+        "en": "Here you go! I'm going to grab another drink. Nice meeting you!",
+        "pt": "Aqui está! Vou pegar outra bebida. Prazer em conhecer você!",
+        "options": [
+          {
+            "en": "It was a pleasure chatting with you! I'll send you a message tomorrow. Bye!",
+            "correct": true
+          },
+          {
+            "en": "I forgot my PIN number.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "level": 6,
+    "category": "Suporte",
+    "emoji": "🛠️",
+    "title": "Reclamações e Suporte",
+    "phrases": [
+      {
+        "en": "I'm calling to report a problem.",
+        "pt": "Estou ligando para relatar um problema.",
+        "distractor": "",
+        "emoji": "📞",
+        "tip": "Report a problem = relatar um problema."
+      },
+      {
+        "en": "My luggage didn't arrive on the flight.",
+        "pt": "Minha mala não chegou no voo.",
+        "distractor": "",
+        "emoji": "🧳",
+        "tip": "Lost luggage = bagagem extraviada."
+      },
+      {
+        "en": "My flight was canceled. Can you rebook me?",
+        "pt": "Meu voo foi cancelado. Pode me realocar em outro?",
+        "distractor": "",
+        "emoji": "✈️",
+        "tip": "Rebook = remarcar / realocar em outro voo."
+      },
+      {
+        "en": "I was overcharged on my bill.",
+        "pt": "Fui cobrado a mais na minha conta.",
+        "distractor": "",
+        "emoji": "🧾",
+        "tip": "Overcharged = cobrado acima do valor correto."
+      },
+      {
+        "en": "This isn't what I ordered.",
+        "pt": "Isso não é o que eu pedi.",
+        "distractor": "",
+        "emoji": "📦",
+        "tip": "Funciona para entregas online e restaurantes."
+      },
+      {
+        "en": "I've been waiting for over an hour.",
+        "pt": "Estou esperando há mais de uma hora.",
+        "distractor": "",
+        "emoji": "⏱️",
+        "tip": "Firme, mas educado."
+      },
+      {
+        "en": "Could I speak to a manager, please?",
+        "pt": "Eu poderia falar com um gerente, por favor?",
+        "distractor": "",
+        "emoji": "👔",
+        "tip": "Use quando o atendente não consegue resolver."
+      },
+      {
+        "en": "How long will it take to resolve this?",
+        "pt": "Quanto tempo vai levar para resolver isso?",
+        "distractor": "",
+        "emoji": "⏳",
+        "tip": "Ajuda a definir uma expectativa clara."
+      },
+      {
+        "en": "Could you give me a confirmation number?",
+        "pt": "Poderia me dar um número de protocolo/confirmação?",
+        "distractor": "",
+        "emoji": "🔢",
+        "tip": "Guarde sempre o protocolo de atendimento."
+      },
+      {
+        "en": "I'd appreciate it if you could look into this.",
+        "pt": "Eu agradeceria se você pudesse verificar isso.",
+        "distractor": "",
+        "emoji": "🙏",
+        "tip": "Look into = investigar / verificar."
+      },
+      {
+        "en": "Thank you for sorting this out so quickly.",
+        "pt": "Obrigado por resolver isso tão rápido.",
+        "distractor": "",
+        "emoji": "✅",
+        "tip": "Sort out = resolver / dar um jeito."
+      },
+      {
+        "en": "That works for me, thank you.",
+        "pt": "Isso funciona para mim, obrigado.",
+        "distractor": "",
+        "emoji": "👍",
+        "tip": "Ótimo para aceitar uma solução proposta."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Meu voo foi cancelado. Pode me realocar?",
+        "fixed": "My flight was canceled.",
+        "variable": "Can you rebook me?",
+        "extra": "",
+        "distractors": [
+          "guitar",
+          "gym"
+        ]
+      },
+      {
+        "pt": "Fui cobrado a mais na minha conta.",
+        "fixed": "I was overcharged",
+        "variable": "on my bill.",
+        "extra": "",
+        "distractors": [
+          "onions",
+          "trunk"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Suporte",
+        "en": "Hello, customer support! How can I assist you today?",
+        "pt": "Olá, suporte ao cliente! Como posso ajudar hoje?",
+        "options": [
+          {
+            "en": "Hi! I'm calling to report a problem. My flight was canceled — can you rebook me?",
+            "correct": true
+          },
+          {
+            "en": "What kind of music are you into?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Suporte",
+        "en": "I'm very sorry about that! I can put you on the next flight at 6 PM.",
+        "pt": "Sinto muito por isso! Posso colocar você no próximo voo às 18h.",
+        "options": [
+          {
+            "en": "That works for me, thank you. Also, I think I was overcharged for my bag.",
+            "correct": true
+          },
+          {
+            "en": "I'm trying to stay in shape.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Suporte",
+        "en": "Let me look into that... Yes, you're right! I just refunded the extra fee.",
+        "pt": "Deixa eu verificar... Sim, você tem razão! Acabei de reembolsar a taxa extra.",
+        "options": [
+          {
+            "en": "Could you give me a confirmation number for the refund, please?",
+            "correct": true
+          },
+          {
+            "en": "How do you know the host?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Suporte",
+        "en": "Sure, it's 84920, and I emailed you the new boarding pass. Anything else?",
+        "pt": "Claro, é 84920, e enviei o novo cartão de embarque por e-mail. Mais alguma coisa?",
+        "options": [
+          {
+            "en": "That's all! Thank you for sorting this out so quickly. Have a great day, bye!",
+            "correct": true
+          },
+          {
+            "en": "The shower has no hot water.",
+            "correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "level": 6,
+    "category": "Opiniões",
+    "emoji": "🧠",
+    "title": "Opiniões e Conversas Avançadas",
+    "phrases": [
+      {
+        "en": "In my opinion, practicing every day is the best way.",
+        "pt": "Na minha opinião, praticar todo dia é o melhor jeito.",
+        "distractor": "",
+        "emoji": "💭",
+        "tip": "In my opinion = na minha opinião."
+      },
+      {
+        "en": "I completely agree with you.",
+        "pt": "Eu concordo completamente com você.",
+        "distractor": "",
+        "emoji": "✅",
+        "tip": "Versão informal: 'I totally agree!' / 'You're spot on!'"
+      },
+      {
+        "en": "I see your point, but I think differently.",
+        "pt": "Entendo seu ponto de vista, mas penso diferente.",
+        "distractor": "",
+        "emoji": "⚖️",
+        "tip": "Forma super educada de discordar em inglês."
+      },
+      {
+        "en": "That's a really good point.",
+        "pt": "Esse é um ponto muito bom.",
+        "distractor": "",
+        "emoji": "💡",
+        "tip": "Valoriza o argumento da outra pessoa."
+      },
+      {
+        "en": "To be honest, I hadn't thought about it that way.",
+        "pt": "Para ser sincero, eu não tinha pensado nisso dessa forma.",
+        "distractor": "",
+        "emoji": "🤔",
+        "tip": "To be honest (TBH) = para ser honesto."
+      },
+      {
+        "en": "It depends on the situation.",
+        "pt": "Depende da situação.",
+        "distractor": "",
+        "emoji": "🔄",
+        "tip": "Salva você quando a resposta não é simples sim/não."
+      },
+      {
+        "en": "What's your take on this?",
+        "pt": "Qual é a sua opinião / visão sobre isso?",
+        "distractor": "",
+        "emoji": "🗣️",
+        "tip": "'Take on something' = ponto de vista sobre algo."
+      },
+      {
+        "en": "If I were you, I would go for it.",
+        "pt": "Se eu fosse você, eu iria em frente.",
+        "distractor": "",
+        "emoji": "🚀",
+        "tip": "Ótima estrutura para dar conselhos."
+      },
+      {
+        "en": "On the one hand it's great, on the other hand it's expensive.",
+        "pt": "Por um lado é ótimo, por outro lado é caro.",
+        "distractor": "",
+        "emoji": "⚖️",
+        "tip": "Perfeito para comparar prós e contras."
+      },
+      {
+        "en": "That makes a lot of sense to me.",
+        "pt": "Isso faz muito sentido para mim.",
+        "distractor": "",
+        "emoji": "👍",
+        "tip": "Mostra compreensão clara."
+      },
+      {
+        "en": "I'm really looking forward to the future.",
+        "pt": "Estou muito animado com o futuro.",
+        "distractor": "",
+        "emoji": "🌟",
+        "tip": "Look forward to = estar ansioso/animado por algo."
+      },
+      {
+        "en": "Thanks for such a great conversation!",
+        "pt": "Obrigado por uma conversa tão boa!",
+        "distractor": "",
+        "emoji": "🙌",
+        "tip": "Encerramento natural para papos mais profundos."
+      }
+    ],
+    "builder": [
+      {
+        "pt": "Entendo seu ponto, mas penso diferente.",
+        "fixed": "I see your point,",
+        "variable": "but I think differently.",
+        "extra": "",
+        "distractors": [
+          "passport",
+          "refund"
+        ]
+      },
+      {
+        "pt": "Se eu fosse você, eu iria em frente.",
+        "fixed": "If I were you,",
+        "variable": "I would go for it.",
+        "extra": "",
+        "distractors": [
+          "coffee",
+          "ticket"
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "speaker": "Amigo",
+        "en": "Hey! What's your take on learning a language through real conversations instead of just grammar?",
+        "pt": "Ei! Qual é sua visão sobre aprender um idioma com conversas reais em vez de só gramática?",
+        "options": [
+          {
+            "en": "In my opinion, practicing real conversations every day is the best way to gain confidence!",
+            "correct": true
+          },
+          {
+            "en": "My luggage didn't arrive.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Amigo",
+        "en": "I completely agree with you! Though some people say you need strict grammar rules first.",
+        "pt": "Concordo completamente! Embora alguns digam que precisa de regras rígidas primeiro.",
+        "options": [
+          {
+            "en": "I see your point, but I think differently. On the one hand grammar helps, on the other hand speaking makes you fluent.",
+            "correct": true
+          },
+          {
+            "en": "Could I speak to a manager?",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Amigo",
+        "en": "To be honest, I hadn't thought about it that way. That makes a lot of sense! Should I start speaking from day one?",
+        "pt": "Para ser sincero, não tinha pensado assim. Faz muito sentido! Devo começar a falar desde o primeiro dia?",
+        "options": [
+          {
+            "en": "If I were you, I would go for it! Even five minutes a day makes a huge difference.",
+            "correct": true
+          },
+          {
+            "en": "I was overcharged on my bill.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "speaker": "Amigo",
+        "en": "You convinced me! I'm starting today. Thanks for the advice!",
+        "pt": "Você me convenceu! Vou começar hoje. Obrigado pelo conselho!",
+        "options": [
+          {
+            "en": "Thanks for such a great conversation! Let's keep in touch, bye!",
+            "correct": true
+          },
+          {
+            "en": "I'm calling to report a problem.",
             "correct": false
           }
         ]

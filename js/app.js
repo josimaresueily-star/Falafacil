@@ -1220,7 +1220,7 @@
     const q = (document.getElementById('phrase-search').value || '').toLowerCase().trim();
     return allPhrases.filter((p) => {
       if (phraseFilter === 'fav' && !state.favorites.includes(p.en)) return false;
-      if (['1', '2', '3', '4'].includes(phraseFilter) && String(p.level) !== phraseFilter) return false;
+      if (['1', '2', '3', '4', '5', '6'].includes(phraseFilter) && String(p.level) !== phraseFilter) return false;
       if (q && !p.en.toLowerCase().includes(q) && !p.pt.toLowerCase().includes(q) && !p.category.toLowerCase().includes(q)) {
         return false;
       }
@@ -1359,7 +1359,7 @@
       devPanel.classList.remove('hidden');
       pwRow.classList.add('hidden');
       lockBtn.classList.remove('hidden');
-      statusText.textContent = 'Modo Teste ATIVO — todas as 20 lições e 4 níveis estão liberados.';
+      statusText.textContent = 'Modo Teste ATIVO — todas as 30 lições e 6 níveis estão liberados.';
     } else {
       pwRow.classList.remove('hidden');
       lockBtn.classList.add('hidden');
@@ -1370,8 +1370,8 @@
   function renderSettings() {
     const completed = Object.keys(state.completedLessons).length;
     const totalStars = Object.values(state.completedLessons).reduce((a, b) => a + b, 0);
-    document.getElementById('stat-scenarios').textContent = `${completed}/20`;
-    document.getElementById('stat-stars').textContent = `${totalStars}/60`;
+    document.getElementById('stat-scenarios').textContent = `${completed}/${window.SCENARIOS.length}`;
+    document.getElementById('stat-stars').textContent = `${totalStars}/${window.SCENARIOS.length * 3}`;
     document.getElementById('stat-favs').textContent = state.favorites.length;
 
     document.getElementById('select-accent').value = state.accent;

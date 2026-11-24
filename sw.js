@@ -1,4 +1,4 @@
-const CACHE_NAME = 'falafacil-v6';
+const CACHE_NAME = 'falafacil-v7';
 const ASSETS = [
   '/',
   '/index.html',
