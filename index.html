@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0d0f12" />
-  <meta name="description" content="Aprenda inglês para conversação com 35 cenários reais, Phrasal Verbs e mais de 560 frases prontas." />
+  <meta name="description" content="Aprenda inglês para conversação com 49 cenários reais (10-15 frases cada), Phrasal Verbs e mais de 570 frases prontas." />
   <title>FalaFácil — Inglês na Prática</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/svg+xml" href="/assets/icon.svg" />
@@ -44,6 +44,8 @@
             </div>
             <span class="ring-caption">DIAS SEGUIDOS</span>
           </div>
+
+          <button class="btn-quick-workout" id="btn-quick-workout">⚡ Treino Rápido (3 min)</button>
 
           <!-- 3 Módulos: Iniciante / Intermediário / Avançado -->
           <div class="module-tabs" id="module-tabs">
@@ -158,17 +160,32 @@
           </div>
         </div>
 
-        <div id="handsfree-banner" class="card hidden" style="border-color:var(--green);background:var(--green-bg);padding:12px 14px;">
-          <strong style="color:#86efac;">🎧 Modo Mãos Livres ativo</strong>
-          <p class="muted" id="handsfree-status" style="color:#dcfce7;margin-top:4px;">Preparando próxima frase...</p>
+        <div id="handsfree-banner" class="card hidden" style="border-color:var(--green);background:var(--green-bg);padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <strong style="color:#86efac;">🎧 Modo Mãos Livres</strong>
+            <select id="select-hf-delay" style="padding:4px 8px;font-size:0.75rem;background:#0b2416;border-color:#22c55e;">
+              <option value="2000">⏱️ Pausa: 2s</option>
+              <option value="3000" selected>⏱️ Pausa: 3s</option>
+              <option value="5000">⏱️ Pausa: 5s</option>
+            </select>
+          </div>
+          <p class="muted" id="handsfree-status" style="color:#dcfce7;margin:8px 0 12px;font-size:0.86rem;">Preparando próxima frase...</p>
+          <div class="hf-controls">
+            <button class="btn-secondary" id="btn-hf-prev" style="padding:8px 12px;font-size:0.82rem;">⏮ Anterior</button>
+            <button class="btn-primary" id="btn-hf-pause" style="padding:8px 14px;font-size:0.82rem;flex:1;">⏸ Pausar</button>
+            <button class="btn-secondary" id="btn-hf-next" style="padding:8px 12px;font-size:0.82rem;">⏭ Próxima</button>
+          </div>
         </div>
 
         <div class="search-row">
           <input type="search" id="phrase-search" placeholder="Buscar em português ou inglês..." />
+          <select id="phrase-scenario-select" class="scenario-select">
+            <option value="all">📂 Todos os cenários baixados</option>
+          </select>
         </div>
 
         <div class="filter-chips" id="phrase-filters">
-          <button class="chip active" data-filter="all">Todas (565)</button>
+          <button class="chip active" data-filter="all">Todas (576)</button>
           <button class="chip" data-filter="fav">⭐ Favoritas</button>
           <button class="chip" data-filter="1">Nível 1</button>
           <button class="chip" data-filter="2">Nível 2</button>
@@ -188,11 +205,11 @@
 
         <div class="card stats-summary">
           <div class="stat-box">
-            <span class="stat-value" id="stat-scenarios">0/35</span>
+            <span class="stat-value" id="stat-scenarios">0/49</span>
             <span class="stat-label">Cenários dominados</span>
           </div>
           <div class="stat-box">
-            <span class="stat-value" id="stat-stars">0/105</span>
+            <span class="stat-value" id="stat-stars">0/147</span>
             <span class="stat-label">Estrelas ganhas</span>
           </div>
           <div class="stat-box">
@@ -291,7 +308,7 @@
           <p id="dev-msg" class="muted" style="margin-top:8px;"></p>
         </div>
 
-        <p id="app-version-trigger" class="version-footer">FalaFácil v9.0</p>
+        <p id="app-version-trigger" class="version-footer">FalaFácil v10.0</p>
       </section>
     </main>
 
