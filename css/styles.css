@@ -1286,3 +1286,64 @@ select {
   margin-top: 8px;
   text-align: left;
 }
+
+/* v10 Quick Workout, Hands-Free Controls, Scenario Filter, Pronunciation Guide & Voice Dialogue */
+.btn-quick-workout {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: 1px solid rgba(147, 197, 253, 0.35);
+  border-radius: 99px;
+  padding: 9px 18px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.hf-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.scenario-select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  font-size: 0.86rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.pron-pill-box {
+  background: rgba(59, 130, 246, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #bfdbfe;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  text-align: left;
+}
+
+.btn-dialogue-mic {
+  width: 100%;
+  margin-top: 10px;
+  background: var(--surface-2);
+  color: #93c5fd;
+  border: 1.5px dashed var(--blue);
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.btn-dialogue-mic.listening {
+  background: var(--red-bg);
+  border-color: var(--red);
+  color: #fca5a5;
+}

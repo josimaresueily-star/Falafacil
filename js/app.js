@@ -9,6 +9,10 @@
   let writeIndex = 0;
   let playlistRunning = false;
   let handsFreeRunning = false;
+  let handsFreePaused = false;
+  let handsFreeIdx = 0;
+  let handsFreeList = [];
+  let handsFreeDelay = 3000;
   let handsFreeTimer = null;
   let quickListenAnswer = null;
   let hideDialoguePt = false;
@@ -103,19 +107,44 @@
     return Boolean(state.completedCheckpoints && state.completedCheckpoints[levelNum - 1]);
   }
 
+  function getLevelOfScenario(scenarioId) {
+    if (window.LEVEL_RANGES) {
+      for (let lvl = 1; lvl <= window.TOTAL_LEVELS; lvl++) {
+        const r = window.LEVEL_RANGES[String(lvl)];
+        if (r && scenarioId >= r.firstId && scenarioId <= r.lastId) return lvl;
+      }
+    }
+    return 1;
+  }
+
   function isScenarioUnlocked(scenarioId) {
     if (state.unlockAll || scenarioId <= 1) return true;
-    const lvl = Math.ceil(scenarioId / 5);
+    const lvl = getLevelOfScenario(scenarioId);
     if (!isLevelUnlocked(lvl)) return false;
-    // Primeira lição do nível desbloqueado já fica aberta
-    if ((scenarioId - 1) % 5 === 0) return true;
+    const range = window.LEVEL_RANGES[String(lvl)];
+    if (range && scenarioId === range.firstId) return true;
     return Boolean(state.completedLessons[scenarioId - 1]);
   }
 
   function isCheckpointUnlocked(levelNum) {
     if (state.unlockAll) return true;
-    const lastIdOfLevel = levelNum * 5;
-    return Boolean(state.completedLessons[lastIdOfLevel]);
+    const range = window.LEVEL_RANGES[String(levelNum)];
+    if (!range) return false;
+    return Boolean(state.completedLessons[range.lastId]);
+  }
+
+  function getPronunciationHints(enText) {
+    if (!window.PRONUNCIATION_GUIDE || !enText) return '';
+    const lower = enText.toLowerCase();
+    const matches = [];
+    window.PRONUNCIATION_GUIDE.forEach((g) => {
+      const re = new RegExp('\\b' + g.word + '\\b', 'i');
+      if (re.test(lower)) {
+        matches.push(`<strong>${g.word}</strong> → <em>${g.read}</em> (${g.note})`);
+      }
+    });
+    if (!matches.length) return '';
+    return `<div class="pron-pill-box">🗣️ Como se lê: ${matches.join(' • ')}</div>`;
   }
 
   function showToast(msg) {
@@ -284,6 +313,10 @@
 
   /* ==================== TAB 1: MÓDULOS, NÍVEIS E TRILHA ==================== */
   function bindModuleTabs() {
+    const qwBtn = document.getElementById('btn-quick-workout');
+    if (qwBtn) {
+      qwBtn.addEventListener('click', startQuickWorkout);
+    }
     document.querySelectorAll('.module-pill').forEach((pill) => {
       pill.addEventListener('click', () => {
         const modId = pill.dataset.module;
@@ -424,12 +457,12 @@
         ${cpScore >= 75 ? `Concluído com ${cpScore}% de acerto!` : 'Acerte 75%+ no teste do nível para ganhar a medalha e liberar o próximo nível.'}
       </p>
       <button class="${cpUnlocked ? 'btn-start-circle' : 'btn-locked-circle'}" id="btn-start-cp">
-        ${cpUnlocked ? (cpScore >= 75 ? 'Refazer Checkpoint' : 'Iniciar Checkpoint') : '🔒 Conclua as 5 lições'}
+        ${cpUnlocked ? (cpScore >= 75 ? 'Refazer Checkpoint' : 'Iniciar Checkpoint') : '🔒 Conclua as lições do nível'}
       </button>
     `;
     cpCard.querySelector('#btn-start-cp').addEventListener('click', () => {
       if (!cpUnlocked) {
-        showToast(`Conclua todas as 5 lições do Nível ${currentLevel} primeiro!`);
+        showToast(`Conclua todas as lições do Nível ${currentLevel} primeiro!`);
         return;
       }
       startCheckpoint(currentLevel);
@@ -517,6 +550,74 @@
     updateLessonVoiceButton();
     document.getElementById('lesson-modal').classList.remove('hidden');
     renderCheckpointStep();
+  }
+
+
+  function startQuickWorkout() {
+    if (allPhrases.length < 3) {
+      showToast('Baixe o Nível 1 primeiro para iniciar o Treino Rápido!');
+      return;
+    }
+    const selected = shuffle(allPhrases).slice(0, Math.min(6, allPhrases.length));
+    const methods = ['listening', 'writing', 'blocks'];
+    const queue = selected.map((phrase, idx) => ({
+      phrase,
+      method: methods[idx % methods.length],
+      isReview: false,
+      isRetry: false
+    }));
+
+    lesson = {
+      mode: 'quick',
+      levelNum: currentLevel,
+      practiceQueue: queue,
+      subIndex: 0,
+      errors: 0,
+      totalChecks: 0,
+      builtChunks: []
+    };
+    updateLessonVoiceButton();
+    document.getElementById('lesson-modal').classList.remove('hidden');
+    renderQuickWorkoutStep();
+  }
+
+  function renderQuickWorkoutStep() {
+    const total = lesson.practiceQueue.length;
+    const pct = Math.round((lesson.subIndex / total) * 100);
+    document.getElementById('lesson-progress-fill').style.width = pct + '%';
+    document.getElementById('lesson-step-label').textContent = `Treino ${lesson.subIndex + 1}/${total}`;
+
+    const body = document.getElementById('lesson-body');
+    const footer = document.getElementById('lesson-footer');
+    body.innerHTML = '';
+    footer.innerHTML = '';
+    renderPracticeTask(body, footer, 'quick');
+  }
+
+  function finishQuickWorkout() {
+    const accuracy = lesson.totalChecks > 0 ? Math.round((1 - lesson.errors / lesson.totalChecks) * 100) : 100;
+    state = window.AppStorage.recordStudy(state, 3);
+    document.getElementById('lesson-progress-fill').style.width = '100%';
+    document.getElementById('lesson-step-label').textContent = 'Concluído!';
+
+    const body = document.getElementById('lesson-body');
+    const footer = document.getElementById('lesson-footer');
+    body.innerHTML = `
+      <div class="complete-screen">
+        <div style="font-size:3.6rem;">⚡</div>
+        <h2 style="margin-top:10px;">Treino Rápido Concluído!</h2>
+        <p class="muted" style="margin-top:8px;">Precisão: <strong>${accuracy}%</strong> • +3 min na sua meta diária!</p>
+        <p style="margin-top:10px;font-size:0.92rem;">🔥 Sua ofensiva está garantida hoje!</p>
+      </div>
+    `;
+    footer.innerHTML = `<button class="btn-green" id="btn-qw-close">Voltar à Trilha</button>`;
+    document.getElementById('btn-qw-close').addEventListener('click', () => {
+      document.getElementById('lesson-modal').classList.add('hidden');
+      lesson = null;
+      renderTopBar();
+      renderTrail();
+      renderSettings();
+    });
   }
 
   function renderCheckpointStep() {
@@ -622,6 +723,7 @@
           <button class="icon-btn" id="btn-play-kw">🔊</button>
           <span class="visual-phrase">${item.en}</span>
         </div>
+        ${getPronunciationHints(item.en)}
       </div>
       <div class="options-grid" id="kw-options"></div>
     `;
@@ -663,6 +765,7 @@
           renderLessonStep();
         });
       });
+      optButtons.push(btn);
       optContainer.appendChild(btn);
     });
   }
@@ -689,6 +792,7 @@
           <button class="icon-btn" id="btn-play-vocab">🔊</button>
           <span class="visual-phrase">${item.en}</span>
         </div>
+        ${getPronunciationHints(item.en)}
         ${ffWarn ? `<div class="false-friend-box">⚠️ ${ffWarn}</div>` : ''}
       </div>
       <div class="options-grid" id="vocab-options"></div>
@@ -857,6 +961,8 @@
       <h2 class="lesson-prompt-title">Mini-Diálogo Real</h2>
       <div class="chat-box" id="chat-box"></div>
       <div class="options-grid" id="dialogue-options"></div>
+      <button class="btn-dialogue-mic" id="btn-dialogue-mic">🎙️ Ou responda falando no microfone</button>
+      <div id="dialogue-mic-status" class="speech-result hidden"></div>
     `;
 
     document.getElementById('btn-toggle-sub').addEventListener('click', () => {
@@ -891,7 +997,50 @@
     document.getElementById('btn-npc-speak').addEventListener('click', () => window.AppSpeech.speak(turn.en));
 
     const optContainer = document.getElementById('dialogue-options');
-    shuffle(turn.options).forEach((opt) => {
+    const shuffledOpts = shuffle(turn.options);
+    const optButtons = [];
+
+    const dlgMicBtn = document.getElementById('btn-dialogue-mic');
+    const dlgMicStatus = document.getElementById('dialogue-mic-status');
+    if (dlgMicBtn) {
+      dlgMicBtn.addEventListener('click', () => {
+        if (optContainer.dataset.locked) return;
+        dlgMicBtn.classList.add('listening');
+        dlgMicBtn.textContent = '🎙️ Ouvindo sua resposta... fale agora!';
+        dlgMicStatus.classList.add('hidden');
+
+        window.AppSpeech.listen(
+          state.accent,
+          (transcript) => {
+            dlgMicBtn.classList.remove('listening');
+            dlgMicBtn.textContent = '🎙️ Ou responda falando no microfone';
+            dlgMicStatus.classList.remove('hidden');
+            dlgMicStatus.innerHTML = `<strong>Você disse:</strong> "${transcript}"`;
+
+            // Encontra a opção com maior similaridade e clica automaticamente
+            let bestIdx = 0;
+            let bestSim = -1;
+            shuffledOpts.forEach((o, idx) => {
+              const s = window.AppSpeech.similarity(o.en, transcript);
+              if (s > bestSim) { bestSim = s; bestIdx = idx; }
+            });
+            if (bestSim >= 30 && optButtons[bestIdx]) {
+              optButtons[bestIdx].click();
+            } else {
+              dlgMicStatus.innerHTML += '<br/><span style="color:#fde68a;">Não ficou claro — tente falar novamente ou toque em uma opção acima.</span>';
+            }
+          },
+          (err) => {
+            dlgMicBtn.classList.remove('listening');
+            dlgMicBtn.textContent = '🎙️ Ou responda falando no microfone';
+            dlgMicStatus.classList.remove('hidden');
+            dlgMicStatus.textContent = err;
+          }
+        );
+      });
+    }
+
+    shuffledOpts.forEach((opt) => {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.textContent = opt.en;
@@ -970,10 +1119,12 @@
     function advance() {
       lesson.subIndex++;
       if (lesson.subIndex >= lesson.practiceQueue.length) {
-        if (isCheckpoint) finishCheckpoint();
+        if (isCheckpoint === 'quick') finishQuickWorkout();
+        else if (isCheckpoint) finishCheckpoint();
         else finishLesson();
       } else {
-        if (isCheckpoint) renderCheckpointStep();
+        if (isCheckpoint === 'quick') renderQuickWorkoutStep();
+        else if (isCheckpoint) renderCheckpointStep();
         else renderLessonStep();
       }
     }
@@ -1345,7 +1496,8 @@
 
     const body = document.getElementById('lesson-body');
     const footer = document.getElementById('lesson-footer');
-    const isLastOfLevel = currentScenario.id % 5 === 0;
+    const lvlRange = window.LEVEL_RANGES[String(currentScenario.level)];
+    const isLastOfLevel = lvlRange && currentScenario.id === lvlRange.lastId;
 
     body.innerHTML = `
       <div class="complete-screen">
@@ -1593,10 +1745,58 @@
       playNext();
     });
 
-    // Modo Mãos Livres: Português -> 3 segundos de pausa -> Inglês
+    // Filtro por cenário específico
+    const scenarioSel = document.getElementById('phrase-scenario-select');
+    if (scenarioSel) {
+      scenarioSel.addEventListener('change', () => {
+        stopAllAudioModes();
+        renderPhrasebook();
+      });
+    }
+
+    // Modo Mãos Livres com Pausar/Continuar, Anterior, Próxima e Tempo de Pausa (2s/3s/5s)
     const hfBtn = document.getElementById('btn-handsfree');
     const hfBanner = document.getElementById('handsfree-banner');
     const hfStatus = document.getElementById('handsfree-status');
+    const hfPauseBtn = document.getElementById('btn-hf-pause');
+    const hfPrevBtn = document.getElementById('btn-hf-prev');
+    const hfNextBtn = document.getElementById('btn-hf-next');
+    const hfDelaySel = document.getElementById('select-hf-delay');
+
+    if (hfDelaySel) {
+      hfDelaySel.addEventListener('change', (e) => {
+        handsFreeDelay = Number(e.target.value) || 3000;
+      });
+    }
+
+    function runHandsFreeCycle() {
+      if (!handsFreeRunning || handsFreePaused) return;
+      if (handsFreeIdx >= handsFreeList.length) {
+        stopAllAudioModes();
+        return;
+      }
+      const item = handsFreeList[handsFreeIdx];
+      const sec = Math.round(handsFreeDelay / 1000);
+      hfStatus.textContent = `(${handsFreeIdx + 1}/${handsFreeList.length}) 🇧🇷 "${item.pt}"`;
+
+      window.AppSpeech.speakPt(item.pt, {
+        onEnd: () => {
+          if (!handsFreeRunning || handsFreePaused) return;
+          hfStatus.textContent = `⏳ ${sec} segundos para você responder em inglês...`;
+          handsFreeTimer = setTimeout(() => {
+            if (!handsFreeRunning || handsFreePaused) return;
+            hfStatus.textContent = `🇺🇸 "${item.en}"`;
+            window.AppSpeech.speak(item.en, {
+              onEnd: () => {
+                if (!handsFreeRunning || handsFreePaused) return;
+                handsFreeIdx++;
+                handsFreeTimer = setTimeout(runHandsFreeCycle, 1200);
+              }
+            });
+          }, handsFreeDelay);
+        }
+      });
+    }
 
     hfBtn.addEventListener('click', () => {
       if (handsFreeRunning) {
@@ -1604,45 +1804,74 @@
         return;
       }
       stopAllAudioModes();
-      const list = getFilteredPhrases();
-      if (!list.length) return;
+      handsFreeList = getFilteredPhrases();
+      if (!handsFreeList.length) return;
 
       handsFreeRunning = true;
+      handsFreePaused = false;
+      handsFreeIdx = 0;
       hfBtn.textContent = '⏹ Parar';
+      hfPauseBtn.textContent = '⏸ Pausar';
       hfBanner.classList.remove('hidden');
-      let idx = 0;
-
-      function runCycle() {
-        if (!handsFreeRunning || idx >= list.length) {
-          stopAllAudioModes();
-          return;
-        }
-        const item = list[idx];
-        hfStatus.textContent = `🇧🇷 "${item.pt}" — Tente falar em inglês...`;
-        window.AppSpeech.speakPt(item.pt, {
-          onEnd: () => {
-            if (!handsFreeRunning) return;
-            hfStatus.textContent = `⏳ 3 segundos para você responder em voz alta...`;
-            handsFreeTimer = setTimeout(() => {
-              if (!handsFreeRunning) return;
-              hfStatus.textContent = `🇺🇸 "${item.en}"`;
-              window.AppSpeech.speak(item.en, {
-                onEnd: () => {
-                  idx++;
-                  handsFreeTimer = setTimeout(runCycle, 1200);
-                }
-              });
-            }, 3000);
-          }
-        });
-      }
-      runCycle();
+      runHandsFreeCycle();
     });
+
+    hfPauseBtn.addEventListener('click', () => {
+      if (!handsFreeRunning) return;
+      if (!handsFreePaused) {
+        handsFreePaused = true;
+        window.AppSpeech.stop();
+        clearTimeout(handsFreeTimer);
+        hfPauseBtn.textContent = '▶ Continuar';
+        hfStatus.textContent = `⏸ Pausado na frase ${handsFreeIdx + 1}/${handsFreeList.length}`;
+      } else {
+        handsFreePaused = false;
+        hfPauseBtn.textContent = '⏸ Pausar';
+        runHandsFreeCycle();
+      }
+    });
+
+    hfPrevBtn.addEventListener('click', () => {
+      if (!handsFreeRunning || !handsFreeList.length) return;
+      window.AppSpeech.stop();
+      clearTimeout(handsFreeTimer);
+      handsFreePaused = false;
+      hfPauseBtn.textContent = '⏸ Pausar';
+      handsFreeIdx = (handsFreeIdx - 1 + handsFreeList.length) % handsFreeList.length;
+      runHandsFreeCycle();
+    });
+
+    hfNextBtn.addEventListener('click', () => {
+      if (!handsFreeRunning || !handsFreeList.length) return;
+      window.AppSpeech.stop();
+      clearTimeout(handsFreeTimer);
+      handsFreePaused = false;
+      hfPauseBtn.textContent = '⏸ Pausar';
+      handsFreeIdx = (handsFreeIdx + 1) % handsFreeList.length;
+      runHandsFreeCycle();
+    });
+  }
+
+  function populateScenarioSelect() {
+    const sel = document.getElementById('phrase-scenario-select');
+    if (!sel) return;
+    const prev = sel.value;
+    sel.innerHTML = '<option value="all">📂 Todos os cenários baixados</option>';
+    loadedScenarios.forEach((s) => {
+      const opt = document.createElement('option');
+      opt.value = String(s.id);
+      opt.textContent = `Nível ${s.level} • ${s.emoji} ${s.title}`;
+      sel.appendChild(opt);
+    });
+    if ([...sel.options].some((o) => o.value === prev)) sel.value = prev;
   }
 
   function getFilteredPhrases() {
     const q = (document.getElementById('phrase-search').value || '').toLowerCase().trim();
+    const scenSel = document.getElementById('phrase-scenario-select');
+    const scenId = scenSel ? scenSel.value : 'all';
     return allPhrases.filter((p) => {
+      if (scenId !== 'all' && String(p.scenarioId) !== scenId) return false;
       if (phraseFilter === 'fav' && !state.favorites.includes(p.en)) return false;
       if (['1', '2', '3', '4', '5', '6', '7'].includes(phraseFilter) && String(p.level) !== phraseFilter) return false;
       if (q && !p.en.toLowerCase().includes(q) && !p.pt.toLowerCase().includes(q) && !p.category.toLowerCase().includes(q)) {
@@ -1653,6 +1882,7 @@
   }
 
   function renderPhrasebook() {
+    populateScenarioSelect();
     const list = getFilteredPhrases();
     const container = document.getElementById('phrase-list');
     container.innerHTML = '';
@@ -1678,6 +1908,7 @@
             <button class="icon-btn btn-fav" title="Favoritar">${isFav ? '⭐' : '☆'}</button>
           </div>
         </div>
+        ${getPronunciationHints(p.en)}
         <div class="phrase-tip-box">💡 ${p.tip}</div>
       `;
 
@@ -1838,7 +2069,7 @@
         window.AppStorage.save(state);
         devInput.value = '';
         devMsg.style.color = '#86efac';
-        devMsg.textContent = '✅ Todos os 35 cenários e 7 níveis foram desbloqueados para teste!';
+        devMsg.textContent = '✅ Todos os 49 cenários e 7 níveis foram desbloqueados para teste!';
         renderDevPanel();
         renderTrail();
       } else {
@@ -1870,7 +2101,7 @@
       devPanel.classList.remove('hidden');
       pwRow.classList.add('hidden');
       lockBtn.classList.remove('hidden');
-      statusText.textContent = 'Modo Teste ATIVO — todas as 35 lições e 7 níveis estão liberados.';
+      statusText.textContent = 'Modo Teste ATIVO — todas as 49 lições e 7 níveis estão liberados.';
     } else {
       pwRow.classList.remove('hidden');
       lockBtn.classList.add('hidden');
