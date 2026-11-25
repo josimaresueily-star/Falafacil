@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "dev.pages.falafacil_cqt.twa",
+        "sha256_cert_fingerprints": ["CF:B5:24:19:C7:74:B8:07:81:1C:0A:52:B9:13:9F:BB:44:DE:AD:C2:52:18:F7:CA:85:F3:7B:7D:FD:A2:24:43"]
+      }
+    }]
