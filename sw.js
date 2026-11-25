@@ -1,4 +1,4 @@
-const CACHE_NAME = 'falafacil-v10.1';
+const CACHE_NAME = 'falafacil-v10.2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -8,6 +8,9 @@ const ASSETS = [
   '/js/speech.js',
   '/js/storage.js',
   '/js/app.js',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png',
+  '/assets/icon-maskable-512.png',
   '/assets/icon.svg'
 ];
 

@@ -1,18 +1,52 @@
 {
-  "name": "FalaFácil - Inglês para Conversação",
+  "id": "/",
+  "name": "FalaFácil — Inglês na Prática",
   "short_name": "FalaFácil",
-  "description": "Aprenda inglês com frases prontas e cenários reais do dia a dia.",
+  "description": "Aprenda inglês para conversação com 49 cenários reais, Phrasal Verbs e mais de 570 frases prontas.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0d0f12",
   "theme_color": "#0d0f12",
-  "orientation": "portrait",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": [
+    "education"
+  ],
   "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
     {
       "src": "/assets/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/screenshot-mobile.png",
+      "sizes": "540x960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Trilha de Conversação FalaFácil"
     }
   ]
 }
