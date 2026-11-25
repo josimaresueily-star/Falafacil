@@ -765,7 +765,6 @@
           renderLessonStep();
         });
       });
-      optButtons.push(btn);
       optContainer.appendChild(btn);
     });
   }
@@ -1085,6 +1084,7 @@
           }
         });
       });
+      optButtons.push(btn);
       optContainer.appendChild(btn);
     });
   }
