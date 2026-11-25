@@ -1,24 +1,26 @@
-// FalaFácil v5 — 4 Etapas + Combine o Áudio na Prática Aleatória + Refazer Erros no Fim da Fila (<60% no Shadowing)
+// FalaFácil v9 — 3 Módulos, 7 Níveis, 35 Cenários, Palavras-Chave, Checkpoints, Mãos Livres, Backup e Sem Travamento
 (function () {
   let state = window.AppStorage.load();
+  let currentModule = 'iniciante';
   let currentLevel = 1;
   let loadedScenarios = [];
   let allPhrases = [];
   let shadowIndex = 0;
   let writeIndex = 0;
   let playlistRunning = false;
+  let handsFreeRunning = false;
+  let handsFreeTimer = null;
   let quickListenAnswer = null;
+  let hideDialoguePt = false;
 
-  // Estado da Lição Ativa (4 Etapas)
+  // Estado da Lição ou Checkpoint Ativo
   let lesson = null;
 
   function rebuildLoadedData() {
     loadedScenarios = [];
-    for (let lvl = 1; lvl <= 6; lvl++) {
+    for (let lvl = 1; lvl <= window.TOTAL_LEVELS; lvl++) {
       const data = window.AppStorage.getLevelData(lvl);
-      if (Array.isArray(data)) {
-        loadedScenarios.push(...data);
-      }
+      if (Array.isArray(data)) loadedScenarios.push(...data);
     }
     allPhrases = [];
     loadedScenarios.forEach((s) => {
@@ -59,7 +61,7 @@
     rebuildLoadedData();
 
     bindNavigation();
-    bindLevelTabs();
+    bindModuleTabs();
     bindPractice();
     bindPhrasebook();
     bindSettings();
@@ -77,6 +79,7 @@
       loadQuickListening();
       loadQuickWriting();
     }
+    renderErrorsList();
     renderPhrasebook();
     renderSettings();
   }
@@ -90,16 +93,29 @@
     return a;
   }
 
+  function isMicMuted() {
+    return state.micMutedUntil && Date.now() < state.micMutedUntil;
+  }
 
   function isLevelUnlocked(levelNum) {
     if (state.unlockAll || levelNum <= 1) return true;
-    const prevLevelLastId = (levelNum - 1) * 5;
-    return Boolean(state.completedLessons[prevLevelLastId]);
+    // Para desbloquear o nível N, precisa ter concluído o Checkpoint do nível N-1
+    return Boolean(state.completedCheckpoints && state.completedCheckpoints[levelNum - 1]);
   }
 
   function isScenarioUnlocked(scenarioId) {
     if (state.unlockAll || scenarioId <= 1) return true;
+    const lvl = Math.ceil(scenarioId / 5);
+    if (!isLevelUnlocked(lvl)) return false;
+    // Primeira lição do nível desbloqueado já fica aberta
+    if ((scenarioId - 1) % 5 === 0) return true;
     return Boolean(state.completedLessons[scenarioId - 1]);
+  }
+
+  function isCheckpointUnlocked(levelNum) {
+    if (state.unlockAll) return true;
+    const lastIdOfLevel = levelNum * 5;
+    return Boolean(state.completedLessons[lastIdOfLevel]);
   }
 
   function showToast(msg) {
@@ -130,15 +146,29 @@
   function getDistractor(item) {
     if (item.distractor && item.distractor.trim()) return item.distractor;
     const candidates = allPhrases.filter((p) => p.pt !== item.pt);
+    if (!candidates.length) return 'Outra opção';
     return candidates[Math.floor(Math.random() * candidates.length)].pt;
   }
 
-  // Divide qualquer frase em blocos naturais (3 a 5 blocos) para Completar Blocos
+  function getKeywordDistractor(kwItem, pool) {
+    const others = pool.filter((k) => k.pt !== kwItem.pt);
+    if (others.length) return others[Math.floor(Math.random() * others.length)].pt;
+    return 'Outro significado';
+  }
+
+  function detectFalseFriend(enText) {
+    if (!window.FALSE_FRIENDS) return null;
+    const lower = (enText || '').toLowerCase();
+    for (const ff of window.FALSE_FRIENDS) {
+      const re = new RegExp('\\b' + ff.word + '\\b', 'i');
+      if (re.test(lower)) return ff.warn;
+    }
+    return null;
+  }
+
   function splitIntoChunks(sentence) {
     const words = sentence.trim().split(/\s+/);
-    if (words.length <= 5) {
-      return words;
-    }
+    if (words.length <= 5) return words;
     const targetBlocks = words.length <= 8 ? 4 : 5;
     const chunks = [];
     const baseSize = Math.floor(words.length / targetBlocks);
@@ -153,35 +183,26 @@
     return chunks;
   }
 
-  // Monta a fila da Etapa 4 (Prática Final):
-  // TODAS as frases do assunto + blocos aleatórios de "Combine o áudio" + Revisão de lições anteriores
   function createFinalPracticeQueue(scenario) {
-    const methods = ['shadowing', 'writing', 'blocks', 'listening'];
+    const methods = isMicMuted()
+      ? ['writing', 'blocks', 'listening']
+      : ['shadowing', 'writing', 'blocks', 'listening'];
     const queue = [];
     const phrases = shuffle(scenario.phrases);
 
-    // 1. Primeira passagem: 100% das frases do assunto atual, alternando os 4 métodos individuais
     phrases.forEach((phrase, idx) => {
       const method = methods[idx % methods.length];
       queue.push({ phrase, method, isReview: false, isRetry: false });
     });
 
-    // 2. Inclui exercícios de "Combine o áudio com o significado" (4 frases por card) misturados na fila
     const matchCount = Math.max(1, Math.min(3, Math.floor(phrases.length / 4)));
     for (let m = 0; m < matchCount; m++) {
       const slice = shuffle(scenario.phrases).slice(0, Math.min(4, scenario.phrases.length));
-      queue.push({
-        method: 'match',
-        phrases: slice,
-        isReview: false,
-        isRetry: false
-      });
+      queue.push({ method: 'match', phrases: slice, isReview: false, isRetry: false });
     }
 
-    // 3. Se o cenário tiver menos de 8 frases, faz uma 2ª passagem com MÉTODOS DIFERENTES
     if (phrases.length < 8) {
-      const secondPass = shuffle(scenario.phrases);
-      secondPass.forEach((phrase) => {
+      shuffle(scenario.phrases).forEach((phrase) => {
         const prevEntry = queue.find((q) => q.phrase && q.phrase.en === phrase.en);
         const otherMethods = methods.filter((m) => !prevEntry || m !== prevEntry.method);
         const chosenMethod = otherMethods[Math.floor(Math.random() * otherMethods.length)];
@@ -189,7 +210,6 @@
       });
     }
 
-    // 4. Revisão Espaçada: inclui até 3 frases de lições anteriores (ou já concluídas)
     const completedIds = Object.keys(state.completedLessons)
       .map(Number)
       .filter((id) => id !== scenario.id);
@@ -201,22 +221,19 @@
     if (prevScenarios.length > 0) {
       const reviewPool = [];
       prevScenarios.forEach((ps) => {
-        ps.phrases.forEach((p) => {
-          reviewPool.push({ phrase: p, fromTitle: ps.title });
-        });
+        ps.phrases.forEach((p) => reviewPool.push({ phrase: p, fromTitle: ps.title }));
       });
-
-      const selectedReviews = shuffle(reviewPool).slice(0, Math.min(3, reviewPool.length));
-      selectedReviews.forEach((rev, i) => {
-        const method = methods[(i + 1) % methods.length];
-        queue.push({
-          phrase: rev.phrase,
-          method,
-          isReview: true,
-          isRetry: false,
-          reviewFrom: rev.fromTitle
+      shuffle(reviewPool)
+        .slice(0, Math.min(3, reviewPool.length))
+        .forEach((rev, i) => {
+          queue.push({
+            phrase: rev.phrase,
+            method: methods[(i + 1) % methods.length],
+            isReview: true,
+            isRetry: false,
+            reviewFrom: rev.fromTitle
+          });
         });
-      });
     }
 
     return shuffle(queue);
@@ -236,58 +253,98 @@
     document.getElementById('goal-fill').style.width = `${Math.round((mins / goal) * 100)}%`;
   }
 
+  function stopAllAudioModes() {
+    window.AppSpeech.stop();
+    playlistRunning = false;
+    handsFreeRunning = false;
+    clearTimeout(handsFreeTimer);
+    const playBtn = document.getElementById('btn-playlist');
+    const hfBtn = document.getElementById('btn-handsfree');
+    const hfBanner = document.getElementById('handsfree-banner');
+    if (playBtn) playBtn.textContent = '▶ EN';
+    if (hfBtn) hfBtn.textContent = '🎧 Mãos Livres';
+    if (hfBanner) hfBanner.classList.add('hidden');
+  }
+
   function bindNavigation() {
     document.querySelectorAll('.nav-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        window.AppSpeech.stop();
-        playlistRunning = false;
+        stopAllAudioModes();
         const view = btn.dataset.view;
         document.querySelectorAll('.nav-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         document.querySelectorAll('.view').forEach((v) => v.classList.remove('active'));
         document.getElementById('view-' + view).classList.add('active');
+        if (view === 'practice') renderErrorsList();
         if (view === 'phrasebook') renderPhrasebook();
         if (view === 'settings') renderSettings();
       });
     });
   }
 
-  /* ==================== TAB 1: TRILHA ==================== */
-  function renderLevelTabs() {
-    document.querySelectorAll('.level-pill').forEach((pill) => {
-      const lvl = Number(pill.dataset.level);
-      const unlocked = isLevelUnlocked(lvl);
-      pill.classList.toggle('locked', !unlocked);
-      pill.classList.toggle('active', lvl === currentLevel);
-      pill.textContent = unlocked ? `Nível ${lvl}` : `🔒 Nível ${lvl}`;
-    });
-  }
-
-  function bindLevelTabs() {
-    document.querySelectorAll('.level-pill').forEach((pill) => {
+  /* ==================== TAB 1: MÓDULOS, NÍVEIS E TRILHA ==================== */
+  function bindModuleTabs() {
+    document.querySelectorAll('.module-pill').forEach((pill) => {
       pill.addEventListener('click', () => {
-        const lvl = Number(pill.dataset.level);
-        if (!isLevelUnlocked(lvl)) {
-          showToast(`Conclua o Nível ${lvl - 1} para desbloquear o Nível ${lvl}!`);
-          return;
+        const modId = pill.dataset.module;
+        const mod = window.MODULES_META.find((m) => m.id === modId);
+        if (!mod) return;
+        currentModule = modId;
+        if (!mod.levels.includes(currentLevel)) {
+          currentLevel = mod.levels[0];
         }
-        currentLevel = lvl;
-        renderLevelTabs();
+        document.querySelectorAll('.module-pill').forEach((p) => p.classList.toggle('active', p.dataset.module === currentModule));
         renderTrail();
       });
     });
   }
 
+  function renderLevelTabs() {
+    const mod = window.MODULES_META.find((m) => m.id === currentModule) || window.MODULES_META[0];
+    const container = document.getElementById('level-tabs');
+    container.innerHTML = '';
+
+    mod.levels.forEach((lvl) => {
+      const unlocked = isLevelUnlocked(lvl);
+      const btn = document.createElement('button');
+      btn.className = 'level-pill' + (lvl === currentLevel ? ' active' : '') + (!unlocked ? ' locked' : '');
+      btn.textContent = unlocked ? `Nível ${lvl}` : `🔒 Nível ${lvl}`;
+      btn.addEventListener('click', () => {
+        if (!unlocked) {
+          showToast(`Conclua o 🏆 Checkpoint do Nível ${lvl - 1} para liberar o Nível ${lvl}!`);
+          return;
+        }
+        currentLevel = lvl;
+        renderTrail();
+      });
+      container.appendChild(btn);
+    });
+  }
+
   function renderTrail() {
-    if (!isLevelUnlocked(currentLevel)) currentLevel = 1;
     renderLevelTabs();
     document.getElementById('level-subtitle').textContent = window.LEVELS_META[currentLevel];
     const container = document.getElementById('trail-container');
     container.innerHTML = '';
 
     const offlineBar = document.getElementById('level-offline-bar');
-    const isDownloaded = window.AppStorage.isLevelDownloaded(currentLevel);
+    const levelUnlocked = isLevelUnlocked(currentLevel);
 
+    if (!levelUnlocked) {
+      offlineBar.innerHTML = '';
+      const lockCard = document.createElement('div');
+      lockCard.className = 'download-level-card';
+      lockCard.style.borderColor = 'var(--border)';
+      lockCard.innerHTML = `
+        <div style="font-size:2.6rem;margin-bottom:10px;">🔒</div>
+        <h3 style="margin-bottom:6px;">Nível ${currentLevel} Bloqueado</h3>
+        <p class="muted">Conclua o <strong>🏆 Checkpoint do Nível ${currentLevel - 1}</strong> (com 75%+) para desbloquear este nível.</p>
+      `;
+      container.appendChild(lockCard);
+      return;
+    }
+
+    const isDownloaded = window.AppStorage.isLevelDownloaded(currentLevel);
     if (!isDownloaded) {
       offlineBar.innerHTML = '';
       const dlCard = document.createElement('div');
@@ -343,9 +400,7 @@
       if (unlocked) {
         card.querySelector('.btn-start-circle').addEventListener('click', () => startLesson(s, 1));
         const quickBtn = card.querySelector('.btn-quick-circle');
-        if (quickBtn) {
-          quickBtn.addEventListener('click', () => startLesson(s, 4));
-        }
+        if (quickBtn) quickBtn.addEventListener('click', () => startLesson(s, 5));
       } else {
         card.querySelector('.btn-locked-circle').addEventListener('click', () => {
           showToast(`Conclua o Cenário ${s.id - 1} para desbloquear esta lição!`);
@@ -353,9 +408,36 @@
       }
       container.appendChild(card);
     });
+
+    // CARD DE CHECKPOINT AO FINAL DO NÍVEL
+    const cpUnlocked = isCheckpointUnlocked(currentLevel);
+    const cpScore = (state.completedCheckpoints && state.completedCheckpoints[currentLevel]) || 0;
+    const medal = window.MEDALS_META[currentLevel];
+
+    const cpCard = document.createElement('div');
+    cpCard.className = 'checkpoint-card' + (cpScore >= 75 ? ' completed' : '') + (!cpUnlocked ? ' locked' : '');
+    cpCard.innerHTML = `
+      <div style="font-size:2.4rem;margin-bottom:6px;">${cpUnlocked ? medal.icon : '🔒'}</div>
+      <span class="lesson-num">Desafio Final do Nível ${currentLevel}</span>
+      <h3 style="margin:6px 0;">🏆 Checkpoint: ${medal.name}</h3>
+      <p class="muted" style="margin-bottom:14px;">
+        ${cpScore >= 75 ? `Concluído com ${cpScore}% de acerto!` : 'Acerte 75%+ no teste do nível para ganhar a medalha e liberar o próximo nível.'}
+      </p>
+      <button class="${cpUnlocked ? 'btn-start-circle' : 'btn-locked-circle'}" id="btn-start-cp">
+        ${cpUnlocked ? (cpScore >= 75 ? 'Refazer Checkpoint' : 'Iniciar Checkpoint') : '🔒 Conclua as 5 lições'}
+      </button>
+    `;
+    cpCard.querySelector('#btn-start-cp').addEventListener('click', () => {
+      if (!cpUnlocked) {
+        showToast(`Conclua todas as 5 lições do Nível ${currentLevel} primeiro!`);
+        return;
+      }
+      startCheckpoint(currentLevel);
+    });
+    container.appendChild(cpCard);
   }
 
-  /* ==================== MOTOR DA LIÇÃO (4 ETAPAS) ==================== */
+  /* ==================== MOTOR DA LIÇÃO (5 ETAPAS) + CHECKPOINT ==================== */
   function updateLessonVoiceButton() {
     const btn = document.getElementById('btn-lesson-voice');
     if (btn) btn.textContent = state.voiceGender === 'male' ? '👨' : '👩';
@@ -379,19 +461,24 @@
   }
 
   function startLesson(scenario, initialStep = 1) {
-    // 4 Etapas: 1=Vocab (todas as frases), 2=Moldes, 3=Diálogo, 4=Prática Final Aleatória (inclui Combine o Áudio)
+    const keywordQueue = (scenario.keywords || []).map((k) => ({ ...k, isRetry: false }));
     const vocabQueue = scenario.phrases.map((p) => ({ ...p, isRetry: false }));
     const builderQueue = scenario.builder.map((b) => ({ ...b, isRetry: false }));
     const dialogueQueue = scenario.dialogue.map((d) => ({ ...d, isRetry: false }));
     const practiceQueue = createFinalPracticeQueue(scenario);
 
+    let startStep = initialStep;
+    if (startStep === 1 && !keywordQueue.length) startStep = 2;
+
     lesson = {
+      mode: 'lesson',
       scenario,
+      keywordQueue,
       vocabQueue,
       builderQueue,
       dialogueQueue,
       practiceQueue,
-      step: initialStep,
+      step: startStep, // 1=Palavras-Chave, 2=Frases, 3=Moldes, 4=Diálogo, 5=Prática Final
       subIndex: 0,
       errors: 0,
       totalChecks: 0,
@@ -403,16 +490,101 @@
     renderLessonStep();
   }
 
+  function startCheckpoint(levelNum) {
+    const lvlScenarios = loadedScenarios.filter((s) => s.level === levelNum);
+    const pool = [];
+    lvlScenarios.forEach((s) => {
+      s.phrases.forEach((p) => pool.push({ ...p, category: s.category, level: s.level }));
+    });
+    const selected = shuffle(pool).slice(0, Math.min(10, pool.length));
+    const methods = ['listening', 'writing', 'blocks'];
+    const queue = selected.map((phrase, idx) => ({
+      phrase,
+      method: methods[idx % methods.length],
+      isReview: false,
+      isRetry: false
+    }));
+
+    lesson = {
+      mode: 'checkpoint',
+      levelNum,
+      practiceQueue: queue,
+      subIndex: 0,
+      errors: 0,
+      totalChecks: 0,
+      builtChunks: []
+    };
+    updateLessonVoiceButton();
+    document.getElementById('lesson-modal').classList.remove('hidden');
+    renderCheckpointStep();
+  }
+
+  function renderCheckpointStep() {
+    const total = lesson.practiceQueue.length;
+    const pct = Math.round((lesson.subIndex / total) * 100);
+    document.getElementById('lesson-progress-fill').style.width = pct + '%';
+    document.getElementById('lesson-step-label').textContent = `Checkpoint ${lesson.subIndex + 1}/${total}`;
+
+    const body = document.getElementById('lesson-body');
+    const footer = document.getElementById('lesson-footer');
+    body.innerHTML = '';
+    footer.innerHTML = '';
+
+    renderPracticeTask(body, footer, true);
+  }
+
+  function finishCheckpoint() {
+    const accuracy = lesson.totalChecks > 0 ? Math.round((1 - lesson.errors / lesson.totalChecks) * 100) : 100;
+    const passed = accuracy >= 75;
+    const lvl = lesson.levelNum;
+    const medal = window.MEDALS_META[lvl];
+
+    if (passed) {
+      if (!state.completedCheckpoints) state.completedCheckpoints = {};
+      state.completedCheckpoints[lvl] = Math.max(state.completedCheckpoints[lvl] || 0, accuracy);
+      state = window.AppStorage.recordStudy(state, 5);
+      const nextLvl = lvl + 1;
+      if (nextLvl <= window.TOTAL_LEVELS && !window.AppStorage.isLevelDownloaded(nextLvl)) {
+        downloadLevel(nextLvl, false);
+      }
+    }
+
+    document.getElementById('lesson-progress-fill').style.width = '100%';
+    document.getElementById('lesson-step-label').textContent = passed ? 'Aprovado!' : 'Tente de novo';
+
+    const body = document.getElementById('lesson-body');
+    const footer = document.getElementById('lesson-footer');
+    body.innerHTML = `
+      <div class="complete-screen">
+        <div style="font-size:3.8rem;">${passed ? medal.icon : '💪'}</div>
+        <h2 style="margin-top:10px;">${passed ? `Medalha ${medal.name} Desbloqueada!` : 'Quase lá!'}</h2>
+        <p class="muted" style="margin-top:8px;">Sua pontuação no Checkpoint do Nível ${lvl}: <strong>${accuracy}%</strong> (meta: 75%)</p>
+        <p style="margin-top:10px;font-size:0.92rem;">
+          ${passed ? (lvl < window.TOTAL_LEVELS ? `🎉 O Nível ${lvl + 1} foi desbloqueado!` : '🎉 Você concluiu todos os níveis disponíveis!') : 'Revise as frases do nível e tente o Checkpoint novamente.'}
+        </p>
+      </div>
+    `;
+    footer.innerHTML = `<button class="btn-green" id="btn-cp-close">Voltar à Trilha</button>`;
+    document.getElementById('btn-cp-close').addEventListener('click', () => {
+      document.getElementById('lesson-modal').classList.add('hidden');
+      lesson = null;
+      renderTopBar();
+      renderTrail();
+      renderSettings();
+    });
+  }
+
   function updateLessonProgress() {
-    const base = (lesson.step - 1) * 25;
+    const base = (lesson.step - 1) * 20;
     let subPct = 0;
-    if (lesson.step === 1) subPct = (lesson.subIndex / lesson.vocabQueue.length) * 25;
-    if (lesson.step === 2) subPct = (lesson.subIndex / lesson.builderQueue.length) * 25;
-    if (lesson.step === 3) subPct = (lesson.subIndex / lesson.dialogueQueue.length) * 25;
-    if (lesson.step === 4) subPct = (lesson.subIndex / lesson.practiceQueue.length) * 25;
+    if (lesson.step === 1) subPct = (lesson.subIndex / Math.max(1, lesson.keywordQueue.length)) * 20;
+    if (lesson.step === 2) subPct = (lesson.subIndex / lesson.vocabQueue.length) * 20;
+    if (lesson.step === 3) subPct = (lesson.subIndex / lesson.builderQueue.length) * 20;
+    if (lesson.step === 4) subPct = (lesson.subIndex / lesson.dialogueQueue.length) * 20;
+    if (lesson.step === 5) subPct = (lesson.subIndex / lesson.practiceQueue.length) * 20;
 
     document.getElementById('lesson-progress-fill').style.width = Math.min(100, Math.round(base + subPct)) + '%';
-    document.getElementById('lesson-step-label').textContent = `Etapa ${lesson.step}/4`;
+    document.getElementById('lesson-step-label').textContent = `Etapa ${lesson.step}/5`;
   }
 
   function renderLessonStep() {
@@ -422,13 +594,80 @@
     body.innerHTML = '';
     footer.innerHTML = '';
 
-    if (lesson.step === 1) renderStepVocab(body, footer);
-    else if (lesson.step === 2) renderStepBuilder(body, footer);
-    else if (lesson.step === 3) renderStepDialogue(body, footer);
-    else if (lesson.step === 4) renderStepFinalPractice(body, footer);
+    if (lesson.step === 1) renderStepKeywords(body, footer);
+    else if (lesson.step === 2) renderStepVocab(body, footer);
+    else if (lesson.step === 3) renderStepBuilder(body, footer);
+    else if (lesson.step === 4) renderStepDialogue(body, footer);
+    else if (lesson.step === 5) renderPracticeTask(body, footer, false);
   }
 
-  // ETAPA 1: Vocabulário Visual (TODAS as frases do cenário; se errar, vai pro fim da fila)
+  // ETAPA 1: Aquecimento de Palavras-Chave (Novo!)
+  function renderStepKeywords(body, footer) {
+    const item = lesson.keywordQueue[lesson.subIndex];
+    const options = shuffle([
+      { text: item.pt, correct: true },
+      { text: getKeywordDistractor(item, lesson.scenario.keywords || []), correct: false }
+    ]);
+    const retryBadge = item.isRetry
+      ? `<div class="tag" style="background:rgba(239,68,68,0.18);color:#fca5a5;margin-bottom:8px;">🔁 Refazendo palavra</div>`
+      : '';
+
+    body.innerHTML = `
+      <span class="method-badge">🔑 Palavra-Chave ${lesson.subIndex + 1} de ${lesson.keywordQueue.length}</span>
+      ${retryBadge}
+      <h2 class="lesson-prompt-title">Aprenda esta palavra antes das frases</h2>
+      <div class="visual-card">
+        <div class="visual-emoji">${item.emoji}</div>
+        <div class="visual-phrase-row">
+          <button class="icon-btn" id="btn-play-kw">🔊</button>
+          <span class="visual-phrase">${item.en}</span>
+        </div>
+      </div>
+      <div class="options-grid" id="kw-options"></div>
+    `;
+
+    window.AppSpeech.speak(item.en);
+    document.getElementById('btn-play-kw').addEventListener('click', () => window.AppSpeech.speak(item.en));
+
+    const optContainer = document.getElementById('kw-options');
+    options.forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt.text;
+      btn.addEventListener('click', () => {
+        if (optContainer.dataset.locked) return;
+        optContainer.dataset.locked = '1';
+        lesson.totalChecks++;
+
+        if (opt.correct) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+          lesson.errors++;
+          lesson.keywordQueue.push({ ...item, isRetry: true });
+        }
+
+        footer.innerHTML = `
+          <div class="feedback-banner ${opt.correct ? 'ok' : 'err'}">
+            <strong>${opt.correct ? 'Boa! 🔑' : 'Quase! Esta palavra voltará no fim.'}</strong>
+            <p style="margin-top:4px;">${item.en} — ${item.pt}</p>
+          </div>
+          <button class="btn-green" id="btn-next-kw">Próximo</button>
+        `;
+        document.getElementById('btn-next-kw').addEventListener('click', () => {
+          lesson.subIndex++;
+          if (lesson.subIndex >= lesson.keywordQueue.length) {
+            lesson.step = 2;
+            lesson.subIndex = 0;
+          }
+          renderLessonStep();
+        });
+      });
+      optContainer.appendChild(btn);
+    });
+  }
+
+  // ETAPA 2: Frases Prontas com Contexto + Alerta de Falsos Cognatos
   function renderStepVocab(body, footer) {
     const item = lesson.vocabQueue[lesson.subIndex];
     const options = shuffle([
@@ -438,6 +677,7 @@
     const retryBadge = item.isRetry
       ? `<div class="tag" style="background:rgba(239,68,68,0.18);color:#fca5a5;margin-bottom:8px;">🔁 Refazendo frase errada</div>`
       : '';
+    const ffWarn = detectFalseFriend(item.en);
 
     body.innerHTML = `
       <span class="method-badge">📖 Frase ${lesson.subIndex + 1} de ${lesson.vocabQueue.length}</span>
@@ -449,6 +689,7 @@
           <button class="icon-btn" id="btn-play-vocab">🔊</button>
           <span class="visual-phrase">${item.en}</span>
         </div>
+        ${ffWarn ? `<div class="false-friend-box">⚠️ ${ffWarn}</div>` : ''}
       </div>
       <div class="options-grid" id="vocab-options"></div>
     `;
@@ -471,8 +712,8 @@
         } else {
           btn.classList.add('wrong');
           lesson.errors++;
-          // Recoloca no fim da fila para ser refeito
           lesson.vocabQueue.push({ ...item, isRetry: true });
+          window.AppStorage.recordErrorPhrase(state, item, lesson.scenario);
         }
 
         footer.innerHTML = `
@@ -486,7 +727,7 @@
         document.getElementById('btn-next-step').addEventListener('click', () => {
           lesson.subIndex++;
           if (lesson.subIndex >= lesson.vocabQueue.length) {
-            lesson.step = 2;
+            lesson.step = 3;
             lesson.subIndex = 0;
           }
           renderLessonStep();
@@ -496,7 +737,7 @@
     });
   }
 
-  // ETAPA 2: Moldes de Conversa (Blocos Coloridos; se errar, vai pro fim da fila)
+  // ETAPA 3: Moldes de Conversa
   function renderStepBuilder(body, footer) {
     const item = lesson.builderQueue[lesson.subIndex];
     const targetParts = [
@@ -589,7 +830,7 @@
       document.getElementById('btn-next-builder').addEventListener('click', () => {
         lesson.subIndex++;
         if (lesson.subIndex >= lesson.builderQueue.length) {
-          lesson.step = 3;
+          lesson.step = 4;
           lesson.subIndex = 0;
           lesson.chatHistory = [];
         }
@@ -598,7 +839,7 @@
     });
   }
 
-  // ETAPA 3: Mini-Diálogo Interativo (se errar, recoloca o turno no fim)
+  // ETAPA 4: Mini-Diálogo Real (com botão "🙈 Ocultar tradução")
   function renderStepDialogue(body, footer) {
     const turn = lesson.dialogueQueue[lesson.subIndex];
     const retryBadge = turn.isRetry
@@ -606,12 +847,25 @@
       : '';
 
     body.innerHTML = `
-      <span class="method-badge">💬 Diálogo ${lesson.subIndex + 1} de ${lesson.dialogueQueue.length}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span class="method-badge" style="margin-bottom:0;">💬 Diálogo ${lesson.subIndex + 1}/${lesson.dialogueQueue.length}</span>
+        <button class="btn-circle" id="btn-toggle-sub" style="padding:5px 11px;font-size:0.75rem;">
+          ${hideDialoguePt ? '👁️ Mostrar tradução' : '🙈 Ocultar tradução'}
+        </button>
+      </div>
       ${retryBadge}
       <h2 class="lesson-prompt-title">Mini-Diálogo Real</h2>
       <div class="chat-box" id="chat-box"></div>
       <div class="options-grid" id="dialogue-options"></div>
     `;
+
+    document.getElementById('btn-toggle-sub').addEventListener('click', () => {
+      hideDialoguePt = !hideDialoguePt;
+      const hintEl = document.getElementById('npc-pt-hint');
+      const btn = document.getElementById('btn-toggle-sub');
+      if (hintEl) hintEl.classList.toggle('hidden', hideDialoguePt);
+      btn.textContent = hideDialoguePt ? '👁️ Mostrar tradução' : '🙈 Ocultar tradução';
+    });
 
     const chatBox = document.getElementById('chat-box');
     lesson.chatHistory.forEach((msg) => {
@@ -629,7 +883,7 @@
         <button class="icon-btn" style="width:28px;height:28px;font-size:0.8rem;" id="btn-npc-speak">🔊</button>
       </div>
       <div>${turn.en}</div>
-      <div class="chat-hint-pt">${turn.pt}</div>
+      <div id="npc-pt-hint" class="chat-hint-pt ${hideDialoguePt ? 'hidden' : ''}">${turn.pt}</div>
     `;
     chatBox.appendChild(npcBubble);
 
@@ -674,7 +928,7 @@
         document.getElementById('btn-next-dialogue').addEventListener('click', () => {
           lesson.subIndex++;
           if (lesson.subIndex >= lesson.dialogueQueue.length) {
-            lesson.step = 4;
+            lesson.step = 5;
             lesson.subIndex = 0;
             renderLessonStep();
           } else {
@@ -686,12 +940,16 @@
     });
   }
 
-  // ETAPA 4: Prática Final Completa e Aleatória
-  // Métodos: Escrita, Ouvir e Repetir (<60% volta pro fim), Completar Blocos, Ouvido Rápido e Combine o Áudio
-  function renderStepFinalPractice(body, footer) {
+  // ETAPA 5 (e CHECKPOINT): Prática Final Aleatória
+  function renderPracticeTask(body, footer, isCheckpoint) {
     const task = lesson.practiceQueue[lesson.subIndex];
     const total = lesson.practiceQueue.length;
     const num = lesson.subIndex + 1;
+
+    // Se o microfone foi silenciado por 15 min, substitui shadowing por escrita automaticamente
+    if (task.method === 'shadowing' && isMicMuted()) {
+      task.method = 'writing';
+    }
 
     const reviewTag = task.isReview
       ? `<div class="tag" style="background:rgba(34,197,94,0.18);color:#86efac;margin-bottom:8px;">🔄 Revisão: ${task.reviewFrom}</div>`
@@ -701,19 +959,26 @@
       : '';
 
     function requeueTask() {
-      lesson.practiceQueue.push({ ...task, isRetry: true });
-    }
-
-    function advanceFinalPractice() {
-      lesson.subIndex++;
-      if (lesson.subIndex >= lesson.practiceQueue.length) {
-        finishLesson();
-      } else {
-        renderLessonStep();
+      if (!isCheckpoint) {
+        lesson.practiceQueue.push({ ...task, isRetry: true });
+      }
+      if (task.phrase) {
+        window.AppStorage.recordErrorPhrase(state, task.phrase, lesson.scenario || {});
       }
     }
 
-    // MÉTODO 1: COMBINE O ÁUDIO COM O SIGNIFICADO (Integrado aleatoriamente na prática!)
+    function advance() {
+      lesson.subIndex++;
+      if (lesson.subIndex >= lesson.practiceQueue.length) {
+        if (isCheckpoint) finishCheckpoint();
+        else finishLesson();
+      } else {
+        if (isCheckpoint) renderCheckpointStep();
+        else renderLessonStep();
+      }
+    }
+
+    // COMBINE O ÁUDIO
     if (task.method === 'match') {
       const roundPhrases = task.phrases.map((p, idx) => ({ ...p, idx }));
       const audioOrder = shuffle(roundPhrases);
@@ -723,10 +988,9 @@
       let hadError = false;
 
       body.innerHTML = `
-        <span class="method-badge">🔗 Combine o Áudio • Prática ${num}/${total}</span>
+        <span class="method-badge">🔗 Combine o Áudio • ${num}/${total}</span>
         ${retryTag}
         <h2 class="lesson-prompt-title">Combine o áudio com o significado</h2>
-        <p class="muted" style="margin-bottom:14px;">Toque em um áudio à esquerda e depois na tradução correspondente à direita.</p>
         <div class="match-grid">
           <div class="match-col" id="fp-match-audio"></div>
           <div class="match-col" id="fp-match-pt"></div>
@@ -770,10 +1034,10 @@
             if (matchedIds.length === roundPhrases.length) {
               if (hadError) requeueTask();
               footer.innerHTML = `
-                ${hadError ? '<div class="feedback-banner err"><strong>Houve erro nesta rodada!</strong><p style="margin-top:4px;">Este exercício voltará no fim da fila para fixar.</p></div>' : ''}
-                <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+                ${hadError ? '<div class="feedback-banner err"><strong>Houve erro nesta rodada!</strong><p style="margin-top:4px;">Voltará no fim da fila para fixar.</p></div>' : ''}
+                <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir 🎉'}</button>
               `;
-              document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
+              document.getElementById('btn-lp-next').addEventListener('click', advance);
             }
           } else {
             lesson.errors++;
@@ -789,14 +1053,14 @@
 
     const phrase = task.phrase;
 
-    // MÉTODO 2: ESCRITA
+    // ESCRITA
     if (task.method === 'writing') {
       body.innerHTML = `
-        <span class="method-badge">✍️ Escrita • Prática ${num}/${total}</span>
+        <span class="method-badge">✍️ Escrita • ${num}/${total}</span>
         ${reviewTag}${retryTag}
         <h2 class="lesson-prompt-title">Escreva a frase em inglês</h2>
         <div class="visual-card" style="padding:20px 16px;">
-          <div class="visual-emoji" style="font-size:2.4rem;">${phrase.emoji}</div>
+          <div class="visual-emoji" style="font-size:2.4rem;">${phrase.emoji || '💬'}</div>
           <p style="font-size:1.12rem;font-weight:800;">${phrase.pt}</p>
           <div class="audio-controls" style="margin:14px 0 0;">
             <button class="btn-circle" id="btn-lp-audio">🔊 Ouvir</button>
@@ -829,18 +1093,17 @@
           lesson.errors++;
           requeueTask();
         }
-
         window.AppSpeech.speak(phrase.en);
         input.disabled = true;
 
         footer.innerHTML = `
           <div class="feedback-banner ${ok ? 'ok' : 'err'}">
-            <strong>${ok ? 'Mandou bem! ✍️' : 'Resposta correta (voltará no fim da fila):'}</strong>
+            <strong>${ok ? 'Mandou bem! ✍️' : 'Resposta correta:'}</strong>
             <p style="margin-top:4px;">${phrase.en}</p>
           </div>
-          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir 🎉'}</button>
         `;
-        document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
+        document.getElementById('btn-lp-next').addEventListener('click', advance);
       }
 
       document.getElementById('btn-lp-verify').addEventListener('click', checkWritten);
@@ -850,12 +1113,12 @@
       return;
     }
 
-    // MÉTODO 3: OUVIR E REPETIR (SHADOWING — se ficar abaixo de 60%, volta para o fim da fila!)
+    // OUVIR E REPETIR (SHADOWING + botão "🔇 Não posso falar agora (15 min)")
     if (task.method === 'shadowing') {
       let bestScore = null;
 
       body.innerHTML = `
-        <span class="method-badge">🎙️ Ouvir e Repetir • Prática ${num}/${total}</span>
+        <span class="method-badge">🎙️ Ouvir e Repetir • ${num}/${total}</span>
         ${reviewTag}${retryTag}
         <h2 class="lesson-prompt-title">Ouça e fale em voz alta</h2>
         <div class="card">
@@ -866,19 +1129,28 @@
             <button class="btn-circle" id="btn-lp-say-1">🔊 1.0x</button>
             <button class="btn-circle" id="btn-lp-say-slow">🐢 0.75x</button>
           </div>
-          <div class="mic-area" style="margin-bottom:0;">
+          <div class="mic-area" style="margin-bottom:8px;">
             <button class="btn-mic" id="btn-lp-mic">
               <span class="mic-icon">🎙️</span>
               <span id="lp-mic-label">Toque e repita em voz alta</span>
             </button>
             <div id="lp-speech-res" class="speech-result hidden"></div>
           </div>
+          <button class="btn-text-small" id="btn-mute-mic" style="margin-bottom:0;">🔇 Não posso falar agora (pular microfone por 15 min)</button>
         </div>
       `;
 
       window.AppSpeech.speak(phrase.en);
       document.getElementById('btn-lp-say-1').addEventListener('click', () => window.AppSpeech.speak(phrase.en, { rate: 1.0 }));
       document.getElementById('btn-lp-say-slow').addEventListener('click', () => window.AppSpeech.speak(phrase.en, { rate: 0.72 }));
+
+      document.getElementById('btn-mute-mic').addEventListener('click', () => {
+        state.micMutedUntil = Date.now() + 15 * 60 * 1000;
+        window.AppStorage.save(state);
+        showToast('🔇 Microfone pausado por 15 min. Trocando para escrita!');
+        task.method = 'writing';
+        renderLessonStep();
+      });
 
       const micBtn = document.getElementById('btn-lp-mic');
       micBtn.addEventListener('click', () => {
@@ -911,9 +1183,8 @@
         );
       });
 
-      footer.innerHTML = `<button class="btn-green" id="btn-lp-next">${num < total ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>`;
+      footer.innerHTML = `<button class="btn-green" id="btn-lp-next">${num < total ? 'Próximo exercício →' : 'Concluir 🎉'}</button>`;
       document.getElementById('btn-lp-next').addEventListener('click', () => {
-        // Se tentou falar e ficou abaixo de 60%, recoloca no fim da fila!
         if (bestScore !== null) {
           lesson.totalChecks++;
           if (bestScore < 60) {
@@ -921,27 +1192,25 @@
             requeueTask();
           }
         }
-        advanceFinalPractice();
+        advance();
       });
       return;
     }
 
-    // MÉTODO 4: COMPLETAR BLOCOS
+    // COMPLETAR BLOCOS
     if (task.method === 'blocks') {
       const rawChunks = splitIntoChunks(phrase.en);
       const targetParts = rawChunks.map((text, idx) => ({
         text,
         type: idx === 0 ? 'chunk-fixed' : idx === rawChunks.length - 1 ? 'chunk-extra' : 'chunk-var'
       }));
-
       const otherPool = allPhrases.filter((p) => p.en !== phrase.en);
-      const randomOther = otherPool[Math.floor(Math.random() * otherPool.length)];
-      const extraWord = randomOther.en.split(' ')[0];
+      const extraWord = otherPool.length ? otherPool[Math.floor(Math.random() * otherPool.length)].en.split(' ')[0] : 'please';
       const bankParts = shuffle([...targetParts, { text: extraWord, type: 'chunk-extra' }]);
       lesson.builtChunks = [];
 
       body.innerHTML = `
-        <span class="method-badge">🧩 Completar Blocos • Prática ${num}/${total}</span>
+        <span class="method-badge">🧩 Completar Blocos • ${num}/${total}</span>
         ${reviewTag}${retryTag}
         <h2 class="lesson-prompt-title">Organize os blocos na ordem certa</h2>
         <div class="visual-card" style="padding:16px;">
@@ -995,30 +1264,29 @@
           lesson.errors++;
           requeueTask();
         }
-
         window.AppSpeech.speak(phrase.en);
         footer.innerHTML = `
           <div class="feedback-banner ${ok ? 'ok' : 'err'}">
-            <strong>${ok ? 'Perfeito! 🧩' : 'Ordem correta (voltará no fim da fila):'}</strong>
+            <strong>${ok ? 'Perfeito! 🧩' : 'Ordem correta:'}</strong>
             <p style="margin-top:4px;">${phrase.en}</p>
           </div>
-          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir 🎉'}</button>
         `;
-        document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
+        document.getElementById('btn-lp-next').addEventListener('click', advance);
       });
       return;
     }
 
-    // MÉTODO 5: OUVIDO RÁPIDO
+    // OUVIDO RÁPIDO
     const distractors = shuffle(allPhrases.filter((p) => p.pt !== phrase.pt)).slice(0, 2);
     const choices = shuffle([
       { pt: phrase.pt, correct: true },
-      { pt: distractors[0].pt, correct: false },
-      { pt: distractors[1].pt, correct: false }
+      { pt: distractors[0] ? distractors[0].pt : 'Outra opção 1', correct: false },
+      { pt: distractors[1] ? distractors[1].pt : 'Outra opção 2', correct: false }
     ]);
 
     body.innerHTML = `
-      <span class="method-badge">🎧 Ouvido Rápido • Prática ${num}/${total}</span>
+      <span class="method-badge">🎧 Ouvido Rápido • ${num}/${total}</span>
       ${reviewTag}${retryTag}
       <h2 class="lesson-prompt-title">O que você ouviu?</h2>
       <div class="wave-player" id="btn-lp-wave">
@@ -1050,15 +1318,14 @@
           lesson.errors++;
           requeueTask();
         }
-
         footer.innerHTML = `
           <div class="feedback-banner ${c.correct ? 'ok' : 'err'}">
-            <strong>${c.correct ? 'Acertou no ouvido! 🎧' : 'A frase era (voltará no fim da fila):'}</strong>
+            <strong>${c.correct ? 'Acertou no ouvido! 🎧' : 'A frase era:'}</strong>
             <p style="margin-top:4px;">${phrase.en} — ${phrase.pt}</p>
           </div>
-          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir Cenário 🎉'}</button>
+          <button class="btn-green" id="btn-lp-next">${num < lesson.practiceQueue.length ? 'Próximo exercício →' : 'Concluir 🎉'}</button>
         `;
-        document.getElementById('btn-lp-next').addEventListener('click', advanceFinalPractice);
+        document.getElementById('btn-lp-next').addEventListener('click', advance);
       });
       optContainer.appendChild(btn);
     });
@@ -1073,24 +1340,22 @@
     state.completedLessons[currentScenario.id] = Math.max(prev, stars);
     state = window.AppStorage.recordStudy(state, 5);
 
-    // Se concluiu a última lição do nível, baixa automaticamente o próximo nível para uso offline
-    const nextLevel = currentScenario.level + 1;
-    if (currentScenario.id % 5 === 0 && nextLevel <= 6 && !window.AppStorage.isLevelDownloaded(nextLevel)) {
-      downloadLevel(nextLevel, false);
-    }
-
     document.getElementById('lesson-progress-fill').style.width = '100%';
     document.getElementById('lesson-step-label').textContent = 'Concluído!';
 
     const body = document.getElementById('lesson-body');
     const footer = document.getElementById('lesson-footer');
+    const isLastOfLevel = currentScenario.id % 5 === 0;
+
     body.innerHTML = `
       <div class="complete-screen">
         <div style="font-size:3.5rem;">${currentScenario.emoji}</div>
         <h2 style="margin-top:10px;">Cenário Dominado!</h2>
         <p class="muted" style="margin-top:6px;">${currentScenario.title} (${currentScenario.phrases.length} frases)</p>
         <div class="complete-stars">${'⭐'.repeat(stars)}</div>
-        <p style="font-size:0.95rem;">+5 min adicionados à sua meta diária!</p>
+        <p style="font-size:0.95rem;">
+          ${isLastOfLevel ? `🏆 Você liberou o <strong>Checkpoint do Nível ${currentScenario.level}</strong>!` : '+5 min adicionados à sua meta diária!'}
+        </p>
       </div>
     `;
     footer.innerHTML = `
@@ -1100,10 +1365,7 @@
       </div>
     `;
 
-    document.getElementById('btn-repeat-random-practice').addEventListener('click', () => {
-      startLesson(currentScenario, 4);
-    });
-
+    document.getElementById('btn-repeat-random-practice').addEventListener('click', () => startLesson(currentScenario, 5));
     document.getElementById('btn-finish-close').addEventListener('click', () => {
       document.getElementById('lesson-modal').classList.add('hidden');
       lesson = null;
@@ -1113,7 +1375,7 @@
     });
   }
 
-  /* ==================== TAB 2: PRÁTICA (FALA, OUVIDO E ESCRITA) ==================== */
+  /* ==================== TAB 2: PRÁTICA + MEUS ERROS ==================== */
   function bindPractice() {
     document.querySelectorAll('.mode-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -1121,16 +1383,12 @@
         btn.classList.add('active');
         document.querySelectorAll('.practice-panel').forEach((p) => p.classList.remove('active'));
         document.getElementById('panel-' + btn.dataset.mode).classList.add('active');
+        if (btn.dataset.mode === 'errors') renderErrorsList();
       });
     });
 
-    // Shadowing
-    document.getElementById('btn-shadow-normal').addEventListener('click', () => {
-      window.AppSpeech.speak(allPhrases[shadowIndex].en, { rate: 1.0 });
-    });
-    document.getElementById('btn-shadow-slow').addEventListener('click', () => {
-      window.AppSpeech.speak(allPhrases[shadowIndex].en, { rate: 0.72 });
-    });
+    document.getElementById('btn-shadow-normal').addEventListener('click', () => window.AppSpeech.speak(allPhrases[shadowIndex].en, { rate: 1.0 }));
+    document.getElementById('btn-shadow-slow').addEventListener('click', () => window.AppSpeech.speak(allPhrases[shadowIndex].en, { rate: 0.72 }));
     document.getElementById('btn-shadow-prev').addEventListener('click', () => {
       shadowIndex = (shadowIndex - 1 + allPhrases.length) % allPhrases.length;
       renderShadowCard();
@@ -1145,7 +1403,6 @@
       const target = allPhrases[shadowIndex].en;
       const resultBox = document.getElementById('speech-result');
       const label = document.getElementById('mic-label');
-
       micBtn.classList.add('listening');
       label.textContent = 'Ouvindo... fale agora!';
       resultBox.classList.add('hidden');
@@ -1172,7 +1429,6 @@
       );
     });
 
-    // Listening
     document.getElementById('btn-quick-listen').addEventListener('click', () => {
       if (quickListenAnswer) window.AppSpeech.speak(quickListenAnswer.en, { rate: 0.95 });
     });
@@ -1180,10 +1436,7 @@
       if (quickListenAnswer) window.AppSpeech.speak(quickListenAnswer.en, { rate: 0.72 });
     });
 
-    // Writing
-    document.getElementById('btn-write-audio').addEventListener('click', () => {
-      window.AppSpeech.speak(allPhrases[writeIndex].en);
-    });
+    document.getElementById('btn-write-audio').addEventListener('click', () => window.AppSpeech.speak(allPhrases[writeIndex].en));
     document.getElementById('btn-write-hint').addEventListener('click', () => {
       const box = document.getElementById('write-hint-text');
       box.textContent = 'Dica: ' + makeHint(allPhrases[writeIndex].en);
@@ -1202,14 +1455,10 @@
       const expected = normalizeText(p.en);
       const sim = window.AppSpeech.similarity(p.en, input.value);
       const ok = typed === expected || sim >= 85;
-
       window.AppSpeech.speak(p.en);
       fb.classList.remove('hidden');
       fb.style.background = ok ? 'var(--green-bg)' : 'var(--red-bg)';
-      fb.innerHTML = ok
-        ? `✅ Excelente! "${p.en}"`
-        : `❌ Resposta esperada: "${p.en}"`;
-
+      fb.innerHTML = ok ? `✅ Excelente! "${p.en}"` : `❌ Resposta esperada: "${p.en}"`;
       if (ok) {
         setTimeout(() => {
           writeIndex = Math.floor(Math.random() * allPhrases.length);
@@ -1217,15 +1466,49 @@
         }, 1600);
       }
     }
-
     document.getElementById('btn-write-check').addEventListener('click', verifyQuickWriting);
     document.getElementById('write-input').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') verifyQuickWriting();
     });
   }
 
+  function renderErrorsList() {
+    const container = document.getElementById('errors-list');
+    container.innerHTML = '';
+    const errs = state.frequentErrors || [];
+    if (!errs.length) {
+      container.innerHTML = `<p class="muted" style="text-align:center;padding:20px;">Nenhum erro registrado ainda! 🎉 Continue estudando.</p>`;
+      return;
+    }
+    errs.forEach((p) => {
+      const item = document.createElement('div');
+      item.className = 'phrase-item';
+      item.innerHTML = `
+        <div class="phrase-top">
+          <div>
+            <span class="tag" style="margin-bottom:4px;">${p.category} • Nível ${p.level}</span>
+            <div class="phrase-en">${p.en}</div>
+            <div class="phrase-pt">${p.pt}</div>
+          </div>
+          <div class="phrase-actions">
+            <button class="icon-btn btn-say" title="Ouvir">🔊</button>
+            <button class="icon-btn btn-done" title="Já dominei!">✅</button>
+          </div>
+        </div>
+      `;
+      item.querySelector('.btn-say').addEventListener('click', () => window.AppSpeech.speak(p.en));
+      item.querySelector('.btn-done').addEventListener('click', () => {
+        window.AppStorage.removeErrorPhrase(state, p.en);
+        renderErrorsList();
+        showToast('✅ Removida da lista de erros!');
+      });
+      container.appendChild(item);
+    });
+  }
+
   function renderShadowCard() {
-    const p = allPhrases[shadowIndex];
+    if (!allPhrases.length) return;
+    const p = allPhrases[shadowIndex % allPhrases.length];
     document.getElementById('shadow-category').textContent = `Nível ${p.level} • ${p.category}`;
     document.getElementById('shadow-en').textContent = p.en;
     document.getElementById('shadow-pt').textContent = p.pt;
@@ -1234,7 +1517,8 @@
   }
 
   function loadQuickWriting() {
-    const p = allPhrases[writeIndex];
+    if (!allPhrases.length) return;
+    const p = allPhrases[writeIndex % allPhrases.length];
     document.getElementById('write-category').textContent = `Nível ${p.level} • ${p.category}`;
     document.getElementById('write-pt').textContent = p.pt;
     document.getElementById('write-input').value = '';
@@ -1243,6 +1527,7 @@
   }
 
   function loadQuickListening() {
+    if (allPhrases.length < 3) return;
     const pool = shuffle(allPhrases);
     quickListenAnswer = pool[0];
     const choices = shuffle([pool[0], pool[1], pool[2]]);
@@ -1267,7 +1552,7 @@
     });
   }
 
-  /* ==================== TAB 3: FRASEÁRIO ==================== */
+  /* ==================== TAB 3: FRASEÁRIO + MODO MÃOS LIVRES ==================== */
   let phraseFilter = 'all';
 
   function bindPhrasebook() {
@@ -1284,11 +1569,10 @@
     const playBtn = document.getElementById('btn-playlist');
     playBtn.addEventListener('click', () => {
       if (playlistRunning) {
-        playlistRunning = false;
-        window.AppSpeech.stop();
-        playBtn.textContent = '▶ Playlist';
+        stopAllAudioModes();
         return;
       }
+      stopAllAudioModes();
       const list = getFilteredPhrases();
       if (!list.length) return;
       playlistRunning = true;
@@ -1296,18 +1580,63 @@
       let idx = 0;
       function playNext() {
         if (!playlistRunning || idx >= list.length) {
-          playlistRunning = false;
-          playBtn.textContent = '▶ Playlist';
+          stopAllAudioModes();
           return;
         }
         window.AppSpeech.speak(list[idx].en, {
           onEnd: () => {
             idx++;
-            setTimeout(playNext, 700);
+            handsFreeTimer = setTimeout(playNext, 700);
           }
         });
       }
       playNext();
+    });
+
+    // Modo Mãos Livres: Português -> 3 segundos de pausa -> Inglês
+    const hfBtn = document.getElementById('btn-handsfree');
+    const hfBanner = document.getElementById('handsfree-banner');
+    const hfStatus = document.getElementById('handsfree-status');
+
+    hfBtn.addEventListener('click', () => {
+      if (handsFreeRunning) {
+        stopAllAudioModes();
+        return;
+      }
+      stopAllAudioModes();
+      const list = getFilteredPhrases();
+      if (!list.length) return;
+
+      handsFreeRunning = true;
+      hfBtn.textContent = '⏹ Parar';
+      hfBanner.classList.remove('hidden');
+      let idx = 0;
+
+      function runCycle() {
+        if (!handsFreeRunning || idx >= list.length) {
+          stopAllAudioModes();
+          return;
+        }
+        const item = list[idx];
+        hfStatus.textContent = `🇧🇷 "${item.pt}" — Tente falar em inglês...`;
+        window.AppSpeech.speakPt(item.pt, {
+          onEnd: () => {
+            if (!handsFreeRunning) return;
+            hfStatus.textContent = `⏳ 3 segundos para você responder em voz alta...`;
+            handsFreeTimer = setTimeout(() => {
+              if (!handsFreeRunning) return;
+              hfStatus.textContent = `🇺🇸 "${item.en}"`;
+              window.AppSpeech.speak(item.en, {
+                onEnd: () => {
+                  idx++;
+                  handsFreeTimer = setTimeout(runCycle, 1200);
+                }
+              });
+            }, 3000);
+          }
+        });
+      }
+      runCycle();
     });
   }
 
@@ -1315,7 +1644,7 @@
     const q = (document.getElementById('phrase-search').value || '').toLowerCase().trim();
     return allPhrases.filter((p) => {
       if (phraseFilter === 'fav' && !state.favorites.includes(p.en)) return false;
-      if (['1', '2', '3', '4', '5', '6'].includes(phraseFilter) && String(p.level) !== phraseFilter) return false;
+      if (['1', '2', '3', '4', '5', '6', '7'].includes(phraseFilter) && String(p.level) !== phraseFilter) return false;
       if (q && !p.en.toLowerCase().includes(q) && !p.pt.toLowerCase().includes(q) && !p.category.toLowerCase().includes(q)) {
         return false;
       }
@@ -1329,7 +1658,7 @@
     container.innerHTML = '';
 
     if (!list.length) {
-      container.innerHTML = `<p class="muted" style="text-align:center;padding:30px;">Nenhuma frase encontrada.</p>`;
+      container.innerHTML = `<p class="muted" style="text-align:center;padding:30px;">Nenhuma frase encontrada (baixe o nível na trilha para ver suas frases aqui).</p>`;
       return;
     }
 
@@ -1368,7 +1697,27 @@
     });
   }
 
-  /* ==================== TAB 4: AJUSTES ==================== */
+  /* ==================== TAB 4: AJUSTES, MEDALHAS E BACKUP ==================== */
+  function renderMedals() {
+    const grid = document.getElementById('medals-grid');
+    grid.innerHTML = '';
+    for (let lvl = 1; lvl <= window.TOTAL_LEVELS; lvl++) {
+      const m = window.MEDALS_META[lvl];
+      const score = (state.completedCheckpoints && state.completedCheckpoints[lvl]) || 0;
+      const earned = score >= 75;
+      const div = document.createElement('div');
+      div.className = 'medal-item ' + (earned ? 'earned' : 'locked');
+      div.innerHTML = `
+        <span style="font-size:1.5rem;">${m.icon}</span>
+        <div>
+          <strong style="display:block;">${m.name}</strong>
+          <span class="muted">Nível ${lvl} ${earned ? `• ${score}%` : '• Bloqueada'}</span>
+        </div>
+      `;
+      grid.appendChild(div);
+    }
+  }
+
   function bindSettings() {
     document.getElementById('select-accent').addEventListener('change', (e) => {
       state.accent = e.target.value;
@@ -1389,9 +1738,72 @@
       state.rate = Number(e.target.value);
       window.AppStorage.save(state);
     });
+
+    // BACKUP & RESTORE
+    const backupMsg = document.getElementById('backup-msg');
+    document.getElementById('btn-export-file').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `falafacil-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      backupMsg.style.color = '#86efac';
+      backupMsg.textContent = '✅ Arquivo de backup baixado! Guarde-o no celular ou Google Drive.';
+    });
+
+    document.getElementById('btn-copy-code').addEventListener('click', async () => {
+      const code = window.AppStorage.exportBackupCode(state);
+      try {
+        await navigator.clipboard.writeText(code);
+        backupMsg.style.color = '#86efac';
+        backupMsg.textContent = '✅ Código copiado! Cole no seu WhatsApp ou notas para guardar.';
+      } catch {
+        prompt('Copie seu código de backup:', code);
+      }
+    });
+
+    document.getElementById('btn-restore-code').addEventListener('click', () => {
+      const input = document.getElementById('restore-code-input');
+      try {
+        state = window.AppStorage.importBackupCode(input.value);
+        input.value = '';
+        backupMsg.style.color = '#86efac';
+        backupMsg.textContent = '✅ Progresso restaurado com sucesso!';
+        renderTopBar();
+        renderTrail();
+        renderSettings();
+      } catch {
+        backupMsg.style.color = '#fca5a5';
+        backupMsg.textContent = '❌ Código de backup inválido.';
+      }
+    });
+
+    document.getElementById('restore-file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          state = window.AppStorage.importBackupCode(reader.result);
+          backupMsg.style.color = '#86efac';
+          backupMsg.textContent = '✅ Progresso restaurado pelo arquivo!';
+          renderTopBar();
+          renderTrail();
+          renderSettings();
+        } catch {
+          backupMsg.style.color = '#fca5a5';
+          backupMsg.textContent = '❌ Arquivo de backup inválido.';
+        }
+      };
+      reader.readAsText(file);
+    });
+
     document.getElementById('btn-reset-progress').addEventListener('click', () => {
       if (confirm('Tem certeza que deseja apagar todo o seu progresso?')) {
         state = window.AppStorage.reset();
+        currentModule = 'iniciante';
         currentLevel = 1;
         renderTopBar();
         renderTrail();
@@ -1400,7 +1812,7 @@
       }
     });
 
-    // Senha escondida nos Ajustes: 5 toques em "FalaFácil v6.0" abre o painel de teste
+    // Senha escondida nos Ajustes: 5 toques em "FalaFácil v9.0"
     let devTaps = 0;
     let devTapTimer = null;
     const versionTrigger = document.getElementById('app-version-trigger');
@@ -1426,7 +1838,7 @@
         window.AppStorage.save(state);
         devInput.value = '';
         devMsg.style.color = '#86efac';
-        devMsg.textContent = '✅ Todas as lições e níveis foram desbloqueados para teste!';
+        devMsg.textContent = '✅ Todos os 35 cenários e 7 níveis foram desbloqueados para teste!';
         renderDevPanel();
         renderTrail();
       } else {
@@ -1436,9 +1848,7 @@
     }
 
     document.getElementById('btn-dev-unlock').addEventListener('click', tryUnlockDev);
-    devInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') tryUnlockDev();
-    });
+    devInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryUnlockDev(); });
 
     document.getElementById('btn-dev-lock').addEventListener('click', () => {
       state.unlockAll = false;
@@ -1460,7 +1870,7 @@
       devPanel.classList.remove('hidden');
       pwRow.classList.add('hidden');
       lockBtn.classList.remove('hidden');
-      statusText.textContent = 'Modo Teste ATIVO — todas as 30 lições e 6 níveis estão liberados.';
+      statusText.textContent = 'Modo Teste ATIVO — todas as 35 lições e 7 níveis estão liberados.';
     } else {
       pwRow.classList.remove('hidden');
       lockBtn.classList.add('hidden');
@@ -1479,6 +1889,7 @@
     document.getElementById('select-voice-gender').value = state.voiceGender || 'female';
     document.getElementById('select-goal').value = String(state.dailyGoal);
     document.getElementById('select-rate').value = String(state.rate);
+    renderMedals();
     renderDevPanel();
   }
 

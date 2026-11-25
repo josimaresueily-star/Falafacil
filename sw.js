@@ -1,4 +1,4 @@
-const CACHE_NAME = 'falafacil-v8';
+const CACHE_NAME = 'falafacil-v9';
 const ASSETS = [
   '/',
   '/index.html',
@@ -27,25 +27,18 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
+// Network-First: tenta buscar a versão mais nova online; se estiver offline, usa o cache
 self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
-  // Cache level JSON files dynamically when downloaded
-  if (url.pathname.startsWith('/data/level-')) {
-    e.respondWith(
-      caches.open(CACHE_NAME).then((cache) =>
-        cache.match(e.request).then((cached) => {
-          if (cached) return cached;
-          return fetch(e.request).then((resp) => {
-            if (resp.ok) cache.put(e.request, resp.clone());
-            return resp;
-          });
-        })
-      )
-    );
-    return;
-  }
-
+  if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then((cached) => cached || fetch(e.request))
+    fetch(e.request)
+      .then((resp) => {
+        if (resp && resp.ok) {
+          const copy = resp.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, copy));
+        }
+        return resp;
+      })
+      .catch(() => caches.match(e.request))
   );
 });

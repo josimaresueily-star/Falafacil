@@ -77,6 +77,19 @@
       window.speechSynthesis.speak(utter);
     },
 
+    speakPt(text, options = {}) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'pt-BR';
+      utter.rate = options.rate || 1.0;
+      const voices = window.speechSynthesis.getVoices() || [];
+      const ptVoice = voices.find((v) => v.lang.toLowerCase().startsWith('pt'));
+      if (ptVoice) utter.voice = ptVoice;
+      if (options.onEnd) utter.onend = options.onEnd;
+      window.speechSynthesis.speak(utter);
+    },
+
     stop() {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     },

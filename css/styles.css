@@ -1190,3 +1190,99 @@ select {
   justify-content: center;
   flex-shrink: 0;
 }
+
+/* v9 Modules, Checkpoint, Medals, Hands-Free, False Friends */
+.module-tabs {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.module-pill {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 7px 12px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.module-pill.active {
+  background: var(--surface-2);
+  color: #fff;
+  border-color: var(--yellow);
+}
+
+.checkpoint-card {
+  width: 248px;
+  border-radius: 26px;
+  border: 3px solid var(--yellow);
+  background: linear-gradient(145deg, #272213, #171a21);
+  padding: 20px 18px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(250, 204, 21, 0.14);
+}
+
+.checkpoint-card.completed {
+  border-color: var(--green);
+  background: linear-gradient(145deg, #102a1b, #171a21);
+}
+
+.checkpoint-card.locked {
+  border-color: var(--border);
+  opacity: 0.55;
+  filter: grayscale(0.5);
+}
+
+.btn-handsfree {
+  background: var(--green);
+  color: #052e16;
+  border: none;
+  border-radius: 99px;
+  padding: 7px 12px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.medals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.medal-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.medal-item.earned {
+  border-color: var(--yellow);
+  background: rgba(250, 204, 21, 0.1);
+}
+
+.medal-item.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
+.false-friend-box {
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fcd34d;
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-size: 0.78rem;
+  margin-top: 8px;
+  text-align: left;
+}

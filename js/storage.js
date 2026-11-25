@@ -1,4 +1,4 @@
-// Persistência local (LocalStorage) + Cache Offline por Nível
+// Persistência local (LocalStorage) + Cache Offline por Nível + Backup/Restore
 const STORAGE_KEY = 'falafacil_state_v1';
 const LEVEL_PREFIX = 'falafacil_level_data_';
 
@@ -8,11 +8,14 @@ const DEFAULT_STATE = {
   todayMinutes: 0,
   dailyGoal: 15,
   accent: 'en-US',
-  voiceGender: 'female', // 'female' | 'male'
+  voiceGender: 'female',
   rate: 0.95,
-  completedLessons: {},  // { lessonId: stars (1-3) }
-  favorites: [],         // array of English phrases
-  unlockAll: false       // modo teste
+  completedLessons: {},     // { lessonId: stars (1-3) }
+  completedCheckpoints: {}, // { levelNum: bestPct }
+  frequentErrors: [],       // array of { en, pt, tip, category, level }
+  favorites: [],            // array of English phrases
+  micMutedUntil: 0,         // timestamp ms (pular microfone por 15 min)
+  unlockAll: false          // modo teste
 };
 
 window.AppStorage = {
@@ -53,7 +56,30 @@ window.AppStorage = {
     return state;
   },
 
-  // Armazenamento offline por nível
+  recordErrorPhrase(state, phraseObj, meta = {}) {
+    if (!phraseObj || !phraseObj.en) return;
+    if (!Array.isArray(state.frequentErrors)) state.frequentErrors = [];
+    const exists = state.frequentErrors.some((e) => e.en === phraseObj.en);
+    if (!exists) {
+      state.frequentErrors.unshift({
+        en: phraseObj.en,
+        pt: phraseObj.pt,
+        tip: phraseObj.tip || '',
+        category: meta.category || phraseObj.category || 'Revisão',
+        level: meta.level || phraseObj.level || 1
+      });
+      if (state.frequentErrors.length > 40) state.frequentErrors.pop();
+      this.save(state);
+    }
+  },
+
+  removeErrorPhrase(state, enText) {
+    if (!Array.isArray(state.frequentErrors)) return;
+    state.frequentErrors = state.frequentErrors.filter((e) => e.en !== enText);
+    this.save(state);
+  },
+
+  // Armazenamento offline por nível (1..7)
   getLevelData(levelNum) {
     try {
       const raw = localStorage.getItem(LEVEL_PREFIX + levelNum);
@@ -77,16 +103,27 @@ window.AppStorage = {
     return localStorage.getItem(LEVEL_PREFIX + levelNum) !== null;
   },
 
-  getDownloadedLevels() {
-    const list = [];
-    for (let i = 1; i <= 6; i++) {
-      if (this.isLevelDownloaded(i)) list.push(i);
-    }
-    return list;
+  // Backup em Código Curto (Base64 UTF-8) ou Arquivo JSON
+  exportBackupCode(state) {
+    const json = JSON.stringify(state);
+    return btoa(unescape(encodeURIComponent(json)));
   },
 
-  removeLevelData(levelNum) {
-    localStorage.removeItem(LEVEL_PREFIX + levelNum);
+  importBackupCode(code) {
+    const trimmed = (code || '').trim();
+    let parsed = null;
+    if (trimmed.startsWith('{')) {
+      parsed = JSON.parse(trimmed);
+    } else {
+      const json = decodeURIComponent(escape(atob(trimmed)));
+      parsed = JSON.parse(json);
+    }
+    if (!parsed || typeof parsed !== 'object' || !('completedLessons' in parsed)) {
+      throw new Error('Formato inválido');
+    }
+    const merged = { ...DEFAULT_STATE, ...parsed };
+    this.save(merged);
+    return merged;
   },
 
   reset() {

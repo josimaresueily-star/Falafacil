@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0d0f12" />
-  <meta name="description" content="Aprenda inglês para conversação com 30 cenários reais e mais de 500 frases prontas do dia a dia." />
+  <meta name="description" content="Aprenda inglês para conversação com 35 cenários reais, Phrasal Verbs e mais de 560 frases prontas." />
   <title>FalaFácil — Inglês na Prática</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/svg+xml" href="/assets/icon.svg" />
@@ -44,14 +44,17 @@
             </div>
             <span class="ring-caption">DIAS SEGUIDOS</span>
           </div>
-          <div class="level-tabs" id="level-tabs">
-            <button class="level-pill active" data-level="1">Nível 1</button>
-            <button class="level-pill" data-level="2">Nível 2</button>
-            <button class="level-pill" data-level="3">Nível 3</button>
-            <button class="level-pill" data-level="4">Nível 4</button>
-            <button class="level-pill" data-level="5">Nível 5</button>
-            <button class="level-pill" data-level="6">Nível 6</button>
+
+          <!-- 3 Módulos: Iniciante / Intermediário / Avançado -->
+          <div class="module-tabs" id="module-tabs">
+            <button class="module-pill active" data-module="iniciante">🟢 Iniciante</button>
+            <button class="module-pill" data-module="intermediario">🟡 Intermediário</button>
+            <button class="module-pill" data-module="avancado">🔴 Avançado</button>
           </div>
+
+          <!-- Níveis do Módulo Ativo -->
+          <div class="level-tabs" id="level-tabs"></div>
+
           <p class="level-subtitle" id="level-subtitle">Primeiros Contatos e Sobrevivência</p>
           <div id="level-offline-bar" class="offline-status-bar"></div>
         </div>
@@ -61,13 +64,14 @@
         </div>
       </section>
 
-      <!-- TAB 2: PRÁTICA (SHADOWING & OUVIDO) -->
+      <!-- TAB 2: PRÁTICA (FALA, OUVIDO, ESCRITA, MEUS ERROS) -->
       <section id="view-practice" class="view">
         <h1 class="page-title">Prática Rápida</h1>
-        <div class="practice-mode-switch">
+        <div class="practice-mode-switch" style="grid-template-columns: repeat(4, 1fr);">
           <button class="mode-btn active" data-mode="shadowing">🎙️ Fala</button>
           <button class="mode-btn" data-mode="listening">🎧 Ouvido</button>
           <button class="mode-btn" data-mode="writing">✍️ Escrita</button>
+          <button class="mode-btn" data-mode="errors">🎯 Erros</button>
         </div>
 
         <!-- Shadowing Panel -->
@@ -86,7 +90,7 @@
             <div class="mic-area">
               <button class="btn-mic" id="btn-mic">
                 <span class="mic-icon">🎙️</span>
-                <span id="mic-label">Segure ou toque para falar</span>
+                <span id="mic-label">Toque e repita em voz alta</span>
               </button>
               <div id="speech-result" class="speech-result hidden"></div>
             </div>
@@ -133,13 +137,30 @@
             <div id="write-feedback" class="inline-feedback hidden"></div>
           </div>
         </div>
+
+        <!-- Frequent Errors Review Panel -->
+        <div id="panel-errors" class="practice-panel">
+          <div class="card">
+            <h3 style="margin-bottom:6px;">🎯 Meus Erros Frequentes</h3>
+            <p class="muted" style="margin-bottom:14px;">Frases que você errou nas lições ficam salvas aqui para revisão focada.</p>
+            <div id="errors-list" class="phrase-list"></div>
+          </div>
+        </div>
       </section>
 
-      <!-- TAB 3: FRASEÁRIO (MODO SOBREVIVÊNCIA) -->
+      <!-- TAB 3: FRASEÁRIO (MODO SOBREVIVÊNCIA + MÃOS LIVRES) -->
       <section id="view-phrasebook" class="view">
         <div class="phrasebook-header">
           <h1 class="page-title">Fraseário de Bolso</h1>
-          <button class="btn-playlist" id="btn-playlist">▶ Playlist</button>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-handsfree" id="btn-handsfree" title="Fala em português, dá 3s de pausa e responde em inglês">🎧 Mãos Livres</button>
+            <button class="btn-playlist" id="btn-playlist">▶ EN</button>
+          </div>
+        </div>
+
+        <div id="handsfree-banner" class="card hidden" style="border-color:var(--green);background:var(--green-bg);padding:12px 14px;">
+          <strong style="color:#86efac;">🎧 Modo Mãos Livres ativo</strong>
+          <p class="muted" id="handsfree-status" style="color:#dcfce7;margin-top:4px;">Preparando próxima frase...</p>
         </div>
 
         <div class="search-row">
@@ -147,7 +168,7 @@
         </div>
 
         <div class="filter-chips" id="phrase-filters">
-          <button class="chip active" data-filter="all">Todas (515)</button>
+          <button class="chip active" data-filter="all">Todas (565)</button>
           <button class="chip" data-filter="fav">⭐ Favoritas</button>
           <button class="chip" data-filter="1">Nível 1</button>
           <button class="chip" data-filter="2">Nível 2</button>
@@ -155,30 +176,35 @@
           <button class="chip" data-filter="4">Nível 4</button>
           <button class="chip" data-filter="5">Nível 5</button>
           <button class="chip" data-filter="6">Nível 6</button>
+          <button class="chip" data-filter="7">Nível 7 (Phrasal)</button>
         </div>
 
-        <div id="phrase-list" class="phrase-list">
-          <!-- Populated dynamically -->
-        </div>
+        <div id="phrase-list" class="phrase-list"></div>
       </section>
 
-      <!-- TAB 4: AJUSTES -->
+      <!-- TAB 4: AJUSTES, MEDALHAS E BACKUP -->
       <section id="view-settings" class="view">
         <h1 class="page-title">Perfil e Ajustes</h1>
 
         <div class="card stats-summary">
           <div class="stat-box">
-            <span class="stat-value" id="stat-scenarios">0/30</span>
+            <span class="stat-value" id="stat-scenarios">0/35</span>
             <span class="stat-label">Cenários dominados</span>
           </div>
           <div class="stat-box">
-            <span class="stat-value" id="stat-stars">0/90</span>
+            <span class="stat-value" id="stat-stars">0/105</span>
             <span class="stat-label">Estrelas ganhas</span>
           </div>
           <div class="stat-box">
             <span class="stat-value" id="stat-favs">0</span>
             <span class="stat-label">Frases salvas</span>
           </div>
+        </div>
+
+        <!-- Medalhas por Nível -->
+        <div class="card">
+          <strong style="display:block;margin-bottom:10px;">🏆 Medalhas dos Checkpoints</strong>
+          <div id="medals-grid" class="medals-grid"></div>
         </div>
 
         <div class="card settings-card">
@@ -230,11 +256,30 @@
           </div>
         </div>
 
+        <!-- Backup & Recuperação (proteção contra limpeza do histórico do Google/Chrome) -->
+        <div class="card">
+          <strong style="display:block;margin-bottom:4px;">💾 Backup do Progresso</strong>
+          <p class="muted" style="margin-bottom:12px;">Salve seu progresso para não perder nada se apagar o histórico do navegador ou trocar de celular.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <button class="btn-secondary" id="btn-export-file">⬇️ Baixar arquivo</button>
+            <button class="btn-secondary" id="btn-copy-code">📋 Copiar código</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="restore-code-input" class="writing-input" style="padding:10px 12px;font-size:0.85rem;" placeholder="Cole seu código de backup aqui..." />
+            <button class="btn-primary" id="btn-restore-code" style="white-space:nowrap;">Restaurar</button>
+          </div>
+          <label class="btn-text-small" style="margin-top:10px;text-align:center;color:#93c5fd;cursor:pointer;">
+            📂 Ou importar arquivo .json de backup
+            <input type="file" id="restore-file-input" accept=".json,application/json" style="display:none;" />
+          </label>
+          <p id="backup-msg" class="muted" style="margin-top:6px;text-align:center;"></p>
+        </div>
+
         <div class="card danger-card">
           <button class="btn-danger" id="btn-reset-progress">🗑️ Resetar todo o progresso</button>
         </div>
 
-        <!-- Painel oculto de teste (ativado com 5 toques na versão abaixo) -->
+        <!-- Painel oculto de teste (5 toques na versão abaixo) -->
         <div id="dev-unlock-panel" class="card hidden">
           <strong style="display:block;margin-bottom:6px;">🔓 Modo Teste (Desenvolvedor)</strong>
           <p class="muted" id="dev-status-text" style="margin-bottom:10px;">Digite a senha para liberar todas as lições e níveis.</p>
@@ -246,7 +291,7 @@
           <p id="dev-msg" class="muted" style="margin-top:8px;"></p>
         </div>
 
-        <p id="app-version-trigger" class="version-footer">FalaFácil v8.0</p>
+        <p id="app-version-trigger" class="version-footer">FalaFácil v9.0</p>
       </section>
     </main>
 
@@ -271,7 +316,7 @@
     </nav>
   </div>
 
-  <!-- FULLSCREEN LESSON MODAL -->
+  <!-- FULLSCREEN LESSON / CHECKPOINT MODAL -->
   <div id="lesson-modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="lesson-header">
       <button class="btn-close-lesson" id="btn-close-lesson" title="Sair da lição">✕</button>
@@ -279,16 +324,11 @@
         <div class="lesson-progress-fill" id="lesson-progress-fill" style="width: 0%"></div>
       </div>
       <button class="btn-voice-toggle" id="btn-lesson-voice" title="Alternar voz feminina/masculina">👩</button>
-      <span class="step-badge" id="lesson-step-label">Etapa 1/4</span>
+      <span class="step-badge" id="lesson-step-label">Etapa 1/5</span>
     </div>
 
-    <div class="lesson-body" id="lesson-body">
-      <!-- Dynamic step content -->
-    </div>
-
-    <div class="lesson-footer" id="lesson-footer">
-      <!-- Feedback banner + action button -->
-    </div>
+    <div class="lesson-body" id="lesson-body"></div>
+    <div class="lesson-footer" id="lesson-footer"></div>
   </div>
 
   <script src="/js/levels-meta.js"></script>
