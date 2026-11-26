@@ -34,13 +34,13 @@
     });
   }
 
-  async function downloadLevel(levelNum, silent = false) {
-    if (window.AppStorage.isLevelDownloaded(levelNum)) {
+  async function downloadLevel(levelNum, silent = false, force = false) {
+    if (!force && window.AppStorage.isLevelDownloaded(levelNum)) {
       rebuildLoadedData();
       return true;
     }
     try {
-      const resp = await fetch(`/data/level-${levelNum}.json`);
+      const resp = await fetch(`/data/level-${levelNum}.json?v=10.3`, { cache: 'no-store' });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const data = await resp.json();
       window.AppStorage.saveLevelData(levelNum, data);
@@ -73,7 +73,18 @@
 
     // Baixa automaticamente apenas o Nível 1 na primeira vez
     if (!window.AppStorage.isLevelDownloaded(1)) {
-      await downloadLevel(1, true);
+      await downloadLevel(1, true, true);
+      window.AppStorage.setDataVersion();
+    } else if (navigator.onLine && window.AppStorage.needsDataRefresh()) {
+      // Atualiza silenciosamente os níveis já baixados quando há nova versão (sem perder o progresso)
+      let allOk = true;
+      for (let lvl = 1; lvl <= window.TOTAL_LEVELS; lvl++) {
+        if (window.AppStorage.isLevelDownloaded(lvl)) {
+          const ok = await downloadLevel(lvl, true, true);
+          if (!ok) allOk = false;
+        }
+      }
+      if (allOk) window.AppStorage.setDataVersion();
     }
 
     renderTopBar();
@@ -1969,6 +1980,53 @@
       state.rate = Number(e.target.value);
       window.AppStorage.save(state);
     });
+
+    // ATUALIZAÇÃO MANUAL SEGURA (mantém todo o progresso salvo no LocalStorage)
+    const forceUpdateBtn = document.getElementById('btn-force-update');
+    const updateMsg = document.getElementById('update-msg');
+    if (forceUpdateBtn) {
+      forceUpdateBtn.addEventListener('click', async () => {
+        if (!navigator.onLine) {
+          updateMsg.style.color = '#fca5a5';
+          updateMsg.textContent = '⚠️ Conecte-se à internet para verificar atualizações.';
+          return;
+        }
+        forceUpdateBtn.disabled = true;
+        forceUpdateBtn.textContent = 'Atualizando...';
+        updateMsg.style.color = '#fde68a';
+        updateMsg.textContent = 'Limpando cache antigo e buscando a versão mais nova...';
+
+        try {
+          if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          }
+          if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            for (const reg of regs) {
+              await reg.update().catch(() => {});
+              if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+          }
+          for (let lvl = 1; lvl <= window.TOTAL_LEVELS; lvl++) {
+            if (window.AppStorage.isLevelDownloaded(lvl)) {
+              await downloadLevel(lvl, true, true);
+            }
+          }
+          window.AppStorage.setDataVersion();
+          updateMsg.style.color = '#86efac';
+          updateMsg.textContent = '✅ Tudo atualizado! Recarregando aplicativo...';
+          setTimeout(() => {
+            window.location.replace('/?updated=' + Date.now());
+          }, 500);
+        } catch (err) {
+          forceUpdateBtn.disabled = false;
+          forceUpdateBtn.textContent = '🔄 Verificar e aplicar atualização agora';
+          updateMsg.style.color = '#fca5a5';
+          updateMsg.textContent = '⚠️ Erro ao atualizar. Tente novamente.';
+        }
+      });
+    }
 
     // BACKUP & RESTORE
     const backupMsg = document.getElementById('backup-msg');

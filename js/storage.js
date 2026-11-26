@@ -1,6 +1,8 @@
 // Persistência local (LocalStorage) + Cache Offline por Nível + Backup/Restore
 const STORAGE_KEY = 'falafacil_state_v1';
 const LEVEL_PREFIX = 'falafacil_level_data_';
+const DATA_VERSION_KEY = 'falafacil_data_version';
+const CURRENT_DATA_VERSION = '10.3';
 
 const DEFAULT_STATE = {
   streak: 0,
@@ -101,6 +103,20 @@ window.AppStorage = {
 
   isLevelDownloaded(levelNum) {
     return localStorage.getItem(LEVEL_PREFIX + levelNum) !== null;
+  },
+
+  getDataVersion() {
+    return localStorage.getItem(DATA_VERSION_KEY) || '';
+  },
+
+  setDataVersion(ver = CURRENT_DATA_VERSION) {
+    try {
+      localStorage.setItem(DATA_VERSION_KEY, ver);
+    } catch {}
+  },
+
+  needsDataRefresh() {
+    return this.getDataVersion() !== CURRENT_DATA_VERSION;
   },
 
   // Backup em Código Curto (Base64 UTF-8) ou Arquivo JSON

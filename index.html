@@ -9,7 +9,7 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png" />
   <link rel="apple-touch-icon" href="/assets/icon-192.png" />
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/styles.css?v=10.3" />
 </head>
 <body>
   <div id="app">
@@ -274,6 +274,14 @@
           </div>
         </div>
 
+        <!-- Atualização manual segura (limpa cache de arquivos sem apagar progresso) -->
+        <div class="card">
+          <strong style="display:block;margin-bottom:4px;">🔄 Atualização do Aplicativo</strong>
+          <p class="muted" style="margin-bottom:10px;">Baixe a versão mais recente sem perder seu progresso, estrelas ou medalhas.</p>
+          <button class="btn-primary" id="btn-force-update" style="width:100%;">🔄 Verificar e aplicar atualização agora</button>
+          <p id="update-msg" class="muted" style="margin-top:6px;text-align:center;"></p>
+        </div>
+
         <!-- Backup & Recuperação (proteção contra limpeza do histórico do Google/Chrome) -->
         <div class="card">
           <strong style="display:block;margin-bottom:4px;">💾 Backup do Progresso</strong>
@@ -309,7 +317,7 @@
           <p id="dev-msg" class="muted" style="margin-top:8px;"></p>
         </div>
 
-        <p id="app-version-trigger" class="version-footer">FalaFácil v10.2</p>
+        <p id="app-version-trigger" class="version-footer">FalaFácil v10.3</p>
       </section>
     </main>
 
@@ -349,14 +357,33 @@
     <div class="lesson-footer" id="lesson-footer"></div>
   </div>
 
-  <script src="/js/levels-meta.js"></script>
-  <script src="/js/storage.js"></script>
-  <script src="/js/speech.js"></script>
-  <script src="/js/app.js"></script>
+  <script src="/js/levels-meta.js?v=10.3"></script>
+  <script src="/js/storage.js?v=10.3"></script>
+  <script src="/js/speech.js?v=10.3"></script>
+  <script src="/js/app.js?v=10.3"></script>
   <script>
     if ('serviceWorker' in navigator) {
+      const hadController = Boolean(navigator.serviceWorker.controller);
+      let swRefreshing = false;
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!hadController || swRefreshing) return;
+        swRefreshing = true;
+        window.location.reload();
+      });
+
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
+        navigator.serviceWorker
+          .register('/sw.js', { updateViaCache: 'none' })
+          .then((reg) => {
+            reg.update().catch(() => {});
+            document.addEventListener('visibilitychange', () => {
+              if (document.visibilityState === 'visible') {
+                reg.update().catch(() => {});
+              }
+            });
+          })
+          .catch(() => {});
       });
     }
   </script>

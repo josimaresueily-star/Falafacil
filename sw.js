@@ -1,4 +1,4 @@
-const CACHE_NAME = 'falafacil-v10.2';
+const CACHE_NAME = 'falafacil-v10.3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -16,7 +16,15 @@ const ASSETS = [
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) =>
+      Promise.all(
+        ASSETS.map((url) =>
+          fetch(new Request(url, { cache: 'reload' }))
+            .then((resp) => (resp && resp.ok ? cache.put(url, resp) : null))
+            .catch(() => null)
+        )
+      )
+    )
   );
   self.skipWaiting();
 });
@@ -30,11 +38,20 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-// Network-First: tenta buscar a versão mais nova online; se estiver offline, usa o cache
+self.addEventListener('message', (e) => {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Network-First real: ignora o cache HTTP interno do Chrome/Android quando há internet
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (url.origin !== self.location.origin) return;
+
   e.respondWith(
-    fetch(e.request)
+    fetch(new Request(e.request.url, { cache: 'no-store' }))
       .then((resp) => {
         if (resp && resp.ok) {
           const copy = resp.clone();
@@ -42,6 +59,6 @@ self.addEventListener('fetch', (e) => {
         }
         return resp;
       })
-      .catch(() => caches.match(e.request))
+      .catch(() => caches.match(e.request, { ignoreSearch: true }))
   );
 });
